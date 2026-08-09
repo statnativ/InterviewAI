@@ -12,6 +12,9 @@ class Application(Base):
     __tablename__ = "applications"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False
+    )
     candidate_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("candidates.id", ondelete="CASCADE"), nullable=False
     )
@@ -45,4 +48,5 @@ class Application(Base):
         UniqueConstraint("candidate_id", "job_id"),
         Index("idx_applications_candidate_status", "candidate_id", "status"),
         Index("idx_applications_job_status", "job_id", "status"),
+        Index("idx_applications_tenant", "tenant_id"),
     )

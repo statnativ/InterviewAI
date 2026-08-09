@@ -1,7 +1,7 @@
 ---
 tags: [vault, docs, index]
 status: live — doc map current
-last-updated: 2026-08-09
+last-updated: 2026-08-10
 ---
 
 # The Interview Agent — Vault Home
@@ -14,12 +14,18 @@ changes — stale frontmatter (`status`/`last-updated`) is the tripwire for drif
 
 | Note | Purpose | Status |
 |---|---|---|
-| [[Project Overview]] | The big picture: mission, milestone roadmap, mental model, governance layer, what's next | ✅ current (2026-08-09) |
-| [[Backend Overview]] | How the backend works: stack, 10-table schema, API surface, services, request traces, tests, bugs | ✅ current (2026-08-09) |
+| [[Project Overview]] | The big picture: mission, milestone roadmap, mental model, governance layer, what's next | ✅ current (2026-08-10) |
+| [[Backend Overview]] | How the backend works: stack, 13-table schema (tenants + tenant_id, sessions, practice_tests, interview job/candidate links), API surface, RBAC, master admin auth, M3 question generation, services, request traces, tests, bugs | ✅ current (2026-08-10) |
 | [[AI Architecture]] | How the AI works: OpenRouter gateway, model choices + costs, each AI service, deterministic-vs-AI split | ✅ current (2026-08-09) |
-| [[Frontend Overview]] | How the React frontend works: API layer, store, pages, what's real vs. simulated | ✅ current (2026-08-09) |
+| [[Frontend Overview]] | How the React frontend works: API layer, store, pages, the new `/admin/*` module and M3 question-generation UI, what's real vs. simulated | ✅ current (2026-08-10) |
 | [[Synthetic Data — Design]] | The synthetic corpus: 37 jobs / 90 people / 228 applications, pipeline, PDF resumes | ✅ current (2026-08-09) |
+| [[Identity & Access Overview]] | M6 plan: tenant isolation → RBAC → OIDC SSO → MFA → SCIM, phased with tests (ADR-005/006); plus an out-of-sequence master admin auth module (email/password, session cookie, cross-tenant) | 🔶 Phase 1 + 2 shipped & tested (2026-08-09); master admin module shipped & tested (2026-08-09); Phase 3 (tenant SSO) next |
 | [[Runbook]] | How to run everything: first-time setup, day-to-day commands, migrations, troubleshooting | ✅ current (2026-08-09) |
+| [[Enterprise Buyer Research]] | Who buys AI interview/ATS platforms, top buying criteria, compliance (NYC LL 144, EU AI Act), validated pain points | ✅ current (2026-08-09) |
+| [[Cost Savings & ROI Model]] | Cost-per-hire/bad-hire benchmarks, an illustrative ROI model built on our own PRD targets, source-credibility tiering | ✅ current (2026-08-09) |
+| [[Competitive Landscape]] | Vendor matrix (HireVue, BrightHire, Metaview, Sapia, avatar-led players, etc.), category map, where we're behind table stakes | ✅ current (2026-08-09) |
+| [[Enterprise Must-Haves Checklist]] | Concrete must-have features/integrations for enterprise procurement (SSO/SCIM/RBAC, SOC 2, AI-hiring compliance, ATS integrations), checked against our current build | ✅ current (2026-08-09) |
+| [[UX Review]] | Live-app UX audit: blank-page deep-link bug, mode/state-sync bugs, accessibility — 6 of 8 findings fixed same session; rubric editor + P2/P3 still open | ✅ current (2026-08-09) |
 
 Engineering artifacts that are **frozen at decision time** (not living docs) live in the
 repo, not here: `docs/architecture/decisions/` (ADRs), `docs/product/` (vision, PRD),

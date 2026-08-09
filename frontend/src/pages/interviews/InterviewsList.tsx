@@ -41,8 +41,17 @@ export function InterviewsList() {
             return (
               <Card
                 key={interview.id}
-                className="cursor-pointer p-5 hover:border-brand-primary/40"
+                role="button"
+                tabIndex={0}
+                aria-label={`Edit ${interview.title}`}
                 onClick={() => navigate(`/interviews/${interview.id}/edit`)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    navigate(`/interviews/${interview.id}/edit`);
+                  }
+                }}
+                className="cursor-pointer p-5 hover:border-brand-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">

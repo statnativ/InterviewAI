@@ -9,6 +9,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { NewJobModal } from "./NewJobModal";
 import { Plus, Search } from "lucide-react";
 import type { JobStatus } from "@/data/types";
+import { canWrite } from "@/lib/utils";
 
 const statusTone: Record<JobStatus, "strong" | "pending" | "possible" | "neutral"> = {
   Open: "strong",
@@ -22,6 +23,7 @@ export function JobsList() {
   const [params, setParams] = useSearchParams();
   const jobs = useAppStore((s) => s.jobs);
   const candidates = useAppStore((s) => s.candidates);
+  const currentUser = useAppStore((s) => s.currentUser);
   const [query, setQuery] = useState("");
 
   const filtered = jobs.filter((j) =>
@@ -38,9 +40,11 @@ export function JobsList() {
       <PageTopbar
         title="Jobs"
         actions={
-          <Button onClick={() => setParams({ new: "1" })}>
-            <Plus className="h-4 w-4" /> New job
-          </Button>
+          canWrite(currentUser.role) && (
+            <Button onClick={() => setParams({ new: "1" })}>
+              <Plus className="h-4 w-4" /> New job
+            </Button>
+          )
         }
       />
 

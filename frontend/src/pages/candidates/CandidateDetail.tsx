@@ -7,21 +7,22 @@ import { Button } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { Input, Textarea } from "@/components/ui/Input";
 import { ScorePill, scoreTone } from "@/components/ui/ScorePill";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { ArrowLeft, Link2, Sparkles, ThumbsUp, ThumbsDown, Bookmark, Mail, Phone, MapPin, FileText, Check } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { canWrite, cn } from "@/lib/utils";
 
 export function CandidateDetail() {
   const { jobId, candidateId } = useParams();
   const navigate = useNavigate();
-  const getJob = useAppStore((s) => s.getJob);
-  const getCandidate = useAppStore((s) => s.getCandidate);
+  const job = useAppStore((s) => s.jobs.find((j) => j.id === jobId));
+  const candidate = useAppStore((s) => s.candidates.find((c) => c.id === candidateId));
+  const currentUser = useAppStore((s) => s.currentUser);
+  const ready = useAppStore((s) => s.ready);
   const toggleShortlist = useAppStore((s) => s.toggleShortlist);
   const setDecision = useAppStore((s) => s.setDecision);
   const updateCandidate = useAppStore((s) => s.updateCandidate);
 
-  const job = getJob(jobId!);
-  const candidate = getCandidate(candidateId!);
   const [notes, setNotes] = useState(candidate?.notes ?? "");
   const [tagInput, setTagInput] = useState("");
   const [copied, setCopied] = useState(false);
@@ -31,7 +32,27 @@ export function CandidateDetail() {
     setTagInput("");
   }, [candidateId, candidate?.notes]);
 
-  if (!job || !candidate) return null;
+  if (!ready) {
+    return (
+      <OrgAppShell>
+        <LoadingState label="Loading candidate…" />
+      </OrgAppShell>
+    );
+  }
+
+  if (!job || !candidate) {
+    return (
+      <OrgAppShell>
+        <NotFoundState
+          message="This candidate doesn't exist or may have been removed."
+          backLabel="Back to candidates"
+          onBack={() => navigate("/candidates")}
+        />
+      </OrgAppShell>
+    );
+  }
+
+  const editable = canWrite(currentUser.role);
 
   const commitNotes = () => updateCandidate(candidate.id, { notes });
 
@@ -132,6 +153,8 @@ export function CandidateDetail() {
             <Button
               variant={candidate.shortlisted ? "primary" : "secondary"}
               size="sm"
+              disabled={!editable}
+              title={editable ? undefined : "Only recruiters and admins can shortlist candidates"}
               onClick={() => toggleShortlist(candidate.id)}
             >
               <Bookmark className="h-3.5 w-3.5" /> Shortlist
@@ -139,6 +162,8 @@ export function CandidateDetail() {
             <Button
               variant={candidate.decision === "Approved" ? "primary" : "secondary"}
               size="sm"
+              disabled={!editable}
+              title={editable ? undefined : "Only recruiters and admins can set a decision"}
               onClick={() => setDecision(candidate.id, "Approved")}
             >
               <ThumbsUp className="h-3.5 w-3.5" /> Approve
@@ -146,6 +171,8 @@ export function CandidateDetail() {
             <Button
               variant="secondary"
               size="sm"
+              disabled={!editable}
+              title={editable ? undefined : "Only recruiters and admins can set a decision"}
               onClick={() => setDecision(candidate.id, "Hold")}
             >
               Hold
@@ -153,6 +180,8 @@ export function CandidateDetail() {
             <Button
               variant={candidate.decision === "Rejected" ? "danger" : "secondary"}
               size="sm"
+              disabled={!editable}
+              title={editable ? undefined : "Only recruiters and admins can set a decision"}
               onClick={() => setDecision(candidate.id, "Rejected")}
             >
               <ThumbsDown className="h-3.5 w-3.5" /> Reject

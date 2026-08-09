@@ -17,14 +17,22 @@ import json
 import re
 from pathlib import Path
 
+import bcrypt
 from sqlalchemy import select
 
 from app.db import async_session
+from app.deps import SEED_TENANT_ID
 from app.models.application import Application
 from app.models.candidate import Candidate
 from app.models.interview import Interview
 from app.models.job import Job
+from app.models.tenant import Tenant
 from app.models.user import User
+
+# The one seed platform admin. Plaintext lives only here (never logged,
+# never returned by any endpoint) — everywhere else it's a bcrypt hash.
+PLATFORM_ADMIN_USERNAME = "statnativ"
+PLATFORM_ADMIN_PASSWORD = "P@55W0rD"
 
 SEED_TS = Path(__file__).resolve().parents[1] / "frontend" / "src" / "data" / "generated-seed.ts"
 
@@ -93,17 +101,60 @@ async def seed() -> None:
     interviews = SEED_INTERVIEWS
 
     async with async_session() as db:
-        org = await db.execute(select(User).where(User.email == "riley@northwindhealth.com"))
+        tenant = await db.get(Tenant, SEED_TENANT_ID)
+        if tenant is None:
+            # Only hit if seeding against a DB where migration c3d4e5f6a7b8
+            # hasn't run — normally the migration already inserts this row.
+            tenant = Tenant(id=SEED_TENANT_ID, name="Northwind Health", slug="northwind-health")
+            db.add(tenant)
+            await db.flush()
+
+        org = await db.execute(
+            select(User).where(User.tenant_id == tenant.id, User.email == "riley@northwindhealth.com")
+        )
         org_user = org.scalar_one_or_none()
+        if org_user is None:
+            org_user = User(
+                tenant_id=tenant.id,
+                email="riley@northwindhealth.com",
+                name="Riley Hoffman",
+                role="recruiter",
+            )
+            db.add(org_user)
+            await db.flush()
+
+        admin = (
+            await db.execute(select(User).where(User.username == PLATFORM_ADMIN_USERNAME))
+        ).scalar_one_or_none()
+        if admin is None:
+            admin = User(
+                tenant_id=None,
+                email="statnativ@platform.local",
+                name="Platform Admin",
+                username=PLATFORM_ADMIN_USERNAME,
+                password_hash=bcrypt.hashpw(PLATFORM_ADMIN_PASSWORD.encode(), bcrypt.gensalt()).decode(),
+                is_platform_admin=True,
+                status="active",
+            )
+            db.add(admin)
+            await db.flush()
+
+        await db.commit()
+        print(f"Tenant: {tenant.name} ({tenant.slug}); seed user: {org_user.email}; platform admin: {admin.username}")
 
         seen_emails: dict[str, Candidate] = {}
 
         for j in jobs:
-            existing = (await db.execute(select(Job).where(Job.title == j["title"]))).scalars().first()
+            existing = (
+                await db.execute(
+                    select(Job).where(Job.tenant_id == tenant.id, Job.title == j["title"])
+                )
+            ).scalars().first()
             if existing:
                 continue
             db.add(
                 Job(
+                    tenant_id=tenant.id,
                     title=j["title"],
                     department=j.get("department"),
                     location=j.get("location"),
@@ -125,12 +176,28 @@ async def seed() -> None:
             title = title_by_id.get(c["jobId"])
             if title is None:
                 continue
-            job = (await db.execute(select(Job).where(Job.title == title))).scalars().first()
+            job = (
+                await db.execute(
+                    select(Job).where(Job.tenant_id == tenant.id, Job.title == title)
+                )
+            ).scalars().first()
             if job is None:
                 continue
             person = seen_emails.get(c["email"])
             if person is None:
+                # Not just the in-memory dict — a re-run starts that empty, so
+                # without this the script would try to re-insert every
+                # candidate and hit the (tenant_id, email) unique constraint.
+                person = (
+                    await db.execute(
+                        select(Candidate).where(
+                            Candidate.tenant_id == tenant.id, Candidate.email == c["email"]
+                        )
+                    )
+                ).scalars().first()
+            if person is None:
                 person = Candidate(
+                    tenant_id=tenant.id,
                     name=c["name"],
                     email=c["email"],
                     phone=c.get("phone"),
@@ -164,6 +231,7 @@ async def seed() -> None:
                 continue
             db.add(
                 Application(
+                    tenant_id=tenant.id,
                     candidate_id=person.id,
                     job_id=job.id,
                     status="screening",
@@ -185,12 +253,17 @@ async def seed() -> None:
 
         for iv in interviews:
             existing = (
-                await db.execute(select(Interview).where(Interview.title == iv["title"]))
+                await db.execute(
+                    select(Interview).where(
+                        Interview.tenant_id == tenant.id, Interview.title == iv["title"]
+                    )
+                )
             ).scalars().first()
             if existing:
                 continue
             db.add(
                 Interview(
+                    tenant_id=tenant.id,
                     title=iv["title"],
                     job_title=iv.get("jobTitle", ""),
                     mode=iv.get("mode", "Chat"),

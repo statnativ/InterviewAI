@@ -33,6 +33,12 @@ import { PersonaBuilder } from "@/pages/avatar/PersonaBuilder";
 
 import { PlaceholderPage } from "@/pages/PlaceholderPage";
 
+import { AdminShell } from "@/components/layout/AdminShell";
+import { AdminLogin } from "@/pages/admin/AdminLogin";
+import { AdminTenants } from "@/pages/admin/AdminTenants";
+import { AdminUsers } from "@/pages/admin/AdminUsers";
+import { AdminPracticeTests } from "@/pages/admin/AdminPracticeTests";
+
 export default function App() {
   const init = useAppStore((s) => s.init);
   useEffect(() => {
@@ -122,6 +128,15 @@ export default function App() {
             />
           }
         />
+
+        {/* Master admin (real session auth — separate from the dev-header org flow above) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<AdminShell />}>
+          <Route index element={<Navigate to="/admin/tenants" replace />} />
+          <Route path="tenants" element={<AdminTenants />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="practice-tests" element={<AdminPracticeTests />} />
+        </Route>
 
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>

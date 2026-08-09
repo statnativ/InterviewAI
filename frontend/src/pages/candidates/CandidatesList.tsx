@@ -11,11 +11,13 @@ import { FilterBar, BulkToolbar, defaultFilters } from "@/components/candidates/
 import { filterCandidates, type CandidateFilters } from "@/lib/candidates";
 import { candidatesToCsv, downloadCsv } from "@/lib/export";
 import { Download } from "lucide-react";
+import { canWrite } from "@/lib/utils";
 
 export function CandidatesList() {
   const navigate = useNavigate();
   const candidates = useAppStore((s) => s.candidates);
   const jobs = useAppStore((s) => s.jobs);
+  const currentUser = useAppStore((s) => s.currentUser);
   const bulkToggleShortlist = useAppStore((s) => s.bulkToggleShortlist);
   const bulkSetDecision = useAppStore((s) => s.bulkSetDecision);
   const bulkMoveStage = useAppStore((s) => s.bulkMoveStage);
@@ -87,14 +89,16 @@ export function CandidatesList() {
           </label>
         </div>
 
-        <BulkToolbar
-          selectedIds={[...selected]}
-          selectedCandidates={selectedCandidates}
-          onShortlist={() => bulkToggleShortlist([...selected])}
-          onDecision={(d) => bulkSetDecision([...selected], d)}
-          onStage={(s) => bulkMoveStage([...selected], s)}
-          onClear={() => setSelected(new Set())}
-        />
+        {canWrite(currentUser.role) && (
+          <BulkToolbar
+            selectedIds={[...selected]}
+            selectedCandidates={selectedCandidates}
+            onShortlist={() => bulkToggleShortlist([...selected])}
+            onDecision={(d) => bulkSetDecision([...selected], d)}
+            onStage={(s) => bulkMoveStage([...selected], s)}
+            onClear={() => setSelected(new Set())}
+          />
+        )}
 
         <Card className="divide-y divide-neutral-100 overflow-hidden">
           {rows.map(({ candidate: c, job }) => (
@@ -110,6 +114,7 @@ export function CandidatesList() {
               />
               <button
                 onClick={() => navigate(`/jobs/${c.jobId}/candidates/${c.id}`)}
+                aria-label={`Open ${c.name}'s profile`}
                 className="flex flex-1 items-center gap-4 text-left"
               >
                 <ScorePill score={c.score} size="sm" />

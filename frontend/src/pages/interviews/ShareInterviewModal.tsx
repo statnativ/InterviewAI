@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { Check, Copy } from "lucide-react";
 
@@ -15,10 +16,30 @@ export function ShareInterviewModal({
   interviewId: string;
 }) {
   const interview = useAppStore((s) => s.interviews.find((i) => i.id === interviewId));
+  const ready = useAppStore((s) => s.ready);
   const toggleShared = useAppStore((s) => s.toggleInterviewShared);
   const [copied, setCopied] = useState(false);
 
-  if (!interview) return null;
+  if (!ready) {
+    return (
+      <Modal open={open} onClose={onClose} title="Share interview">
+        <LoadingState label="Loading…" />
+      </Modal>
+    );
+  }
+
+  if (!interview) {
+    return (
+      <Modal open={open} onClose={onClose} title="Share interview">
+        <NotFoundState
+          message="This interview doesn't exist or may have been removed."
+          backLabel="Close"
+          onBack={onClose}
+        />
+      </Modal>
+    );
+  }
+
   const link = `https://app.statnativ.com/i/${interview.id}`;
 
   return (

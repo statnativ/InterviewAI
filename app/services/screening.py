@@ -160,9 +160,23 @@ def category_for(label: str) -> str:
     return "Skills"
 
 
+def _context_snippet(description: str, idx: int, label: str) -> str:
+    """Short, cleaned-up excerpt of the JD around a matched skill, used to make
+    each rubric criterion's description reference what was actually written
+    instead of one boilerplate sentence repeated for every criterion."""
+    start = max(0, idx - 40)
+    end = min(len(description), idx + len(label) + 40)
+    snippet = re.sub(r"\s+", " ", description[start:end]).strip()
+    if start > 0:
+        snippet = f"…{snippet}"
+    if end < len(description):
+        snippet = f"{snippet}…"
+    return snippet
+
+
 def generate_rubric(description: str, dictionary: list[str] = SKILL_DICTIONARY) -> list[RubricCriterion]:
     """Heuristic JD -> rubric generator (mirror of the frontend generateRubric)."""
-    candidates: list[tuple[str, str]] = []
+    candidates: list[tuple[str, str, str]] = []
     for label in extract_skills(description, dictionary):
         idx = description.lower().index(label.lower())
         before = description[max(0, idx - 80) : idx]
@@ -172,11 +186,11 @@ def generate_rubric(description: str, dictionary: list[str] = SKILL_DICTIONARY) 
             tag = "Must-have"
         else:
             tag = "Nice-to-have"
-        candidates.append((label, tag))
+        candidates.append((label, tag, _context_snippet(description, idx, label)))
 
-    must = [l for l, t in candidates if t == "Must-have"]
-    nice = [l for l, t in candidates if t == "Nice-to-have"]
-    disqual = [l for l, t in candidates if t == "Disqualifying"]
+    must = [l for l, t, _ in candidates if t == "Must-have"]
+    nice = [l for l, t, _ in candidates if t == "Nice-to-have"]
+    disqual = [l for l, t, _ in candidates if t == "Disqualifying"]
 
     buckets: list[tuple[str, int]] = [(l, 3) for l in must]
     buckets += [(l, 1) for l in nice]
@@ -196,19 +210,20 @@ def generate_rubric(description: str, dictionary: list[str] = SKILL_DICTIONARY) 
             weights[largest] += drift
 
     rubric: list[RubricCriterion] = []
-    for label, tag in candidates:
+    for label, tag, snippet in candidates:
         slug = re.sub(r"[^a-z0-9]", "", label, flags=re.I)[:12]
+        fallback = (
+            "Disqualifying criterion for this role."
+            if tag == "Disqualifying"
+            else "Required must have competency for this role."
+            if tag == "Must-have"
+            else "Preferred nice to have competency for this role."
+        )
         rubric.append(
             {
                 "id": f"r{slug}",
                 "label": label,
-                "description": (
-                    "Disqualifying criterion for this role."
-                    if tag == "Disqualifying"
-                    else "Required must have competency for this role."
-                    if tag == "Must-have"
-                    else "Preferred nice to have competency for this role."
-                ),
+                "description": f'From the job description: "{snippet}"' if snippet else fallback,
                 "tag": tag,
                 "category": category_for(label),
                 "weight": weights.get(label, 0),

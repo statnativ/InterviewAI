@@ -10,6 +10,9 @@ class InterviewView(BaseModel):
     id: str
     title: str
     jobTitle: str
+    jobId: str | None = None
+    candidateId: str | None = None
+    candidateName: str | None = None
     mode: str = "Chat"
     status: str = "Draft"
     questions: list[dict] = Field(default_factory=list)
@@ -21,6 +24,8 @@ class InterviewView(BaseModel):
 class InterviewCreate(BaseModel):
     title: str
     jobTitle: str
+    jobId: str | None = None
+    candidateId: str | None = None
     mode: str = "Chat"
     questions: list[dict] = Field(default_factory=list)
     duration: int = 30

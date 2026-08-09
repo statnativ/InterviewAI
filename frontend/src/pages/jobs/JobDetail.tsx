@@ -3,11 +3,12 @@ import { OrgAppShell, PageTopbar } from "@/components/layout/OrgAppShell";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { AddCandidateModal } from "./AddCandidateModal";
 import { Sparkles, Users } from "lucide-react";
 import type { JobStatus } from "@/data/types";
-import { cn } from "@/lib/utils";
+import { canWrite, cn } from "@/lib/utils";
 
 const tagTone: Record<string, "weak" | "info" | "possible"> = {
   "Must-have": "weak",
@@ -19,17 +20,38 @@ export function JobDetail() {
   const { jobId } = useParams();
   const navigate = useNavigate();
   const [params, setParams] = useSearchParams();
-  const getJob = useAppStore((s) => s.getJob);
+  const job = useAppStore((s) => s.jobs.find((j) => j.id === jobId));
   const candidates = useAppStore((s) => s.candidates);
+  const linkedInterview = useAppStore((s) => s.interviews.find((i) => i.jobId === jobId));
+  const currentUser = useAppStore((s) => s.currentUser);
+  const ready = useAppStore((s) => s.ready);
   const updateJobStatus = useAppStore((s) => s.updateJobStatus);
   const generateRubric = useAppStore((s) => s.generateRubric);
   const saveJobVersion = useAppStore((s) => s.saveJobVersion);
-  const job = getJob(jobId!);
 
-  if (!job) return null;
+  if (!ready) {
+    return (
+      <OrgAppShell>
+        <LoadingState label="Loading job…" />
+      </OrgAppShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <OrgAppShell>
+        <NotFoundState
+          message="This job doesn't exist or may have been removed."
+          backLabel="Back to jobs"
+          onBack={() => navigate("/jobs")}
+        />
+      </OrgAppShell>
+    );
+  }
 
   const totalWeight = job.rubric.reduce((sum, r) => sum + r.weight, 0);
   const candidateCount = candidates.filter((c) => c.jobId === job.id).length;
+  const editable = canWrite(currentUser.role);
 
   const closeModal = () => {
     params.delete("add");
@@ -63,12 +85,15 @@ export function JobDetail() {
               {statuses.map((s) => (
                 <button
                   key={s}
-                  onClick={() => updateJobStatus(job.id, s)}
+                  onClick={() => editable && updateJobStatus(job.id, s)}
+                  disabled={!editable}
+                  title={editable ? undefined : "Only recruiters and admins can change job status"}
                   className={cn(
                     "rounded-md border px-3 py-1.5 text-sm font-medium transition-colors",
                     job.status === s
                       ? "border-brand-primary bg-brand-primary text-white"
-                      : "border-neutral-300 text-neutral-600 hover:bg-neutral-50"
+                      : "border-neutral-300 text-neutral-600 hover:bg-neutral-50",
+                    !editable && "cursor-not-allowed opacity-50"
                   )}
                 >
                   {s}
@@ -96,7 +121,8 @@ export function JobDetail() {
                   <Button
                     variant="secondary"
                     size="sm"
-                    disabled={!job.description.trim()}
+                    disabled={!job.description.trim() || !editable}
+                    title={editable ? undefined : "Only recruiters and admins can regenerate the rubric"}
                     onClick={() => generateRubric(job.id)}
                   >
                     <Sparkles className="h-3.5 w-3.5" /> Regenerate rubric
@@ -173,6 +199,8 @@ export function JobDetail() {
                 <Button
                   variant="secondary"
                   className="mt-3 w-full"
+                  disabled={!editable}
+                  title={editable ? undefined : "Only recruiters and admins can save a new version"}
                   onClick={() => saveJobVersion(job.id)}
                 >
                   Save as new version
@@ -191,12 +219,33 @@ export function JobDetail() {
                 <Button
                   variant="secondary"
                   className="mt-3 w-full"
+                  disabled={!editable}
+                  title={editable ? undefined : "Only recruiters and admins can add candidates"}
                   onClick={() => setParams({ add: "1" })}
                 >
                   Add candidate
                 </Button>
               </CardContent>
             </Card>
+
+            {linkedInterview && (
+              <Card>
+                <CardContent>
+                  <h3 className="mb-2 text-sm font-semibold text-neutral-900">
+                    Interview
+                  </h3>
+                  <button
+                    onClick={() => navigate(`/interviews/${linkedInterview.id}/edit`)}
+                    className="block w-full rounded-md border border-neutral-200 p-3 text-left hover:border-brand-primary/40 hover:bg-neutral-50"
+                  >
+                    <p className="text-sm font-medium text-neutral-900">{linkedInterview.title}</p>
+                    <p className="mt-0.5 text-xs text-neutral-500">
+                      {linkedInterview.questions.length} questions · {linkedInterview.mode}
+                    </p>
+                  </button>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </div>
       </div>

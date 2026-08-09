@@ -26,21 +26,28 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 
 ### R-002
 - **Category**: Scalability / Reliability
-- **Description**: AI calls (LLM, resume parsing, and eventually STT/TTS) run inline on the
-  request thread with no background job runner. Slower calls will degrade or time out requests
-  as more AI work is added (M2 scoring, M4 voice cascade).
-- **Evidence**: Confirmed in `app/routers/candidates.py` — `upload_resume` awaits
-  `parse_resume` directly in the request path.
+- **Description**: AI calls (résumé parsing, and now M3's question generation) run inline on
+  the request thread with no background job runner at all — not even `BackgroundTasks`, which
+  has never been introduced anywhere in the codebase (confirmed: no celery/redis/rq/arq in
+  `requirements.txt`). M3 added a third synchronous LLM call site (`POST /interviews`) without
+  addressing this, reinforcing rather than resolving the risk.
+- **Evidence**: Confirmed in `app/routers/candidates.py` (`upload_resume` awaits `parse_resume`
+  directly) and `app/routers/interviews.py` (`create_interview` awaits `generate_questions`
+  directly, added 2026-08-10).
 - **Likelihood**: High (already true today; worsens as more AI calls are added)
 - **Impact**: Medium (request latency/timeouts, not data loss)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: Sequenced as M2 (BackgroundTasks + polling) and M4 (Celery+Redis once
-  BackgroundTasks isn't enough) — not started.
+- **Mitigation**: ADR-007 (2026-08-10) examined this for M4 specifically and found the
+  roadmap's original "BackgroundTasks → Celery+Redis" framing doesn't fit M4's live-conversation
+  shape — recommends a synchronous/WebSocket execution model for M4 instead, and defers
+  Celery+Redis to M5 (report generation), which is genuinely a decoupled batch workload. This
+  risk (inline calls on the request path) remains open for the *current* endpoints
+  (résumé parsing, M3 question generation) regardless — ADR-007 doesn't address those.
 - **Contingency**: None currently.
 - **Trigger**: Observed request timeouts, or M2/M4 implementation start.
 - **Status**: Open
-- **Related ADR or product decision**: none yet
+- **Related ADR or product decision**: ADR-007
 
 ---
 
@@ -186,16 +193,78 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 - **Category**: Cost / Performance
 - **Description**: `interview_pipeline.py`'s conversation history is an unbounded in-memory
   Python list passed to the LLM in full on every turn. A long interview grows the context
-  window (and therefore per-turn cost and latency) without limit.
+  window (and therefore per-turn cost and latency) without limit. It is also process-local —
+  lost on restart, unreachable from any other uvicorn worker.
 - **Evidence**: Confirmed in `app/services/interview_pipeline.py` — `run_turn` appends to
   `history` with no truncation, summarization, or size check.
 - **Likelihood**: Medium (depends on typical interview length, which is currently unmeasured)
 - **Impact**: Medium (rising per-turn cost/latency over a long interview)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: None implemented.
+- **Mitigation**: Partially designed. ADR-007 (2026-08-10) requires externalizing session state
+  to Postgres for M4 — this resolves the *process-locality* half (lost on restart, unreachable
+  from other workers) as a byproduct of doing persistence at all. It does **not** by itself
+  bound what gets sent to the LLM each turn — that still needs IA-004's truncation/sliding-window
+  logic, which remains a separate, unimplemented piece of work regardless of storage backend.
+  Not yet implemented either way — M4 hasn't started.
 - **Contingency**: None currently.
 - **Trigger**: M4 (wiring the cascade into real, longer interviews) surfacing measurably
   degraded latency or cost on later turns.
+- **Status**: Open — partial mitigation designed, nothing built
+- **Related ADR or product decision**: ADR-004, ADR-007
+
+---
+
+### R-011
+- **Category**: Data model / Architecture
+- **Description**: `Interview` (`app/models/interview.py`) is simultaneously a reusable
+  template shared across every applicant to a job (`shared: bool`, no candidate tie) and, as of
+  M3, a one-off artifact personalized for exactly one candidate (`candidate_id` set). Both
+  states live in the same table with no constraint distinguishing them. `shared = true` and
+  `candidate_id IS NOT NULL` is a reachable, undefined state today — nothing stops a recruiter
+  from sharing a candidate-personalized interview with every other applicant, surfacing one
+  person's résumé-derived questions to everyone else.
+- **Evidence**: Confirmed in `app/models/interview.py` and `app/routers/interviews.py` — no
+  CHECK constraint or application-level guard exists for this combination, unlike the analogous
+  two-mode `User` entity, which does have `ck_users_platform_admin_no_tenant`.
+- **Likelihood**: Medium (requires a recruiter to both personalize an interview and then toggle
+  sharing on it — a plausible UI path, not an edge case)
+- **Impact**: Medium (a candidate could see interview questions written with visible reference
+  to a different candidate's employer/skills — a real, visible mistake, not silent data
+  corruption)
+- **Severity**: Medium
+- **Owner**: Amit Tiwari
+- **Mitigation**: None implemented. Options: a DB `CHECK` constraint preventing
+  `shared AND candidate_id IS NOT NULL` simultaneously (cheapest); or a product decision that
+  this combination is intentionally allowed (unlikely, given personalization's entire point is
+  specificity to one person).
+- **Contingency**: None currently — found during the 2026-08-10 architecture review, not yet
+  triggered in practice.
+- **Trigger**: A recruiter shares a personalized interview, or a test/audit surfaces the
+  combination.
 - **Status**: Open
-- **Related ADR or product decision**: ADR-004
+- **Related ADR or product decision**: none yet — M3 shipped the schema change without one.
+
+---
+
+### R-012
+- **Category**: Operational readiness / Process
+- **Description**: The repository has exactly one git commit ("Initial commit: full ATS
+  vertical slice," 2026-08-09) despite three major features having shipped since (M6 Phase 1/2,
+  the master admin auth module, M3) — all of it sitting uncommitted in the working tree (77
+  modified/untracked files as of the 2026-08-10 architecture review). Every ADR in this
+  directory has a "Rollback or exit strategy" section that implicitly assumes revertible git
+  history exists; it does not, for anything shipped after the initial commit.
+- **Evidence**: Confirmed via `git log --oneline` (1 commit) and `git status --short` (77 files)
+  on 2026-08-10.
+- **Likelihood**: High (already true today)
+- **Impact**: Medium (no incremental rollback granularity if a regression is found in any
+  shipped-but-uncommitted work; no code-review trail)
+- **Severity**: Medium
+- **Owner**: Amit Tiwari
+- **Mitigation**: None implemented yet.
+- **Contingency**: A regression today would require manually reverting specific file edits
+  rather than a git revert.
+- **Trigger**: Already triggered — open as of this review.
+- **Status**: Open
+- **Related ADR or product decision**: none — a process gap, not a technical one.

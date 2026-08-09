@@ -10,7 +10,8 @@ export function LandingCandidate() {
   const navigate = useNavigate();
   const candidate = useAppStore((s) => s.currentCandidate);
   const interviews = useAppStore((s) => s.interviews);
-  const practice = interviews.find((i) => i.status === "Active") ?? interviews[0];
+  const activeInterviews = interviews.filter((i) => i.status === "Active");
+  const practice = activeInterviews[0] ?? interviews[0];
 
   return (
     <CandidateShell>
@@ -33,7 +34,7 @@ export function LandingCandidate() {
                   </h3>
                 </div>
                 <div className="space-y-3">
-                  {interviews.slice(0, 2).map((interview) => (
+                  {activeInterviews.slice(0, 2).map((interview) => (
                     <div
                       key={interview.id}
                       className="flex items-center justify-between rounded-md border border-neutral-200 p-4"
@@ -48,12 +49,23 @@ export function LandingCandidate() {
                       </div>
                       <Button
                         size="sm"
-                        onClick={() => navigate(`/avatar/${interview.id}/disclosure`)}
+                        onClick={() =>
+                          navigate(
+                            interview.mode === "Avatar"
+                              ? `/avatar/${interview.id}/disclosure`
+                              : `/session/${interview.id}/consent`
+                          )
+                        }
                       >
                         Start <ArrowRight className="h-3.5 w-3.5" />
                       </Button>
                     </div>
                   ))}
+                  {activeInterviews.length === 0 && (
+                    <p className="py-4 text-center text-sm text-neutral-400">
+                      No upcoming interviews right now.
+                    </p>
+                  )}
                 </div>
               </CardContent>
             </Card>

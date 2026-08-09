@@ -91,13 +91,17 @@ export function LoginOrg() {
 
           <div className="my-5 flex items-center gap-3">
             <div className="h-px flex-1 bg-neutral-200" />
-            <span className="text-xs text-neutral-400">or continue with</span>
+            <span className="text-xs text-neutral-400">or continue with (coming soon)</span>
             <div className="h-px flex-1 bg-neutral-200" />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            <Button type="button" variant="secondary">Google</Button>
-            <Button type="button" variant="secondary">Microsoft</Button>
+            <Button type="button" variant="secondary" disabled title="SSO coming soon">
+              Google
+            </Button>
+            <Button type="button" variant="secondary" disabled title="SSO coming soon">
+              Microsoft
+            </Button>
           </div>
 
           <p className="mt-5 text-center text-sm text-neutral-500">

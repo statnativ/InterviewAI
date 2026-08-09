@@ -88,6 +88,9 @@ export interface Interview {
   id: string;
   title: string;
   jobTitle: string;
+  jobId: string | null;
+  candidateId: string | null;
+  candidateName: string | null;
   mode: InterviewMode;
   status: "Draft" | "Active" | "Archived";
   questions: InterviewQuestion[];
@@ -111,10 +114,19 @@ export interface ChatMessage {
   timestamp: string;
 }
 
+export type OrgRole = "admin" | "recruiter" | "hiring_manager";
+
 export interface OrgUser {
   name: string;
   email: string;
   company: string;
+  role: OrgRole;
+}
+
+export interface Tenant {
+  id: string;
+  slug: string;
+  name: string;
 }
 
 export interface CandidateUser {

@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import app.models  # noqa: F401  — registers every table on Base.metadata before any request
-from app.routers import candidates, health, interviews, jobs
+from app.routers import admin, auth, candidates, health, interviews, jobs
 
 app = FastAPI(title="AI Interview Platform")
 
@@ -18,3 +18,5 @@ app.include_router(health.router)
 app.include_router(jobs.router)
 app.include_router(candidates.router)
 app.include_router(interviews.router)
+app.include_router(auth.router)
+app.include_router(admin.router)

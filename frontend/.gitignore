@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+# Regeneratable Playwright audit screenshots (run e2e/ux-audit.mjs to produce them)
+e2e/screenshots/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

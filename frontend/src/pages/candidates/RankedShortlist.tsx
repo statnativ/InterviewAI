@@ -6,31 +6,58 @@ import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
 import { ScorePill } from "@/components/ui/ScorePill";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { FilterBar, BulkToolbar, defaultFilters } from "@/components/candidates/CandidateToolbar";
 import { filterCandidates, type CandidateFilters } from "@/lib/candidates";
 import { candidatesToCsv, downloadCsv } from "@/lib/export";
 import { UserPlus, FileBarChart, Columns3, Download } from "lucide-react";
+import { canWrite } from "@/lib/utils";
 
 export function RankedShortlist() {
   const { jobId } = useParams();
   const navigate = useNavigate();
-  const getJob = useAppStore((s) => s.getJob);
-  const getCandidatesForJob = useAppStore((s) => s.getCandidatesForJob);
+  const job = useAppStore((s) => s.jobs.find((j) => j.id === jobId));
+  const allCandidates = useAppStore((s) => s.candidates);
+  const currentUser = useAppStore((s) => s.currentUser);
+  const ready = useAppStore((s) => s.ready);
+  const jobCandidates = useMemo(
+    () =>
+      allCandidates
+        .filter((c) => c.jobId === jobId)
+        .sort((a, b) => b.score - a.score),
+    [allCandidates, jobId]
+  );
   const bulkToggleShortlist = useAppStore((s) => s.bulkToggleShortlist);
   const bulkSetDecision = useAppStore((s) => s.bulkSetDecision);
   const bulkMoveStage = useAppStore((s) => s.bulkMoveStage);
   const [filters, setFilters] = useState<CandidateFilters>(defaultFilters);
   const [selected, setSelected] = useState<Set<string>>(new Set());
 
-  const job = getJob(jobId!);
-  const jobCandidates = getCandidatesForJob(jobId!);
   const rows = useMemo(
     () => filterCandidates(jobCandidates, filters),
     [jobCandidates, filters]
   );
 
-  if (!job) return null;
+  if (!ready) {
+    return (
+      <OrgAppShell>
+        <LoadingState label="Loading candidates…" />
+      </OrgAppShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <OrgAppShell>
+        <NotFoundState
+          message="This job doesn't exist or may have been removed."
+          backLabel="Back to jobs"
+          onBack={() => navigate("/jobs")}
+        />
+      </OrgAppShell>
+    );
+  }
 
   const toggleAll = () =>
     setSelected((prev) =>
@@ -66,9 +93,11 @@ export function RankedShortlist() {
             <Button variant="secondary" onClick={() => navigate(`/jobs/${job.id}/compare`)}>
               <FileBarChart className="h-4 w-4" /> Compare
             </Button>
-            <Button onClick={() => navigate(`/jobs/${job.id}?add=1`)}>
-              <UserPlus className="h-4 w-4" /> Add candidate
-            </Button>
+            {canWrite(currentUser.role) && (
+              <Button onClick={() => navigate(`/jobs/${job.id}?add=1`)}>
+                <UserPlus className="h-4 w-4" /> Add candidate
+              </Button>
+            )}
           </>
         }
       />
@@ -95,14 +124,16 @@ export function RankedShortlist() {
           </div>
         </div>
 
-        <BulkToolbar
-          selectedIds={[...selected]}
-          selectedCandidates={selectedCandidates}
-          onShortlist={() => bulkToggleShortlist([...selected])}
-          onDecision={(d) => bulkSetDecision([...selected], d)}
-          onStage={(s) => bulkMoveStage([...selected], s)}
-          onClear={() => setSelected(new Set())}
-        />
+        {canWrite(currentUser.role) && (
+          <BulkToolbar
+            selectedIds={[...selected]}
+            selectedCandidates={selectedCandidates}
+            onShortlist={() => bulkToggleShortlist([...selected])}
+            onDecision={(d) => bulkSetDecision([...selected], d)}
+            onStage={(s) => bulkMoveStage([...selected], s)}
+            onClear={() => setSelected(new Set())}
+          />
+        )}
 
         <Card className="divide-y divide-neutral-100 overflow-hidden">
           {rows.map((c) => (
@@ -115,6 +146,7 @@ export function RankedShortlist() {
               />
               <button
                 onClick={() => navigate(`/jobs/${job.id}/candidates/${c.id}`)}
+                aria-label={`Open ${c.name}'s profile`}
                 className="flex flex-1 items-center gap-4 text-left"
               >
                 <ScorePill score={c.score} size="sm" />

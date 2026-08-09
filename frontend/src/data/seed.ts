@@ -3,12 +3,22 @@ import type {
   Interview,
   OrgUser,
   CandidateUser,
+  Tenant,
 } from "./types";
+
+// Must match SEED_TENANT_ID in the backend's app/deps.py — the one seed
+// tenant every M6-Phase-1 migration/seed script agrees on.
+export const currentTenant: Tenant = {
+  id: "11111111-1111-1111-1111-111111111111",
+  slug: "northwind-health",
+  name: "Northwind Health",
+};
 
 export const orgUser: OrgUser = {
   name: "Riley Hoffman",
   email: "riley@northwindhealth.com",
   company: "Northwind Health",
+  role: "recruiter",
 };
 
 export const candidateUser: CandidateUser = {
@@ -157,6 +167,9 @@ export const interviews: Interview[] = [
     id: "int-backend-tech",
     title: "Senior Backend Engineer — Technical Screen",
     jobTitle: "Senior Backend Engineer",
+    jobId: null,
+    candidateId: null,
+    candidateName: null,
     mode: "Chat",
     status: "Active",
     duration: 45,
@@ -173,6 +186,9 @@ export const interviews: Interview[] = [
     id: "int-designer-portfolio",
     title: "Product Designer — Portfolio Walkthrough",
     jobTitle: "Product Designer",
+    jobId: null,
+    candidateId: null,
+    candidateName: null,
     mode: "Voice",
     status: "Active",
     duration: 30,
@@ -187,6 +203,9 @@ export const interviews: Interview[] = [
     id: "int-sre-oncall",
     title: "Staff SRE — Incident Leadership",
     jobTitle: "Staff SRE",
+    jobId: null,
+    candidateId: null,
+    candidateName: null,
     mode: "Avatar",
     status: "Archived",
     duration: 40,

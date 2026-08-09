@@ -1,7 +1,7 @@
 ---
 tags: [project, system-design, python, fastapi]
-status: in-progress — ATS vertical slice complete (API + Postgres + React frontend wired)
-last-updated: 2026-08-09
+status: in-progress — ATS vertical slice + M3 (AI question generation) complete
+last-updated: 2026-08-10
 ---
 
 # The Interview Agent — Project Overview
@@ -15,7 +15,13 @@ This note is the **big picture**. Deep dives live in sibling notes:
 - [[AI Architecture]] — OpenRouter gateway, model choices + costs, per-service detail
 - [[Frontend Overview]] — React app: API layer, store, pages, real vs. simulated
 - [[Synthetic Data — Design]] — the synthetic corpus pipeline
+- [[Identity & Access Overview]] — M6 plan: tenants → RBAC → OIDC SSO → MFA → SCIM
 - [[Runbook]] — first-time setup, day-to-day commands, migrations, troubleshooting
+- **`ProductResearch/`** — [[Enterprise Buyer Research]], [[Cost Savings & ROI Model]],
+  [[Competitive Landscape]], [[Enterprise Must-Haves Checklist]], [[UX Review]] — market
+  research on the enterprise buyer, ROI case, competitive positioning, the concrete
+  feature/integration/compliance checklist for procurement, and a live-app UX audit
+  (2026-08-09 pass)
 
 ## Why this project exists
 
@@ -34,11 +40,11 @@ ATS vertical slice are built so far):
 | — | **Cascaded voice pipeline (STT→LLM→TTS)** — pulled forward, standalone script only | multimodal API integration, conversation-as-state | ✅ prototype done |
 | — | **Full ATS vertical slice** — deterministic JD-rubric screening (server-side), jobs/candidates/interviews CRUD, React frontend fully wired to the API (no localStorage) | sync vs async, schema alignment, client↔API contract design | ✅ done (2026-08-09) |
 | M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | 🔶 scoring done deterministically; LLM-as-judge + async polling not started |
-| M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ⬜ not started |
+| M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
 | M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ⬜ not started |
 | M4b | Async → video capture | media-type-as-data, object storage | ⬜ not started |
 | M5 | Answer evaluation + aggregated report, human override | pipeline orchestration, explainability | ⬜ not started |
-| M6 | JWT auth, tenant isolation, RBAC | authn vs authz, multi-tenant isolation | ⬜ not started |
+| M6 | Identity & Access — tenant isolation, RBAC, OIDC SSO, MFA, SCIM (enterprise reqs) | authn vs authz, multi-tenant isolation, protocols (OIDC/SAML), provisioning | 🔶 Phase 1 (tenants) + Phase 2 (RBAC) shipped & tested (2026-08-09); master admin auth module (email/password, separate from tenant SSO) shipped & tested (2026-08-09); Phase 3 (tenant OIDC SSO) not started |
 | M6b | Deploy to cloud (Cloud Run + Neon + GCS) | dev/prod config parity, pay-per-use cost tradeoffs | ⬜ not started |
 | M7 (stretch) | Live, real-time speech/video over WebRTC | real-time systems, latency budgets | ⬜ not started |
 
@@ -232,16 +238,139 @@ added the `interviews` table (questions as JSONB, no `interview_turns` table yet
 cascade is still a standalone script), so the M3/M4 schema gap is closed. The slice also
 partially addressed D1: scoring moved to a deterministic server-side service (no unhandled
 LLM errors on that path anymore), but `llm_client.py`'s error-handling gap and the orphaned
-resume file issue still stand. D3 (tenant_id) and D4 (resume-not-in-prompt) are untouched —
-still single-tenant, still JD-tailored-only.
+resume file issue still stand. **D3 (tenant_id) is now resolved** — Phase 1 of the M6 plan
+([[Identity & Access Overview]]) shipped tenant isolation end-to-end (schema, backend
+enforcement, leak tests, frontend header), and Phase 2 (RBAC enforcement) shipped alongside
+it. D4 (resume-not-in-prompt) is now **half-resolved** — M3's question generation weaves a
+candidate's résumé into authoring-time questions; the live-interview cascade prompt
+(`interview_pipeline.py`) is still JD-only, unaddressed because M4 hasn't started.
+
+**Second review pass (2026-08-10)**, run via the same `.claude/product-architect.md` persona
+against the state after M3/M6 shipped, surfaced two new findings not present in the first pass
+(the codebase didn't have the code that created them yet): **R-011** — `Interview` became a
+two-mode entity (shared template vs. one-off personalized artifact) with no DB constraint
+preventing the two modes from combining incoherently, unlike the analogous `User` two-mode
+design from the admin-auth module, which does have one. **R-012** — the repository has exactly
+one git commit despite three major features (M6 Phase 1/2, the admin module, M3) having shipped
+since, all sitting uncommitted; every ADR's "rollback strategy" section assumes history that
+doesn't exist. Both logged in `docs/risk-register.md` with proposed mitigations
+(`docs/implementation-actions.md` IA-012, IA-013). The same pass produced **ADR-007**, a proper
+pre-implementation review of M4's execution model — its finding: the roadmap's own
+"BackgroundTasks stops being enough → Celery+Redis" framing doesn't fit M4's actual shape (a
+live, stateful, per-turn conversation, not decoupled batch work); recommends a
+synchronous-then-WebSocket path instead and defers Celery/Redis to M5's report generation,
+which is a genuine fit for it.
+
+## Product research (2026-08-09)
+
+A market research pass validated the core wedge (screening time is the biggest recruiter pain
+point; buyers want explainable scores, which our rubric/scorecard model already provides) but
+surfaced three gaps worth weighing against the roadmap — full detail in the linked notes:
+
+- **Compliance is a deal-gate, not a nice-to-have.** NYC Local Law 144 (bias audits, candidate
+  notice) and EU AI Act "high-risk" classification are treated as table stakes by enterprise
+  buyers before AI touches a candidate. We have none of this yet — see
+  [[Enterprise Buyer Research]].
+- **The resume-not-in-prompt gap (D4, above) is a market-visible weakness, not just internal
+  debt.** "Candidate-tailored" questions are an active differentiator competitors market on;
+  myInterview is explicitly criticized for keyword-matching-only. See [[Competitive Landscape]].
+- **ATS integration (Greenhouse/Lever/Workday), explicitly out of MVP scope, is a top-3
+  enterprise buying criterion.** Fine to defer, but should be a conscious "not yet," not a
+  surprise at the first serious sales conversation.
+
+ROI story: our own PRD targets (≥50% recruiter-hour reduction) against Tier A/B cost-per-hire
+benchmarks produce a defensible, conservative savings estimate — see
+[[Cost Savings & ROI Model]] for the model and its (deliberately narrow) assumptions.
+
+**Must-have checklist for enterprise procurement** — [[Enterprise Must-Haves Checklist]] turns
+the above into a concrete gap list: SSO/SCIM/RBAC/tenant isolation (all M6, correctly
+sequenced), SOC 2/ISO 27001 (blocked on having a stable deployed system to audit — M6b),
+AI-hiring-specific compliance (bias audit, candidate disclosure, human-review gate — cheaper to
+fold into M6's auth/audit work now than retrofit), and ATS/HRIS/calendar integrations
+(rightly deferred, but a confirmed real gap vs. every incumbent in [[Competitive Landscape]]).
+
+## UX review (2026-08-09) — P0 + safe P1 fixed same session
+
+A live-app audit (real Postgres + FastAPI + Vite stack, clicked through both `OrgAppShell` and
+`CandidateShell`) surfaced one systemic, high-severity bug plus a set of smaller trust/polish
+issues — full detail, repro steps, and file:line citations in [[UX Review]]. Six of the
+findings were fixed and re-verified live in the same session (`pytest` 10/10, `npm run build`
+clean, fresh direct-navigation repros confirmed):
+
+- **Fixed** — the blank-page-on-deep-link bug: ten pages shared an `if (!x) return null`
+  pattern with no loading/not-found state, which silently broke `CandidateDetail`'s real "Copy
+  link" feature. Root cause for 5 of the 10: they subscribed to the store's `getJob`/
+  `getCandidatesForJob` *functions* instead of the reactive `jobs`/`candidates` arrays, so
+  Zustand never re-rendered them once data loaded. Fixing this the naive way (selecting
+  `s.candidates.filter().sort()` inline) introduced a second bug — a new-array-every-render
+  infinite loop — caught by the live-verification pass and fixed with `useMemo`.
+- **Fixed** — the two state-sync bugs: candidate interview mode now routes correctly
+  (Voice/Chat → consent flow, Avatar → disclosure flow) instead of always going to Avatar; an
+  archived interview no longer shows as startable on the candidate dashboard.
+- **Fixed** — the two accessibility failures (unlabeled row buttons in `CandidatesList`/
+  `RankedShortlist`, non-semantic clickable cards in `InterviewsList`) that confirmed the WCAG
+  2.1 AA gap [[Enterprise Must-Haves Checklist]] had flagged as merely "unverified." Login
+  screens' Google/Microsoft/LinkedIn buttons are now `disabled` with a "coming soon" label
+  instead of silently dead — real SSO stays [[Identity & Access Overview]] (M6)'s job.
+- **Fixed, staying deterministic** — every rubric criterion now quotes the actual JD text it
+  was matched from, instead of one boilerplate sentence repeated per tag (no LLM call added).
+- **Deliberately left open** — the rubric "editor" on `JobDetail` still doesn't let anyone
+  actually change a weight; real inline editing is a feature, not a bug fix, and needs its own
+  product decision before it's built.
+- What's working and shouldn't be touched: the Candidate Detail scorecard's per-criterion
+  evidence citations, the AI disclosure screen's plain-language consent copy, and the design
+  token discipline across the app.
+
+## M3 — AI question generation (2026-08-10)
+
+Real question generation, replacing the "Generate interview" button's fake `generating` state
+with an actual `chat_completion` call (`app/services/question_generator.py`, the codebase's
+second LLM-JSON call site after `resume_parser.py::parse_resume`, and its first one that's
+actually on a live request path). Full detail in [[Backend Overview]] /
+[[Frontend Overview]]; the highlights:
+
+- **`Interview` gained real `job_id`/`candidate_id` FKs** (previously job linkage was a bare
+  `job_title` string with no FK at all) — a deliberate scope expansion beyond the milestone's
+  original ask, made because generation needs a reliable JD source and it closes
+  [[UX Review]] finding #10 (Job Detail had no link to its interview) as a side effect.
+  Confirmed via the Playwright regression: finding #10 flipped FAIL → PASS.
+- **Real candidate personalization**, not just JD-only — an interview can optionally be
+  generated *for one specific candidate*, weaving their résumé-derived profile (title, company,
+  skills, experience — already-structured `Candidate` fields, not a fresh résumé re-parse) into
+  the prompt. This is the authoring-time half of the gap-analysis's D4 finding ("the interview
+  prompt never includes résumé data") — the separate live-interview cascade prompt in
+  `interview_pipeline.py` is untouched and still JD-only.
+- **Edit, reorder, and regenerate all shipped**, not just generation: questions are editable
+  in place (text + type + difficulty), draggable to reorder (reusing `PipelineBoard.tsx`'s
+  native HTML5 DnD pattern), regenerable individually or as a full set — matching PRD §5.2's
+  three explicit asks, not just the generation half.
+- **Tests**: `tests/test_question_generation.py` (9 tests) — the suite's first LLM-mocked
+  tests, monkeypatching `chat_completion` rather than hitting OpenRouter for real.
+- **Found and fixed along the way**: `NewInterview.tsx`'s job `<select>` seeded its initial
+  state from `jobs[0]?.id` at `useState`'s initializer — which only ever sees the store's
+  pre-load empty array, since `jobs` loads asynchronously. The dropdown *looked* selected (the
+  browser's no-match fallback rendering), but the real state was permanently empty, so no job
+  was ever actually linked. This was a **pre-existing latent bug** (the same pattern existed
+  before M3, just harmless then because nothing depended on the value); it became load-bearing
+  once generation started requiring a real `jobId`. Fixed with a `useEffect` that seeds `jobId`
+  once `jobs` actually arrives.
 
 ## Next up
 
 - **M2 (partial)** — scoring is now deterministic and server-side; the "LLM-as-judge" upgrade
   (screening with an LLM instead of keyword matching) and moving screening off the request
   path (`BackgroundTasks` + a polling endpoint) are the remaining pieces.
-- **M3** — AI question generation wired into the UI (currently only a draft rubric endpoint exists).
+- **M4** — wire the voice cascade into the app with DB persistence; next natural milestone now
+  that M3 (question authoring) is done.
+- **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested
+  ([[Identity & Access Overview]]); a master admin auth module (real email/password login +
+  session cookie, one cross-tenant operator account — creates tenants, creates/approves users,
+  authors tenant-scoped Practice Tests) also shipped, out of the phase sequence, since the
+  immediate need was platform-side provisioning rather than tenant SSO — it does **not**
+  replace or advance Phase 3. Next is still Phase 3, real OIDC SSO against a dev Keycloak
+  instance, which is what finally replaces the `X-Tenant-Id`/`X-User-Email` dev-header
+  stand-ins for *tenant users* with a real login.
 - Then D1's hardening list from the architecture review (LLM error handling, orphaned files,
-  git repo) and D3/D4.
+  git repo) and D4.
 - Frontend-side: tests (Vitest for the API client + store), loading/error states, 409-conflict
   UX — see [[Frontend Overview]] → "Next up".

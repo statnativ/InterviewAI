@@ -13,6 +13,9 @@ class Resume(Base):
     __tablename__ = "resumes"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False
+    )
     candidate_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("candidates.id", ondelete="CASCADE"), nullable=False
     )
@@ -63,3 +66,4 @@ Index(
     Resume.is_primary,
     postgresql_where=text("is_primary = TRUE"),
 )
+Index("idx_resumes_tenant", Resume.tenant_id)

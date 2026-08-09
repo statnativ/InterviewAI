@@ -1,10 +1,19 @@
 import type { Candidate, Interview, Job } from "@/data/types";
+import { useAppStore } from "@/store/useAppStore";
 
 const BASE = import.meta.env.VITE_API_BASE ?? "/api";
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // Dev-mode identity headers (M6 Phase 1/2 stand-ins for real session auth —
+  // see app/deps.py). Read via getState() since this module isn't a React
+  // component and can't use the useAppStore hook directly.
+  const { currentTenant, currentUser } = useAppStore.getState();
   const res = await fetch(`${BASE}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "X-Tenant-Id": currentTenant.id,
+      "X-User-Email": currentUser.email,
+    },
     ...init,
   });
   if (!res.ok) {
@@ -46,8 +55,19 @@ export const api = {
 
   // Interviews
   listInterviews: () => request<Interview[]>("/interviews"),
-  createInterview: (input: { title: string; jobTitle: string; mode: string; questions?: unknown[]; duration?: number }) =>
-    request<Interview>("/interviews", { method: "POST", body: JSON.stringify(input) }),
+  createInterview: (input: {
+    title: string;
+    jobTitle: string;
+    jobId?: string;
+    candidateId?: string;
+    mode: string;
+    questions?: unknown[];
+    duration?: number;
+  }) => request<Interview>("/interviews", { method: "POST", body: JSON.stringify(input) }),
   updateInterview: (interviewId: string, patch: Partial<Interview>) =>
     request<Interview>(`/interviews/${interviewId}`, { method: "PATCH", body: JSON.stringify(patch) }),
+  regenerateInterview: (interviewId: string) =>
+    request<Interview>(`/interviews/${interviewId}/regenerate`, { method: "POST" }),
+  regenerateQuestion: (interviewId: string, questionId: string) =>
+    request<Interview>(`/interviews/${interviewId}/questions/${questionId}/regenerate`, { method: "POST" }),
 };

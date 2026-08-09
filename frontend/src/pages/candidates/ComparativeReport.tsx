@@ -1,9 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
+import { useMemo } from "react";
 import { OrgAppShell, PageTopbar } from "@/components/layout/OrgAppShell";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Avatar } from "@/components/ui/Avatar";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { Printer, Sparkles } from "lucide-react";
 import type { Candidate } from "@/data/types";
@@ -16,12 +18,37 @@ const verdictTone: Record<Candidate["compareVerdict"], "strong" | "possible" | "
 export function ComparativeReport() {
   const { jobId } = useParams();
   const navigate = useNavigate();
-  const getJob = useAppStore((s) => s.getJob);
-  const getCandidatesForJob = useAppStore((s) => s.getCandidatesForJob);
+  const job = useAppStore((s) => s.jobs.find((j) => j.id === jobId));
+  const allCandidates = useAppStore((s) => s.candidates);
+  const ready = useAppStore((s) => s.ready);
+  const candidates = useMemo(
+    () =>
+      allCandidates
+        .filter((c) => c.jobId === jobId)
+        .sort((a, b) => b.score - a.score)
+        .filter((c) => c.scorecard.length > 0),
+    [allCandidates, jobId]
+  );
 
-  const job = getJob(jobId!);
-  const candidates = getCandidatesForJob(jobId!).filter((c) => c.scorecard.length > 0);
-  if (!job) return null;
+  if (!ready) {
+    return (
+      <OrgAppShell>
+        <LoadingState label="Loading report…" />
+      </OrgAppShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <OrgAppShell>
+        <NotFoundState
+          message="This job doesn't exist or may have been removed."
+          backLabel="Back to jobs"
+          onBack={() => navigate("/jobs")}
+        />
+      </OrgAppShell>
+    );
+  }
 
   const top = candidates.slice(0, 2);
 

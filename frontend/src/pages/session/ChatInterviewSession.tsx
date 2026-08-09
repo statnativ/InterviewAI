@@ -4,6 +4,7 @@ import { CandidateShell } from "@/components/layout/CandidateShell";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
 import { Avatar } from "@/components/ui/Avatar";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import { AntiCheatingModal } from "./AntiCheatingModal";
 import { Clock, Send } from "lucide-react";
@@ -15,6 +16,7 @@ export function ChatInterviewSession() {
   const navigate = useNavigate();
   const interview = useAppStore((s) => s.interviews.find((i) => i.id === interviewId));
   const candidate = useAppStore((s) => s.currentCandidate);
+  const ready = useAppStore((s) => s.ready);
 
   const [step, setStep] = useState(0);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -59,7 +61,25 @@ export function ChatInterviewSession() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  if (!interview) return null;
+  if (!ready) {
+    return (
+      <CandidateShell>
+        <LoadingState label="Loading interview…" />
+      </CandidateShell>
+    );
+  }
+
+  if (!interview) {
+    return (
+      <CandidateShell>
+        <NotFoundState
+          message="This interview link doesn't exist or may have expired."
+          backLabel="Back to dashboard"
+          onBack={() => navigate("/candidate")}
+        />
+      </CandidateShell>
+    );
+  }
 
   const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const secs = String(elapsed % 60).padStart(2, "0");

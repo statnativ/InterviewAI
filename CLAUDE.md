@@ -8,8 +8,9 @@ intent lives in [docs/product/prd.md](docs/product/prd.md).
 
 **Living docs live in the Obsidian vault** (`OV-TheInterviewAgent/TheInterviewAgent/`):
 [[Project Overview]] (status + roadmap), [[Backend Overview]], [[AI Architecture]],
-[[Frontend Overview]], [[Runbook]]. Keep those current when behavior changes; decision
-records stay frozen in `docs/architecture/decisions/`.
+[[Frontend Overview]], [[Identity & Access Overview]] (M6: tenants/RBAC/SSO/MFA/SCIM),
+[[Runbook]], and `ProductResearch/` (market research, UX audit). Keep those current when
+behavior changes; decision records stay frozen in `docs/architecture/decisions/`.
 
 ## How to Run
 
@@ -17,8 +18,10 @@ records stay frozen in `docs/architecture/decisions/`.
 docker compose up -d          # Postgres (pgvector/pgvector:pg16 image)
 source venv/bin/activate
 alembic upgrade head          # only needed after model changes
-python -m app.seed            # idempotent seed (37 jobs / 228 apps / 90 people / 3 interviews)
-uvicorn app.main:app --port 8000 --host 127.0.0.1 # http://localhost:8000/docs
+python -m app.seed            # idempotent seed (37 jobs / 228 apps / 90 people / 3 interviews / 1 platform admin)
+uvicorn app.main:app --port 8000 --host 127.0.0.1 --reload # http://localhost:8000/docs
+                               # --reload matters: a process started before a router/model change
+                               # keeps serving stale code (404s on new routes) until restarted
 # in a second terminal:
 cd frontend && npm run dev    # UI → http://localhost:5173 (proxies /api → :8000)
 
@@ -54,17 +57,45 @@ StatnativInterviewApp/
 │   ├── config.py                   ← pydantic-settings, reads .env
 │   ├── db.py                        ← async SQLAlchemy engine/session
 │   ├── seed.py                      ← idempotent seed loader (python -m app.seed)
-│   ├── models/                       ← 10 tables: users, candidates, jobs, skills, resumes,
-│   │                                    resume_skills, job_skills, applications,
-│   │                                    ai_processing_logs, interviews
+│   ├── deps.py                        ← get_current_tenant / get_current_user / require_roles
+│   │                                    (M6 Phase 1/2 — dev-header identity, real auth in Phase 3)
+│   │                                    + require_platform_admin (session cookie, master admin only)
+│   ├── models/                       ← 13 tables: tenants, users, candidates, jobs, skills,
+│   │                                    resumes, resume_skills, job_skills, applications,
+│   │                                    ai_processing_logs, interviews (6 of these carry tenant_id;
+│   │                                    interviews also has job_id/candidate_id FKs — M3),
+│   │                                    sessions, practice_tests (master admin module)
 │   ├── schemas/                      ← Pydantic view DTOs (match frontend TS types 1:1)
-│   ├── routers/                       ← health, jobs, candidates, interviews
-│   └── services/                       ← screening (deterministic ATS scoring), views,
-│                                          llm_client, resume_parser, stt_client, tts_client,
-│                                          interview_pipeline (OpenRouter for LLM/STT/TTS)
-├── migrations/                          ← Alembic; two migrations (init + ATS align)
+│   ├── routers/                       ← health, jobs, candidates, interviews (every route
+│   │                                    tenant-scoped + role-checked, see app/deps.py; interviews
+│   │                                    also has /regenerate + /questions/{id}/regenerate — M3)
+│   │                                    + auth, admin (real session auth, master admin only —
+│   │                                    separate surface, doesn't touch the dev-header routes)
+│   └── services/                       ← screening (deterministic ATS scoring), authz (RBAC
+│                                          permission matrix), views, llm_client, resume_parser,
+│                                          question_generator (M3 — AI interview questions),
+│                                          stt_client, tts_client, interview_pipeline (OpenRouter)
+├── migrations/                          ← Alembic; five migrations (init, ATS align, tenant
+│                                            isolation, admin auth module, interview job/candidate links)
 ├── scripts/test_interview_pipeline.py    ← standalone voice-cascade smoke test
-└── tests/                                ← test_health.py, test_screening.py
+├── tests/                                ← test_health, test_screening, test_tenant_isolation,
+│                                            test_rbac, test_admin_auth, test_question_generation
+│                                            (53 tests total; the latter four hit the real dev DB)
+└── frontend/                              ← React 19 + TS + Tailwind v4 SPA (Vite, port 5173)
+    ├── src/lib/api.ts                       ← typed fetch client, proxied /api → :8000, sends
+    │                                            X-Tenant-Id / X-User-Email on every call
+    ├── src/lib/adminApi.ts                  ← separate client for /admin/*, /auth/* — sends the
+    │                                            session cookie (credentials: "include"), never
+    │                                            the dev headers above
+    ├── src/store/useAppStore.ts             ← Zustand store, API-backed (init() + upsert actions)
+    ├── src/pages/                            ← 23 pages across auth/jobs/candidates/interviews/
+    │                                            session/avatar — see [[Frontend Overview]]
+    ├── src/pages/admin/                       ← AdminLogin, AdminTenants, AdminUsers,
+    │                                             AdminPracticeTests (master admin module)
+    ├── src/components/                        ← ui/ kit, layout/ shells (incl. AdminShell — the
+    │                                              app's first real route guard), candidates/ toolbar
+    └── e2e/ux-audit.mjs                        ← Playwright regression script (real Chromium,
+                                                    screenshots every check) — node e2e/ux-audit.mjs
 ```
 
 ## Key Config (`.env`, from `.env.example`)
@@ -98,7 +129,21 @@ and sometimes custom-type imports — confirmed twice already), then `alembic up
 `product-decision` skill directly.
 
 ## Notes
-- No auth yet — `jobs.posted_by` and any "current user" concept is a stub for M6.
+- **M3 (AI question generation) is shipped** — `NewInterview` calls a real LLM
+  (`app/services/question_generator.py`) to draft 8–12 questions from a job description, with
+  optional per-candidate personalization; `InterviewEditor` supports editing, drag reorder, and
+  regenerating one question or the whole set. `Interview` gained `job_id`/`candidate_id` FKs to
+  support this — see [[Project Overview]] and [[Backend Overview]] for detail.
+- No *real* auth yet **for tenant users** — M6 Phase 1 (tenant isolation) and Phase 2 (RBAC
+  enforcement) are shipped and tested (`X-Tenant-Id`/`X-User-Email` dev headers, `app/deps.py`),
+  but there's no login, session, or token for the recruiter/hiring-manager flow. Phase 3 (real
+  OIDC SSO) is next — see [[Identity & Access Overview]]. **Separately**, a real email/password
+  login now exists for one cross-tenant **master admin** account (`/auth/*`, `/admin/*`,
+  session cookie) — it creates tenants, creates/approves/disables tenant users, and authors
+  tenant-scoped Practice Tests. It's additive and isolated: it doesn't touch or advance the
+  tenant-facing dev-header flow, and Google/SSO login for it was explicitly deferred (no OAuth
+  credentials available in that session). Full writeup in [[Identity & Access Overview]]'s
+  addendum.
 - Local-only dev; nothing is deployed. Cloud target (when we get there) is Cloud Run + Neon —
   see the relevant ADR for the cost reasoning.
 - This is an explicit cost-sensitive POC — prefer free/cheap OpenRouter tiers, flag anything

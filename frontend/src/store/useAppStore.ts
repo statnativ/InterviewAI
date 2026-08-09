@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import type { Candidate, Interview, InterviewQuestion, Job, PipelineStage } from "@/data/types";
-import { candidateUser, orgUser } from "@/data/seed";
+import { candidateUser, currentTenant, orgUser } from "@/data/seed";
 import { api } from "@/lib/api";
 
 // App state now lives in the backend (FastAPI + Postgres). This store is a
@@ -11,6 +11,7 @@ import { api } from "@/lib/api";
 interface AppState {
   currentUser: typeof orgUser;
   currentCandidate: typeof candidateUser;
+  currentTenant: typeof currentTenant;
   jobs: Job[];
   candidates: Candidate[];
   interviews: Interview[];
@@ -19,8 +20,6 @@ interface AppState {
 
   init: () => Promise<void>;
 
-  getJob: (jobId: string) => Job | undefined;
-  getCandidatesForJob: (jobId: string) => Candidate[];
   getCandidate: (candidateId: string) => Candidate | undefined;
 
   screenCandidate: (candidateId: string) => Promise<void>;
@@ -53,10 +52,20 @@ interface AppState {
   updateJobStatus: (jobId: string, status: Job["status"]) => Promise<void>;
   saveJobVersion: (jobId: string) => Promise<void>;
 
-  createInterview: (input: { title: string; jobTitle: string; mode: Interview["mode"] }) => Promise<Interview>;
+  createInterview: (input: {
+    title: string;
+    jobTitle: string;
+    jobId?: string;
+    candidateId?: string;
+    mode: Interview["mode"];
+  }) => Promise<Interview>;
   toggleInterviewShared: (interviewId: string) => Promise<void>;
   addQuestion: (interviewId: string, q: Omit<InterviewQuestion, "id">) => Promise<void>;
   removeQuestion: (interviewId: string, questionId: string) => Promise<void>;
+  updateQuestion: (interviewId: string, questionId: string, patch: Partial<Omit<InterviewQuestion, "id">>) => Promise<void>;
+  reorderQuestions: (interviewId: string, orderedQuestions: InterviewQuestion[]) => Promise<void>;
+  regenerateQuestions: (interviewId: string) => Promise<void>;
+  regenerateQuestion: (interviewId: string, questionId: string) => Promise<void>;
 }
 
 function upsertJobs(jobs: Job[], updated: Job): Job[] {
@@ -78,6 +87,7 @@ function upsertCandidates(candidates: Candidate[], updated: Candidate): Candidat
 export const useAppStore = create<AppState>()((set, get) => ({
   currentUser: orgUser,
   currentCandidate: candidateUser,
+  currentTenant,
   jobs: [],
   candidates: [],
   interviews: [],
@@ -97,11 +107,6 @@ export const useAppStore = create<AppState>()((set, get) => ({
     }
   },
 
-  getJob: (jobId) => get().jobs.find((j) => j.id === jobId),
-  getCandidatesForJob: (jobId) =>
-    get()
-      .candidates.filter((c) => c.jobId === jobId)
-      .sort((a, b) => b.score - a.score),
   getCandidate: (candidateId) => get().candidates.find((c) => c.id === candidateId),
 
   screenCandidate: async (candidateId) => {
@@ -244,6 +249,37 @@ export const useAppStore = create<AppState>()((set, get) => ({
     const updated = await api.updateInterview(interviewId, {
       questions: (current?.questions ?? []).filter((q) => q.id !== questionId),
     });
+    set((s) => ({
+      interviews: s.interviews.map((i) => (i.id === interviewId ? updated : i)),
+    }));
+  },
+
+  updateQuestion: async (interviewId, questionId, patch) => {
+    const current = get().interviews.find((i) => i.id === interviewId);
+    const updated = await api.updateInterview(interviewId, {
+      questions: (current?.questions ?? []).map((q) => (q.id === questionId ? { ...q, ...patch } : q)),
+    });
+    set((s) => ({
+      interviews: s.interviews.map((i) => (i.id === interviewId ? updated : i)),
+    }));
+  },
+
+  reorderQuestions: async (interviewId, orderedQuestions) => {
+    const updated = await api.updateInterview(interviewId, { questions: orderedQuestions });
+    set((s) => ({
+      interviews: s.interviews.map((i) => (i.id === interviewId ? updated : i)),
+    }));
+  },
+
+  regenerateQuestions: async (interviewId) => {
+    const updated = await api.regenerateInterview(interviewId);
+    set((s) => ({
+      interviews: s.interviews.map((i) => (i.id === interviewId ? updated : i)),
+    }));
+  },
+
+  regenerateQuestion: async (interviewId, questionId) => {
+    const updated = await api.regenerateQuestion(interviewId, questionId);
     set((s) => ({
       interviews: s.interviews.map((i) => (i.id === interviewId ? updated : i)),
     }));

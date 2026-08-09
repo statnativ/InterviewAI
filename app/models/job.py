@@ -12,6 +12,9 @@ class Job(Base):
     __tablename__ = "jobs"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False
+    )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     department: Mapped[str | None] = mapped_column(String(100))
     description: Mapped[str] = mapped_column(Text, nullable=False)
@@ -33,4 +36,7 @@ class Job(Base):
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc)
     )
 
-    __table_args__ = (Index("idx_jobs_status", "status"),)
+    __table_args__ = (
+        Index("idx_jobs_status", "status"),
+        Index("idx_jobs_tenant", "tenant_id"),
+    )

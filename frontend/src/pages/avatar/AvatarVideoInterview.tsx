@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppStore } from "@/store/useAppStore";
 import { AntiCheatingModal } from "@/pages/session/AntiCheatingModal";
-import { Mic, MicOff, PhoneOff, Clock, Bot } from "lucide-react";
+import { Button } from "@/components/ui/Button";
+import { Mic, MicOff, PhoneOff, Clock, Bot, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function AvatarVideoInterview() {
   const { interviewId } = useParams();
   const navigate = useNavigate();
   const interview = useAppStore((s) => s.interviews.find((i) => i.id === interviewId));
+  const ready = useAppStore((s) => s.ready);
 
   const [step, setStep] = useState(0);
   const [speaking, setSpeaking] = useState(true);
@@ -53,7 +55,27 @@ export function AvatarVideoInterview() {
     return () => document.removeEventListener("visibilitychange", onVisibility);
   }, []);
 
-  if (!interview) return null;
+  if (!ready) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-2 bg-neutral-900 text-sm text-neutral-400">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        Loading interview…
+      </div>
+    );
+  }
+
+  if (!interview) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 bg-neutral-900 text-center">
+        <p className="text-sm text-neutral-400">
+          This interview link doesn't exist or may have expired.
+        </p>
+        <Button variant="secondary" size="sm" onClick={() => navigate("/candidate")}>
+          Back to dashboard
+        </Button>
+      </div>
+    );
+  }
 
   const mins = String(Math.floor(elapsed / 60)).padStart(2, "0");
   const secs = String(elapsed % 60).padStart(2, "0");

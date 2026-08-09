@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { OrgAppShell, PageTopbar } from "@/components/layout/OrgAppShell";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Input";
 import { useAppStore } from "@/store/useAppStore";
+import { api } from "@/lib/api";
 import { MessageSquare, Mic, Video, Sparkles } from "lucide-react";
-import type { InterviewMode } from "@/data/types";
+import type { Candidate, InterviewMode } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 const modes: { mode: InterviewMode; icon: typeof MessageSquare; desc: string }[] = [
@@ -20,15 +21,49 @@ export function NewInterview() {
   const jobs = useAppStore((s) => s.jobs);
   const createInterview = useAppStore((s) => s.createInterview);
   const [title, setTitle] = useState("");
-  const [jobTitle, setJobTitle] = useState(jobs[0]?.title ?? "");
+  const [jobId, setJobId] = useState("");
   const [mode, setMode] = useState<InterviewMode>("Chat");
   const [generating, setGenerating] = useState(false);
+  const [jobCandidates, setJobCandidates] = useState<Candidate[]>([]);
+  const [candidateId, setCandidateId] = useState<string>("");
+
+  // jobs loads asynchronously from the store — seed jobId once it arrives,
+  // rather than at useState's initializer (which only ever sees jobs === []
+  // on first render and would otherwise leave jobId stuck empty forever).
+  useEffect(() => {
+    if (!jobId && jobs.length > 0) {
+      setJobId(jobs[0].id);
+    }
+  }, [jobs, jobId]);
+
+  useEffect(() => {
+    setCandidateId("");
+    if (!jobId) {
+      setJobCandidates([]);
+      return;
+    }
+    let cancelled = false;
+    api.listJobCandidates(jobId).then((list) => {
+      if (!cancelled) setJobCandidates(list);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [jobId]);
+
+  const selectedJob = jobs.find((j) => j.id === jobId);
 
   const generate = async () => {
     if (!title.trim()) return;
     setGenerating(true);
     try {
-      const interview = await createInterview({ title, jobTitle, mode });
+      const interview = await createInterview({
+        title,
+        jobTitle: selectedJob?.title ?? "",
+        jobId: jobId || undefined,
+        candidateId: candidateId || undefined,
+        mode,
+      });
       navigate(`/interviews/${interview.id}/edit`);
     } finally {
       setGenerating(false);
@@ -65,17 +100,40 @@ export function NewInterview() {
               <Label htmlFor="job">Linked job</Label>
               <select
                 id="job"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
+                value={jobId}
+                onChange={(e) => setJobId(e.target.value)}
                 className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
               >
                 {jobs.map((j) => (
-                  <option key={j.id} value={j.title}>
+                  <option key={j.id} value={j.id}>
                     {j.title}
                   </option>
                 ))}
               </select>
             </div>
+
+            {jobId && (
+              <div>
+                <Label htmlFor="candidate">Personalize for a candidate (optional)</Label>
+                <select
+                  id="candidate"
+                  value={candidateId}
+                  onChange={(e) => setCandidateId(e.target.value)}
+                  className="h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900 focus:outline-none focus:ring-2 focus:ring-brand-primary/30"
+                >
+                  <option value="">None — generate from the job description only</option>
+                  {jobCandidates.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-neutral-500">
+                  Weaves the candidate's résumé into the generated questions. This interview
+                  becomes tailored to them specifically, not a shared template.
+                </p>
+              </div>
+            )}
 
             <div>
               <Label>Interview mode</Label>

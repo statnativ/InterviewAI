@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import String, Integer, Boolean, DateTime
+from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -12,8 +12,17 @@ class Interview(Base):
     __tablename__ = "interviews"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    tenant_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False
+    )
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     job_title: Mapped[str] = mapped_column(String(255), nullable=False)
+    job_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("jobs.id", ondelete="SET NULL"), nullable=True
+    )
+    candidate_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("candidates.id", ondelete="SET NULL"), nullable=True
+    )
     mode: Mapped[str] = mapped_column(String(50), default="Chat")  # Chat, Voice, Avatar
     status: Mapped[str] = mapped_column(String(50), default="Draft")  # Draft, Active, Archived
     questions: Mapped[list[dict]] = mapped_column(JSONB, default=list)
@@ -24,4 +33,10 @@ class Interview(Base):
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc)
+    )
+
+    __table_args__ = (
+        Index("idx_interviews_tenant", "tenant_id"),
+        Index("idx_interviews_job", "job_id"),
+        Index("idx_interviews_candidate", "candidate_id"),
     )

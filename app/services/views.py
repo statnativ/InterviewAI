@@ -68,11 +68,14 @@ def candidate_to_view(app: Application, candidate: Candidate) -> CandidateView:
     )
 
 
-def interview_to_view(iv: Interview) -> InterviewView:
+def interview_to_view(iv: Interview, candidate_name: str | None = None) -> InterviewView:
     return InterviewView(
         id=str(iv.id),
         title=iv.title,
         jobTitle=iv.job_title,
+        jobId=str(iv.job_id) if iv.job_id else None,
+        candidateId=str(iv.candidate_id) if iv.candidate_id else None,
+        candidateName=candidate_name,
         mode=iv.mode,
         status=iv.status,
         questions=iv.questions or [],

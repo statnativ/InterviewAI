@@ -1,8 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { OrgAppShell, PageTopbar } from "@/components/layout/OrgAppShell";
 import { Avatar } from "@/components/ui/Avatar";
 import { ScorePill } from "@/components/ui/ScorePill";
+import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
 import type { PipelineStage } from "@/data/types";
 import { cn } from "@/lib/utils";
@@ -26,15 +27,39 @@ const stageDot: Record<PipelineStage, string> = {
 export function PipelineBoard() {
   const { jobId } = useParams();
   const navigate = useNavigate();
-  const getJob = useAppStore((s) => s.getJob);
-  const getCandidatesForJob = useAppStore((s) => s.getCandidatesForJob);
+  const job = useAppStore((s) => s.jobs.find((j) => j.id === jobId));
+  const allCandidates = useAppStore((s) => s.candidates);
+  const ready = useAppStore((s) => s.ready);
+  const candidates = useMemo(
+    () =>
+      allCandidates
+        .filter((c) => c.jobId === jobId)
+        .sort((a, b) => b.score - a.score),
+    [allCandidates, jobId]
+  );
   const movePipelineStage = useAppStore((s) => s.movePipelineStage);
   const [dragId, setDragId] = useState<string | null>(null);
   const [overStage, setOverStage] = useState<PipelineStage | null>(null);
 
-  const job = getJob(jobId!);
-  const candidates = getCandidatesForJob(jobId!);
-  if (!job) return null;
+  if (!ready) {
+    return (
+      <OrgAppShell>
+        <LoadingState label="Loading pipeline…" />
+      </OrgAppShell>
+    );
+  }
+
+  if (!job) {
+    return (
+      <OrgAppShell>
+        <NotFoundState
+          message="This job doesn't exist or may have been removed."
+          backLabel="Back to jobs"
+          onBack={() => navigate("/jobs")}
+        />
+      </OrgAppShell>
+    );
+  }
 
   return (
     <OrgAppShell>
