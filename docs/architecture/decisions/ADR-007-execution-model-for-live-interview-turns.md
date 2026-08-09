@@ -219,8 +219,16 @@ retryable, not latency-sensitive to a live person) exists.
   module. Reusing it would collide both in the schema and in anyone's mental model of what "the
   Session model" means in this codebase. Exact columns are an implementation detail for the M4
   build, not this ADR — expected shape: `session_id`, `interview_id`, `turn_index`, candidate
-  transcript/audio ref, AI response text/audio ref, `created_at`. Additive migration, no
-  existing table altered.
+  transcript/audio ref, AI response text/audio ref, a `status` field (`pending` → ... →
+  `complete`, not a boolean), `created_at`. Additive migration, no existing table altered.
+- **Transport-agnostic contract (this is what makes the "schema doesn't need to change when the
+  transport does" claim checkable, not just intended)**: `interview_turns` rows are outcome-
+  shaped — what was said — never delivery-shaped (no queue position, no stream offset, nothing
+  that only makes sense for one transport). `(session_id, turn_index)` is the idempotency key
+  Option 4's handler uses to survive client retries; Option 3's handler, when it exists, resumes
+  or reconnects against the exact same key and terminates by writing to the exact same row. If a
+  future implementation needs a second table or a parallel schema to support streaming, this
+  contract was violated — that is the concrete test, not a judgment call at the time.
 - Design the persisted shape against the frontend contract that already exists and is currently
   unfulfilled: `frontend/src/data/types.ts` defines `SessionInfo` and `ChatMessage` with no
   backend counterpart today. Build M4's schema to satisfy those types (or revise them
