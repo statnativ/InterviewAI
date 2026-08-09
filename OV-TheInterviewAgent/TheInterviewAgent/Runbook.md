@@ -1,7 +1,7 @@
 ---
 tags: [project, runbook, how-to]
 status: current
-last-updated: 2026-08-09
+last-updated: 2026-08-10
 ---
 
 # The Interview Agent — Runbook
@@ -100,7 +100,8 @@ python -m app.seed
 ## Checks
 
 ```bash
-pytest                       # backend tests — 44 total: screening, health, tenant isolation, RBAC, admin auth
+pytest                       # backend tests — 62 total: screening, health, tenant isolation, RBAC, admin
+                              # auth, question generation, AI-client resilience (retry/fallback)
                               # (from repo root, venv active; the DB-backed suites hit the real dev DB
                               # and clean up after themselves — see [[Backend Overview]] → Tests)
 cd frontend && npm run build # tsc -b && vite build — the working type gate
@@ -130,8 +131,19 @@ in the Docker volume `statnativinterviewapp_pgdata`.
 
 ```bash
 python scripts/test_interview_pipeline.py   # voice cascade demo (STT→LLM→TTS), writes mp3s to data/pipeline_test/
+                                             # also prints IA-002's per-leg timing summary (STT/LLM/TTS
+                                             # seconds per turn) — real API calls, real cost, not free to re-run
 # synthetic-corpus tooling lives in scripts/synthetic/convert/ (see [[Synthetic Data — Design]])
 ```
+
+## Version control
+
+`origin` → `github.com/statnativ/InterviewAI`. The repo had exactly one commit ("Initial commit:
+full ATS vertical slice") through 2026-08-09, with every feature after that (M6 Phase 1/2, the
+admin module, M3) sitting uncommitted — flagged and fixed as R-012/IA-013 (`docs/risk-register.md`)
+on 2026-08-10. **From here on, commit per feature/fix, not per session** — the historical gap is
+accepted as-is (not worth a history rewrite for a solo POC repo), but the whole point of fixing
+it was to stop it from recurring.
 
 ## Troubleshooting
 

@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation)
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback)
 last-updated: 2026-08-10
 ---
 
@@ -44,7 +44,7 @@ app/
 ├── storage/           # local.py — uploaded file storage
 migrations/            # Alembic (env.py imports app.models wholesale)
 tests/                 # pytest: test_health, test_screening, test_tenant_isolation, test_rbac,
-                        # test_admin_auth, test_question_generation
+                        # test_admin_auth, test_question_generation, test_ai_client_resilience
 scripts/               # standalone tools (synthetic corpus, voice-cascade demo)
 ```
 
@@ -69,7 +69,7 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
 | `skills` | `skill.py` | Taxonomy: `name`, `category`, `aliases` (array), `embedding`. ivfflat index. Not wired to endpoints yet. Deliberately **not** tenant-scoped — shared vocabulary, not customer data. |
 | `resume_skills`, `job_skills` | `resume_skill.py`, `job_skill.py` | Many-to-many joins (composite PKs, no surrogate id). Not wired to endpoints yet. Not tenant-scoped directly — isolation comes transitively through `resume_id`/`job_id`. |
 | `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**. Fully wired. |
-| `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
+| `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
 
 ### Schema evolution (the migration story)
@@ -95,6 +95,10 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
   `job_title` string against `jobs.title` **only where unambiguous** (exactly one job with that
   title in the tenant) — left null everywhere else rather than guessing; `candidate_id` gets no
   backfill (new concept, nothing to infer it from).
+- `f6a7b8c9d0e1_interview_shared_personalized_check.py` — R-011/IA-012: `CHECK` constraint
+  `ck_interviews_no_shared_personalized` — `NOT (shared AND candidate_id IS NOT NULL)`. M3
+  shipped candidate personalization without a guard against sharing a personalized interview
+  with every other applicant; checked for existing violations (none) before applying.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -112,7 +116,7 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 | `health.py` | `GET /health` |
 | `jobs.py` | `GET/POST /jobs`, `GET/PATCH /jobs/{job_id}`, `POST /jobs/{job_id}/regenerate-rubric`, `POST /jobs/{job_id}/save-version`, `GET /jobs/{job_id}/candidates` |
 | `candidates.py` | `GET/POST /candidates` (create = dedupe by email + screen instantly), `GET/PATCH /candidates/{app_id}`, `POST /candidates/{app_id}/screen`, `POST /candidates/bulk`, `POST /candidates/{app_id}/resume` |
-| `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}`, `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
+| `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
 
@@ -149,10 +153,10 @@ addendum for why this doesn't count as Phase 3 being done.
 | `views.py` | ORM-model → view-schema mappers (`job_to_view`, `candidate_to_view`, `interview_to_view`). |
 | `resume_parser.py` | `extract_text` (PDF/DOCX → plain text) — on the ATS upload path. `parse_resume` (LLM → structured JSON) still exists but is **no longer on the ATS path** — screening is deterministic now. |
 | `question_generator.py` | **New (M3)**: `generate_questions` (JD + optional candidate profile → 8–12 questions via one `chat_completion` call, same prompt→strip-fences→`json.loads` pattern as `resume_parser.parse_resume`, but raises `LLMError` on bad output instead of falling back), `regenerate_question` (one replacement question, same type/difficulty, avoids duplicating the others), `build_candidate_profile` (compact prompt block from `Candidate`'s already-structured fields — no re-parsing a résumé file). |
-| `llm_client.py` | OpenRouter `/chat/completions`. Supports `exclude_reasoning=True` to strip a reasoning model's "thinking" from visible output. |
-| `stt_client.py` | OpenRouter `/audio/transcriptions`. Model: `qwen/qwen3-asr-flash-2026-02-10`. |
-| `tts_client.py` | OpenRouter `/audio/speech`. Model: `hexgrad/kokoro-82m`. |
-| `interview_pipeline.py` | Chains STT→LLM→TTS. `start_interview()` + `run_turn()`; conversation history (a list of chat messages) **is** the session state. Interviewer brain: `nvidia/nemotron-3-ultra-550b-a55b:free`. Standalone demo only (M4 not wired into the app). |
+| `llm_client.py` | OpenRouter `/chat/completions` via a shared, connection-pooled client (`get_http_client()`, IA-014). Supports `exclude_reasoning=True` to strip a reasoning model's "thinking" from visible output. Response shape validated + a hard-failure retry/fallback (`post_with_retry`, opt-in `fallback_model`) added 2026-08-10 (IA-009) after IA-002 reproduced both failure modes live — depth in [[AI Architecture]]. |
+| `stt_client.py` | OpenRouter `/audio/transcriptions`. Model: `qwen/qwen3-asr-flash-2026-02-10`. One same-model retry (IA-009). |
+| `tts_client.py` | OpenRouter `/audio/speech`. Model: `hexgrad/kokoro-82m` — **paid**, not free-tier (a prior version of this note miscalled it free-tier). One same-model retry (IA-009) — this is the leg that hit a real 60s timeout during IA-002. |
+| `interview_pipeline.py` | Chains STT→LLM→TTS. `start_interview()` + `run_turn()`; conversation history (a list of chat messages) **is** the session state, passed in and returned, not owned by the module. Interviewer brain: `nvidia/nemotron-3-ultra-550b-a55b:free`, with automatic fallback to `deepseek/deepseek-v4-pro` on hard failure (IA-009). Real, live-verified, timed (IA-002: 8.24s/12.51s full-turn totals) — but still a standalone demo, not wired into the app; see ADR-007 for M4's chosen execution model. |
 
 `app/storage/local.py` saves uploaded files under `data/resumes/{candidate_id}/` with a
 random prefix.
@@ -174,7 +178,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 53 tests, all DB-backed
+pytest                          # from repo root (venv active) — 62 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -200,14 +204,21 @@ pytest                          # from repo root (venv active) — 53 tests, all
   username → 401, `/admin/*` requires a session (a valid tenant dev-header pair does **not**
   substitute, proving the two auth systems stay isolated), logout invalidates the session,
   full tenant → user (pending → approve → disable) → practice-test lifecycle.
+- `tests/test_ai_client_resilience.py` — **new (IA-009)**, 8 tests: a fake `httpx` client double
+  drives `llm_client.get_http_client()` so these exercise the real retry/fallback *code paths*
+  (`post_with_retry`, `chat_completion`'s fallback logic), not chat_completion mocked away like
+  `test_question_generation.py` does. Covers: fallback triggers on both observed failure
+  modes (timeout, malformed shape); raises a clear combined error when primary **and** fallback
+  both fail; a call with no `fallback_model` configured (every non-cascade caller) fails
+  immediately with one attempt, unchanged from before; STT/TTS retry-once-then-succeed and
+  retry-then-exhaust.
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
-  (all five now, `test_health.py` included as of the admin-auth pass) sets
-  `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the module-level
-  async engine in `app/db.py` binds to whichever event loop is running on first use; without
-  forcing every file onto the same shared loop, pytest-asyncio's default per-test-function loop
-  makes some later DB-touching test reuse connections bound to an already-closed loop
-  (`asyncpg.exceptions...: another operation is in progress` / "attached to a different loop") —
-  see bug #12 below for the specific way this recurred.
+  sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
+  module-level async engine in `app/db.py` binds to whichever event loop is running on first
+  use; without forcing every file onto the same shared loop, pytest-asyncio's default
+  per-test-function loop makes some later DB-touching test reuse connections bound to an
+  already-closed loop (`asyncpg.exceptions...: another operation is in progress` / "attached to
+  a different loop") — see bug #12 below for the specific way this recurred.
 
 ## Real bugs hit (and fixed) — worth remembering
 
@@ -265,12 +276,32 @@ pytest                          # from repo root (venv active) — 53 tests, all
     failed, which is what made it non-obvious. Fixed by adding
     `pytestmark = pytest.mark.asyncio(loop_scope="session")` to `test_health.py` too.
 
+**M4-prep / ADR-007 era:**
+13. **A raw `httpx.ReadTimeout` propagated completely uncaught, live, on the very first real
+    IA-002 measurement run** — the free-tier TTS call in `start_interview` hit the full 60s
+    timeout with no `LLMError`, no retry, nothing: an unhandled exception straight out of the
+    router. Not a hypothetical — this is what interrupted the first attempt to measure cascade
+    latency at all. Fixed by catching `httpx.TimeoutException`/`TransportError` inside the new
+    shared `post_with_retry` helper and wrapping them as `LLMError`, which is also what makes
+    IA-009's retry/fallback logic reachable — a failure has to become an `LLMError` before
+    anything can act on it. A second, related failure on the next run — a 200 response with no
+    usable `choices` field — was the exact D1 finding from this project's very first
+    architecture review, reproduced live and fixed the same way (see [[AI Architecture]]).
+
 ## Known debt (pointers, not restatements)
 
-- Architecture-review findings still open (LLM error handling, orphaned upload files, no git
-  repo, resume-not-in-prompt): [[Project Overview]] → "Architecture review" section and
-  `docs/risk-register.md`. (`tenant_id` / D3 is **resolved** — M6 Phase 1 of
-  [[Identity & Access Overview]] shipped it, see the data model table above.)
+- Architecture-review findings, current status: [[Project Overview]] → "Architecture review"
+  section and `docs/risk-register.md`. `tenant_id`/D3 **resolved** (M6 Phase 1). D1's
+  `llm_client.py` half **resolved** (2026-08-10, see bug #13 above) — the orphaned-upload-file
+  half is still open. D4 (resume-not-in-prompt) is **half-resolved** — M3's question generation
+  personalizes at authoring time; the live cascade prompt is still JD-only, unaddressed because
+  M4 hasn't started. The "no git repo" finding no longer applies at all — the repo has real
+  commit history now, and R-012/IA-013 fixed the newer "one giant commit" version of the same
+  underlying problem (see [[Runbook]] → Version control).
+- Two risks found during this session's own architecture review, both since addressed: **R-011**
+  (`Interview` could be both shared and personalized at once — fixed via `CHECK
+  ck_interviews_no_shared_personalized`) and **R-004** (free-tier interview LLM reliability —
+  upgraded from theoretical to observed, then partially mitigated via IA-009's retry/fallback).
 - Full structured risk/action lists: `docs/risk-register.md`, `docs/implementation-actions.md`.
 - The old `docs/architecture/overview.md` in the repo has been **retired** (pointer only) —
   this note is its successor.
