@@ -1,0 +1,53 @@
+{
+  "id": "person-079-sarah-kim",
+  "name": "Sarah Kim",
+  "email": "sarah.kim@example.com",
+  "phone": "(555) 079-0079",
+  "location": "Los Angeles, CA",
+  "yearsExp": 5,
+  "currentTitle": "Engineering Manager",
+  "currentCompany": "Prism Commerce",
+  "skills": [
+    "Team Leadership",
+    "Technical Mentorship",
+    "Stakeholder Communication",
+    "Software Architecture",
+    "Scrum",
+    "JavaScript",
+    "TypeScript"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Latticeworks",
+      "from": "2021-04",
+      "to": "2023-01"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Latticeworks",
+      "from": "2023-02",
+      "to": "2024-06"
+    },
+    {
+      "title": "Engineering Manager",
+      "company": "Prism Commerce",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Southern California",
+  "certifications": "Certified Scrum Product Owner (CSPO)",
+  "summary": "Engineering Manager with 5 years of experience, rising from senior software engineering to leading a small team of engineers. Strong on team leadership, technical mentorship, and stakeholder communication, with growth areas in formal performance management and agile process ownership.",
+  "strengths": [
+    "Leads and mentors a team of engineers with a hands-on technical approach",
+    "Clear stakeholder communication with product and design partners",
+    "Strong software architecture background supporting technical decisions"
+  ],
+  "gaps": [
+    "Formal performance management and career development cycles are still being established",
+    "Limited ownership of agile process design and delivery metric tracking"
+  ],
+  "resumeText": "Sarah Kim is an Engineering Manager at Prism Commerce with five years of experience. She moved from senior software engineering into management, leading a small team with strong mentorship and stakeholder communication. Her focus now is building out formal performance management and agile delivery practices.",
+  "primaryDomain": "architecture"
+}

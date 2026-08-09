@@ -1,0 +1,22 @@
+{
+  "id": "job-034-llm-engineer",
+  "title": "LLM / GenAI Engineer",
+  "domain": "ai",
+  "department": "AI / ML",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Senior LLM / GenAI Engineer to design and build production-grade applications on top of large language models. You will integrate OpenAI and Anthropic APIs, craft and iterate on prompts, and apply RAG patterns to ground model output in company knowledge. You will own vector database selection and indexing strategy, and prototype retrieval pipelines with LangChain. You will also evaluate fine-tuning approaches when off-the-shelf models fall short, and partner with product teams to ship GenAI features.",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "LLM APIs (OpenAI / Anthropic)", "level": "must-have", "weight": 20 },
+    { "name": "Prompt Engineering", "level": "must-have", "weight": 15 },
+    { "name": "RAG Patterns", "level": "must-have", "weight": 15 },
+    { "name": "Vector Databases", "level": "must-have", "weight": 10 },
+    { "name": "LangChain", "level": "nice-to-have", "weight": 10 },
+    { "name": "Fine-Tuning", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

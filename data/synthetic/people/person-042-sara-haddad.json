@@ -1,0 +1,48 @@
+{
+  "id": "person-042-sara-haddad",
+  "name": "Sara Haddad",
+  "email": "sara.haddad@example.com",
+  "phone": "(555) 042-0042",
+  "location": "Dubai, AE",
+  "yearsExp": 2,
+  "currentTitle": "React Native Developer",
+  "currentCompany": "Cedar Apps",
+  "skills": [
+    "React Native",
+    "TypeScript",
+    "JavaScript",
+    "State Management (Redux / Zustand)",
+    "Expo",
+    "Testing (Detox)"
+  ],
+  "experience": [
+    {
+      "title": "Junior React Native Developer",
+      "company": "Bloom Mobile",
+      "from": "2024-05",
+      "to": "2025-10"
+    },
+    {
+      "title": "React Native Developer",
+      "company": "Cedar Apps",
+      "from": "2025-11",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, American University of Sharjah",
+  "certifications": "None",
+  "summary": "React Native developer with 2 years of experience building cross-platform screens in TypeScript. Comfortable with Redux for state management, Expo tooling, and Detox tests, but has not yet written custom native modules, relying instead on existing libraries.",
+  "strengths": [
+    "Solid React Native and TypeScript skills",
+    "Manages state with Redux and Zustand",
+    "Confident with Expo-based workflows",
+    "Writes Detox end-to-end tests"
+  ],
+  "gaps": [
+    "No native module experience; relies on existing libraries",
+    "Has not bridged custom native code on iOS or Android",
+    "Limited CI/CD setup experience"
+  ],
+  "resumeText": "React Native Developer at Cedar Apps, building cross-platform features in TypeScript with Redux and Expo. At Bloom Mobile I started as a junior, owning screens and writing Detox tests. I am currently learning how to bridge custom native modules to go beyond what libraries provide.",
+  "primaryDomain": "mobile"
+}

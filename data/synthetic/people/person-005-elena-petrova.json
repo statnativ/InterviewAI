@@ -1,0 +1,56 @@
+{
+  "id": "person-005-elena-petrova",
+  "name": "Elena Petrova",
+  "email": "elena.petrova@example.com",
+  "phone": "(555) 015-0055",
+  "location": "Seattle, WA",
+  "yearsExp": 5,
+  "currentTitle": "Cloud Platform Engineer",
+  "currentCompany": "Cobalt Systems",
+  "skills": [
+    "Go",
+    "Kubernetes",
+    "Terraform",
+    "PostgreSQL",
+    "AWS",
+    "Docker",
+    "Observability",
+    "CI/CD"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Trailhead Logistics",
+      "from": "2021-05",
+      "to": "2023-09"
+    },
+    {
+      "title": "Cloud Platform Engineer",
+      "company": "Atlas Infrastructure",
+      "from": "2023-10",
+      "to": "2025-06"
+    },
+    {
+      "title": "Cloud Platform Engineer",
+      "company": "Cobalt Systems",
+      "from": "2025-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Washington",
+  "certifications": "AWS Certified Solutions Architect – Associate",
+  "summary": "Backend engineer turned cloud platform engineer with 5 years of experience writing Go services and managing Kubernetes infrastructure with Terraform on AWS. Strong on deployment, reliability, and observability, but moving back toward service engineering means rebuilding gRPC and system design depth.",
+  "strengths": [
+    "Solid Go development with 5 years of professional usage",
+    "Production Kubernetes and Terraform infrastructure expertise",
+    "Deep AWS, Docker, and observability experience",
+    "Strong on reliability, CI/CD, and platform automation"
+  ],
+  "gaps": [
+    "No gRPC production experience; services are REST and HTTP based",
+    "System design skills are lighter, focused more on infra topology than distributed service architecture",
+    "Backend product engineering has taken a back seat to platform work recently"
+  ],
+  "resumeText": "Cloud Platform Engineer at Cobalt Systems, where I write Go tooling and manage Kubernetes clusters with Terraform on AWS. At Atlas Infrastructure I standardized cluster provisioning and observability across ten teams. I am returning to service engineering and want to apply my platform depth to product backends.",
+  "primaryDomain": "backend"
+}

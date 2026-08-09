@@ -1,0 +1,63 @@
+{
+  "id": "person-074-james-carter",
+  "name": "James Carter",
+  "email": "james.carter@example.com",
+  "phone": "(555) 074-0074",
+  "location": "Denver, CO",
+  "yearsExp": 10,
+  "currentTitle": "Systems Architect",
+  "currentCompany": "Vertex Infrastructure",
+  "skills": [
+    "Distributed Systems",
+    "System Design",
+    "Database Design",
+    "Scalability",
+    "Security",
+    "Event-Driven Architecture",
+    "Cloud Platforms",
+    "Kubernetes",
+    "Kafka",
+    "Python"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Gridline Systems",
+      "from": "2016-07",
+      "to": "2019-05"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Gridline Systems",
+      "from": "2019-06",
+      "to": "2022-01"
+    },
+    {
+      "title": "Staff Engineer",
+      "company": "Northstar Data",
+      "from": "2022-02",
+      "to": "2024-06"
+    },
+    {
+      "title": "Systems Architect",
+      "company": "Vertex Infrastructure",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Colorado School of Mines",
+  "certifications": "TOGAF 9 Certified",
+  "summary": "Systems Architect with 10 years of experience designing the core infrastructure behind data-intensive products at global scale. Owns high-level technical vision for distributed systems, database topologies, and the security boundaries protecting them, with deep hands-on systems thinking.",
+  "strengths": [
+    "Deep distributed systems and scalability expertise across event-driven platforms",
+    "Strong database design and topology work for high-volume workloads",
+    "Owns security boundaries and threat modeling for core infrastructure",
+    "Leads design reviews and champions scalability trade-offs with engineering leadership"
+  ],
+  "gaps": [
+    "Less experience in direct customer-facing solution engineering",
+    "Recent focus is on core infrastructure rather than product feature delivery"
+  ],
+  "resumeText": "Systems Architect at Vertex Infrastructure, where I design the distributed systems backbone and database topologies powering data-intensive products at global scale. I lead design reviews, set security boundaries, and guide teams toward event-driven, cloud-native patterns. Previously I built and scaled high-availability systems at Gridline Systems and Northstar Data.",
+  "primaryDomain": "architecture"
+}

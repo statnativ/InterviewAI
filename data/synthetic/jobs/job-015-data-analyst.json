@@ -1,0 +1,23 @@
+{
+  "id": "job-015-data-analyst",
+  "title": "Data Analyst",
+  "domain": "data",
+  "department": "Data & Analytics",
+  "location": "New York, NY",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Data Analyst to turn raw product and marketing data into clear, actionable insights for stakeholders across the business. You will write SQL queries against our warehouse and build polished Looker and Tableau dashboards that track key metrics such as retention, conversion, and revenue. You will partner with growth and finance teams to define metrics, run ad-hoc analyses, and translate numbers into concise recommendations. The role is a great fit for someone with strong Excel and statistics fundamentals who wants to grow into a more technical analytics practice.",
+  "seniority": "Junior",
+  "yearsRequired": 2,
+  "requiredSkills": [
+    { "name": "SQL", "level": "must-have", "weight": 25 },
+    { "name": "Data Visualization (Looker / Tableau)", "level": "must-have", "weight": 20 },
+    { "name": "Excel", "level": "must-have", "weight": 15 },
+    { "name": "Statistics", "level": "must-have", "weight": 10 },
+    { "name": "Python", "level": "must-have", "weight": 10 },
+    { "name": "dbt", "level": "nice-to-have", "weight": 10 },
+    { "name": "Airflow", "level": "nice-to-have", "weight": 5 },
+    { "name": "Google Analytics", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "job-027-soc-analyst",
+  "title": "SOC Analyst",
+  "domain": "security",
+  "department": "Security",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Junior",
+  "yearsRequired": 1,
+  "description": "We are looking for a junior SOC Analyst to join our security operations center and help detect, triage, and respond to security incidents. You will monitor SIEM alerts, perform log analysis, and investigate suspicious activity across our network and endpoints. You will also consume threat intelligence to improve detection rules and support incident response playbooks. This is a great opportunity to build a career in security with hands-on exposure to real-world operations.",
+  "requiredSkills": [
+    { "name": "SIEM", "level": "must-have", "weight": 25 },
+    { "name": "Incident Response", "level": "must-have", "weight": 20 },
+    { "name": "Network Fundamentals", "level": "must-have", "weight": 15 },
+    { "name": "Log Analysis", "level": "must-have", "weight": 15 },
+    { "name": "Threat Intelligence", "level": "must-have", "weight": 10 },
+    { "name": "Endpoint Detection", "level": "nice-to-have", "weight": 10 },
+    { "name": "Scripting (Python)", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

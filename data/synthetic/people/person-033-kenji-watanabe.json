@@ -1,0 +1,47 @@
+{
+  "id": "person-033-kenji-watanabe",
+  "name": "Kenji Watanabe",
+  "email": "kenji.watanabe@example.com",
+  "phone": "(555) 033-0033",
+  "location": "Seattle, WA",
+  "yearsExp": 3,
+  "currentTitle": "Data Scientist",
+  "currentCompany": "Summit AI Lab",
+  "skills": [
+    "Python",
+    "Machine Learning",
+    "Pandas",
+    "Scikit-learn",
+    "Deep Learning",
+    "NumPy"
+  ],
+  "experience": [
+    {
+      "title": "Machine Learning Intern",
+      "company": "Summit AI Lab",
+      "from": "2023-06",
+      "to": "2024-02"
+    },
+    {
+      "title": "Data Scientist",
+      "company": "Summit AI Lab",
+      "from": "2024-02",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computer Science, University of Washington",
+  "certifications": "None",
+  "summary": "Data Scientist with three years of experience building and evaluating machine learning models with Python and Pandas. Strong on modeling and deep learning, but light on SQL and formal statistics for production experimentation.",
+  "strengths": [
+    "Builds and tunes Scikit-learn and deep learning models in Python",
+    "Efficient data exploration and feature engineering with Pandas and NumPy",
+    "Prototypes model experiments quickly and documents results clearly"
+  ],
+  "gaps": [
+    "No SQL experience; relies on data engineers to pull warehouse data",
+    "Limited formal Statistics background for causal inference and experiment design",
+    "Little exposure to production model serving and monitoring"
+  ],
+  "resumeText": "Kenji Watanabe is a Data Scientist at Summit AI Lab with three years of experience. He joined as a machine learning intern and converted to a full-time scientist, building Scikit-learn and deep learning models in Python with Pandas for research-driven projects. He is strong at modeling and prototyping but lacks SQL, relies on teammates for data access, and has limited formal statistics training for rigorous experimentation.",
+  "primaryDomain": "data"
+}

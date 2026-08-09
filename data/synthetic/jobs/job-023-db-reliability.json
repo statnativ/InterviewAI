@@ -1,0 +1,23 @@
+{
+  "id": "job-023-db-reliability",
+  "title": "Database Reliability Engineer",
+  "domain": "infra",
+  "department": "Infrastructure",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "description": "We are hiring a Senior Database Reliability Engineer to keep our data tier fast and dependable. You will tune PostgreSQL performance, design replication and high-availability topologies, and manage our fleet of production databases. You will partner with engineering teams on schema design, migrations, and capacity planning. If you obsess over latency, uptime, and clean SQL, this role is for you.",
+  "requiredSkills": [
+    { "name": "PostgreSQL", "level": "must-have", "weight": 25 },
+    { "name": "Performance Tuning", "level": "must-have", "weight": 20 },
+    { "name": "Replication & HA", "level": "must-have", "weight": 15 },
+    { "name": "Linux", "level": "must-have", "weight": 10 },
+    { "name": "SQL", "level": "must-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 10 },
+    { "name": "Cloud Databases", "level": "nice-to-have", "weight": 5 },
+    { "name": "Python", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

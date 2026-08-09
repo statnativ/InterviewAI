@@ -1,0 +1,22 @@
+{
+  "id": "job-036-cv-engineer",
+  "title": "Computer Vision Engineer",
+  "domain": "ai",
+  "department": "AI / ML",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Closed",
+  "description": "We are looking for a Senior Computer Vision Engineer to design and ship vision systems for real-world products. You will build deep learning models in PyTorch for detection, segmentation, and classification, and use OpenCV for image processing and preprocessing pipelines. You will apply your deep learning expertise to tune training and inference, and containerize models with Docker for scalable serving. You will also leverage TensorFlow where existing codebases require it, and collaborate with data teams on labeling and evaluation.",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "PyTorch", "level": "must-have", "weight": 20 },
+    { "name": "OpenCV", "level": "must-have", "weight": 15 },
+    { "name": "Deep Learning", "level": "must-have", "weight": 15 },
+    { "name": "Image Processing", "level": "must-have", "weight": 10 },
+    { "name": "TensorFlow", "level": "nice-to-have", "weight": 10 },
+    { "name": "Docker", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

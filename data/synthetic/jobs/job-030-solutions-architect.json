@@ -1,0 +1,23 @@
+{
+  "id": "job-030-solutions-architect",
+  "title": "Solutions Architect",
+  "domain": "architecture",
+  "department": "Architecture",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 7,
+  "description": "We are looking for a Solutions Architect to own the end-to-end technical design of customer engagements across cloud platforms and legacy estates. You will translate business requirements into secure, cost-effective architectures spanning microservices, enterprise integration patterns, and containerized workloads. Working closely with engineering teams and clients, you will evaluate cloud spend, define migration strategies, and set the guardrails for security architecture. This role is remote-first and ideal for someone who thrives on cross-team influence and pragmatic, buildable solutions.",
+  "requiredSkills": [
+    { "name": "Cloud Architecture (AWS / Azure)", "level": "must-have", "weight": 25 },
+    { "name": "System Design", "level": "must-have", "weight": 20 },
+    { "name": "Microservices", "level": "must-have", "weight": 15 },
+    { "name": "Enterprise Integration", "level": "must-have", "weight": 10 },
+    { "name": "Cost Optimization", "level": "must-have", "weight": 10 },
+    { "name": "Containerization", "level": "nice-to-have", "weight": 10 },
+    { "name": "Security Architecture", "level": "nice-to-have", "weight": 5 },
+    { "name": "Migration Strategies", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

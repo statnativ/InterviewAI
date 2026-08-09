@@ -1,0 +1,47 @@
+{
+  "id": "person-081-chris-evans",
+  "name": "Chris Evans",
+  "email": "chris.evans@example.com",
+  "phone": "(555) 081-0081",
+  "location": "Remote",
+  "yearsExp": 3,
+  "currentTitle": "Backend Engineer",
+  "currentCompany": "Static Field Labs",
+  "skills": [
+    "Go",
+    "System Design",
+    "Python",
+    "SQL",
+    "REST APIs",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Kiteworks Digital",
+      "from": "2023-06",
+      "to": "2025-01"
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "Static Field Labs",
+      "from": "2025-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, San Diego State University",
+  "certifications": "None",
+  "summary": "Junior backend engineer with 3 years of experience building Go and Python services. Early-career architect with solid fundamentals in system design and APIs, but no production experience designing distributed systems, sharded databases, or large-scale scalability.",
+  "strengths": [
+    "Solid Go fundamentals building backend services and REST APIs",
+    "Good system design instincts for small-to-medium services",
+    "Fast learner eager to work on distributed systems"
+  ],
+  "gaps": [
+    "No production distributed systems experience",
+    "Limited PostgreSQL depth beyond basic queries",
+    "No hands-on scalability or high-concurrency design work"
+  ],
+  "resumeText": "Chris Evans is a Backend Engineer at Static Field Labs with three years of experience, the first two at Kiteworks Digital. He writes Go and Python services and has solid system design fundamentals, but he is early in his career: he has not yet designed production distributed systems, worked with PostgreSQL at scale, or owned scalability decisions.",
+  "primaryDomain": "architecture"
+}

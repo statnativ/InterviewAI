@@ -1,0 +1,47 @@
+{
+  "id": "person-067-josh-park",
+  "name": "Josh Park",
+  "email": "josh.park@example.com",
+  "phone": "(555) 067-0067",
+  "location": "Chicago, IL",
+  "yearsExp": 2,
+  "currentTitle": "QA Automation Engineer",
+  "currentCompany": "Brightline Commerce",
+  "skills": [
+    "Test Automation",
+    "Python",
+    "Selenium / Playwright",
+    "JavaScript",
+    "Selenium",
+    "Postman",
+    "Git"
+  ],
+  "experience": [
+    {
+      "title": "Manual QA Tester",
+      "company": "Northgate Retail Group",
+      "from": "2024-06",
+      "to": "2025-05"
+    },
+    {
+      "title": "QA Automation Engineer",
+      "company": "Brightline Commerce",
+      "from": "2025-06",
+      "to": null
+    }
+  ],
+  "education": "B.A. Information Systems, DePaul University",
+  "certifications": "None",
+  "summary": "QA engineer with 2 years of experience who began in manual testing and moved into automation, writing Selenium and Playwright browser tests in Python and JavaScript for e-commerce checkout flows.",
+  "strengths": [
+    "Hands-on with Selenium and Playwright for end-to-end browser test coverage",
+    "Comfortable scripting test cases in both Python and JavaScript",
+    "Strong manual-to-automation transition, with attention to flaky-test reduction"
+  ],
+  "gaps": [
+    "No experience wiring test suites into CI/CD pipelines; tests currently run locally or on a shared runner",
+    "Limited API testing experience beyond simple Postman smoke checks"
+  ],
+  "resumeText": "At Brightline Commerce I write automated browser tests for the checkout and order flows using Selenium and Playwright. I started as a manual QA tester at Northgate Retail Group and transitioned into automation, teaching myself Python and JavaScript test scripting. My suites cover the core purchase journey and I focus on keeping tests stable and fast, though they still run manually triggered rather than from a CI/CD pipeline.",
+  "primaryDomain": "qa"
+}

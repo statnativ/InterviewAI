@@ -1,0 +1,55 @@
+{
+  "id": "person-090-henry-ford",
+  "name": "Henry Ford",
+  "email": "henry.ford@example.com",
+  "phone": "(555) 090-0090",
+  "location": "Denver, CO",
+  "yearsExp": 6,
+  "currentTitle": "LLM Engineer",
+  "currentCompany": "Mile High AI",
+  "skills": [
+    "Python",
+    "LLM APIs (OpenAI / Anthropic)",
+    "Prompt Engineering",
+    "RAG Patterns",
+    "LangChain",
+    "Fine-Tuning",
+    "PyTorch"
+  ],
+  "experience": [
+    {
+      "title": "Data Scientist",
+      "company": "Rocky Mountain Insights",
+      "from": "2020-06",
+      "to": "2022-11"
+    },
+    {
+      "title": "Machine Learning Engineer",
+      "company": "Peakline Analytics",
+      "from": "2022-12",
+      "to": "2025-01"
+    },
+    {
+      "title": "LLM Engineer",
+      "company": "Mile High AI",
+      "from": "2025-02",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Data Science, University of Colorado Boulder",
+  "certifications": "None",
+  "summary": "AI generalist with 6 years of experience spanning data science, machine learning, and now LLM application development. Strong on Python, OpenAI and Anthropic APIs, prompt engineering, and RAG patterns, with fine-tuning experience, currently expanding into vector database ownership.",
+  "strengths": [
+    "Broad AI background across data science, ML, and LLM work",
+    "Production experience with OpenAI and Anthropic APIs",
+    "Strong prompt engineering and RAG pattern implementation",
+    "Hands-on fine-tuning experience with PyTorch"
+  ],
+  "gaps": [
+    "No hands-on vector database selection or indexing strategy",
+    "RAG work relies on managed retrieval rather than deep index design",
+    "Generalist profile with less deep specialization in any single layer"
+  ],
+  "resumeText": "Henry Ford is an LLM Engineer at Mile High AI with six years of experience across data science, machine learning, and LLM application development. He builds Python applications on OpenAI and Anthropic APIs with strong prompt engineering and RAG patterns, and has fine-tuned models in PyTorch. He previously worked as a machine learning engineer at Peakline Analytics and as a data scientist before that. His RAG work uses managed retrieval, and he is building vector database depth.",
+  "primaryDomain": "ai"
+}

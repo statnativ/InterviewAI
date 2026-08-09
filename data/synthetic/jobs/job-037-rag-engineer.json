@@ -1,0 +1,22 @@
+{
+  "id": "job-037-rag-engineer",
+  "title": "RAG / Information Retrieval Engineer",
+  "domain": "ai",
+  "department": "AI / ML",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Senior RAG / Information Retrieval Engineer to build and optimize retrieval-augmented generation systems. You will design vector database schemas and index millions of documents, and manage embedding generation and updates for accuracy and freshness. You will own the retrieval pipeline, tuning RAG patterns from hybrid search to reranking to improve answer quality. You will apply NLP techniques to chunking, query understanding, and evaluation, and use LangChain to prototype and Elasticsearch for hybrid and keyword retrieval.",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "Vector Databases", "level": "must-have", "weight": 20 },
+    { "name": "Embeddings", "level": "must-have", "weight": 15 },
+    { "name": "RAG Patterns", "level": "must-have", "weight": 15 },
+    { "name": "NLP", "level": "must-have", "weight": 10 },
+    { "name": "LangChain", "level": "nice-to-have", "weight": 10 },
+    { "name": "Elasticsearch", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

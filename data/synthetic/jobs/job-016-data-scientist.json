@@ -1,0 +1,23 @@
+{
+  "id": "job-016-data-scientist",
+  "title": "Data Scientist",
+  "domain": "data",
+  "department": "Data & Analytics",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Data Scientist to design and ship machine learning models that improve customer outcomes and drive product decisions. You will frame problems, explore data with Python and Pandas, and build models with Scikit-learn that are validated through rigorous experimentation and A/B testing. You will partner closely with product and engineering to instrument features, run causal analyses, and communicate results to leadership. The role also gives you room to explore deep learning approaches when classic methods reach their limits.",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "Machine Learning", "level": "must-have", "weight": 20 },
+    { "name": "Statistics", "level": "must-have", "weight": 15 },
+    { "name": "Pandas", "level": "must-have", "weight": 10 },
+    { "name": "SQL", "level": "must-have", "weight": 10 },
+    { "name": "Scikit-learn", "level": "nice-to-have", "weight": 10 },
+    { "name": "Deep Learning", "level": "nice-to-have", "weight": 5 },
+    { "name": "Experimentation (A/B Testing)", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "job-013-android-engineer",
+  "title": "Android Engineer",
+  "domain": "mobile",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a Mid-level Android Engineer to own features across our Android app end to end. You will build modern UIs with Kotlin and Jetpack Compose, and follow the MVVM pattern backed by the Android SDK and Coroutines for structured concurrency. You will persist data with Room, integrate with our APIs using Retrofit, and wire in Firebase for analytics and push notifications. You will work closely with product and design in a fully remote team that values clean, well-tested code. This is a chance to have real ownership over the experience of millions of users.",
+  "requiredSkills": [
+    { "name": "Kotlin", "level": "must-have", "weight": 25 },
+    { "name": "Jetpack Compose", "level": "must-have", "weight": 20 },
+    { "name": "Android SDK", "level": "must-have", "weight": 15 },
+    { "name": "Coroutines", "level": "must-have", "weight": 10 },
+    { "name": "MVVM", "level": "must-have", "weight": 10 },
+    { "name": "Room", "level": "nice-to-have", "weight": 10 },
+    { "name": "Retrofit", "level": "nice-to-have", "weight": 5 },
+    { "name": "Firebase", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

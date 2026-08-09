@@ -1,0 +1,43 @@
+{
+  "id": "person-023-anika-sharma",
+  "name": "Anika Sharma",
+  "email": "anika.sharma@example.com",
+  "phone": "(555) 023-0023",
+  "location": "Pune, India",
+  "yearsExp": 2,
+  "currentTitle": "Junior .NET Developer",
+  "currentCompany": "Monsoon IT",
+  "skills": [
+    "C#",
+    "ASP.NET Core",
+    "SQL Server",
+    "REST APIs",
+    "EF Core",
+    "HTML",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "Junior .NET Developer",
+      "company": "Monsoon IT",
+      "from": "2024-09",
+      "to": null
+    }
+  ],
+  "education": "B.E. in Information Technology, Savitribai Phule Pune University",
+  "certifications": "None",
+  "summary": "Junior .NET developer with 2 years building ASP.NET Core REST APIs against SQL Server with EF Core under senior mentorship. Solid C# fundamentals and REST API experience, with Azure cloud and containerized deployment still on my learning path.",
+  "strengths": [
+    "Good C# and ASP.NET Core fundamentals",
+    "SQL Server and EF Core data access experience",
+    "REST API development in a mentored environment",
+    "Eager to learn cloud and deployment tooling"
+  ],
+  "gaps": [
+    "No Azure cloud deployment experience yet",
+    "Limited experience with Docker and Kubernetes",
+    "Working below the typical seniority level for the role"
+  ],
+  "resumeText": "Junior .NET Developer at Monsoon IT building ASP.NET Core REST APIs on SQL Server with EF Core, working within a small feature team and reviewing code with senior engineers. I write unit tests and follow clean-code practices. Azure, Docker, and Kubernetes are the next skills on my roadmap as I grow toward a mid-level engineer.",
+  "primaryDomain": "backend"
+}

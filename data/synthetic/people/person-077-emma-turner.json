@@ -1,0 +1,54 @@
+{
+  "id": "person-077-emma-turner",
+  "name": "Emma Turner",
+  "email": "emma.turner@example.com",
+  "phone": "(555) 077-0077",
+  "location": "Boston, MA",
+  "yearsExp": 6,
+  "currentTitle": "Staff Engineer",
+  "currentCompany": "Fathom Platforms",
+  "skills": [
+    "Distributed Systems",
+    "System Design",
+    "Scalability",
+    "Python",
+    "MySQL",
+    "Redis",
+    "Kafka",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Driftline Media",
+      "from": "2020-07",
+      "to": "2022-05"
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "Driftline Media",
+      "from": "2022-06",
+      "to": "2024-02"
+    },
+    {
+      "title": "Staff Engineer",
+      "company": "Fathom Platforms",
+      "from": "2024-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Northeastern University",
+  "certifications": "AWS Certified Developer - Associate",
+  "summary": "Staff Engineer with 6 years of experience designing distributed systems for high-traffic platforms. Strong on system design and horizontal scalability with Python-based services, and actively building production experience in Go and PostgreSQL-backed storage.",
+  "strengths": [
+    "Solid distributed systems and scalability design for high-concurrency services",
+    "Strong Python backend engineering with Redis and Kafka in production",
+    "Leads design reviews and cross-team technical discussions"
+  ],
+  "gaps": [
+    "No production Go experience; primary language is Python",
+    "Storage is MySQL-based, with limited PostgreSQL and sharded database experience"
+  ],
+  "resumeText": "Emma Turner is a Staff Engineer at Fathom Platforms with six years of experience designing distributed systems for high-traffic platforms. She works across system design, scalability, and event streaming with Kafka and Redis. Her core expertise is Python; she is expanding into Go and PostgreSQL as her team standardizes on them.",
+  "primaryDomain": "architecture"
+}

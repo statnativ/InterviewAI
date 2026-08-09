@@ -1,0 +1,23 @@
+{
+  "id": "job-010-frontend-vue",
+  "title": "Vue.js Engineer",
+  "domain": "frontend",
+  "department": "Engineering",
+  "location": "Amsterdam (Remote)",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Vue.js Engineer to craft polished, responsive user interfaces for our SaaS platform, built on Vue 3 and TypeScript. You will manage application state with Pinia or Vuex, write unit tests with Vitest, and build reusable components that keep our product consistent and fast. You will work closely with product and design to translate requirements into delightful, accessible experiences. If you are passionate about the Vue ecosystem and care about testing and component quality, this role is for you.",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "requiredSkills": [
+    { "name": "Vue.js", "level": "must-have", "weight": 25 },
+    { "name": "TypeScript", "level": "must-have", "weight": 20 },
+    { "name": "Pinia / Vuex", "level": "must-have", "weight": 15 },
+    { "name": "HTML5 & CSS", "level": "must-have", "weight": 10 },
+    { "name": "Testing (Vitest)", "level": "must-have", "weight": 10 },
+    { "name": "Nuxt", "level": "nice-to-have", "weight": 10 },
+    { "name": "Accessibility (a11y)", "level": "nice-to-have", "weight": 5 },
+    { "name": "Storybook", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

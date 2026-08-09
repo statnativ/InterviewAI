@@ -1,0 +1,1484 @@
+{
+  "generatedAt": "2026-08-08",
+  "summary": {
+    "jobs": 37,
+    "people": 90,
+    "applications": 228,
+    "averageApplicationsPerJob": 6.2
+  },
+  "jobs": [
+    {
+      "id": "job-001-senior-backend-go",
+      "title": "Senior Backend Engineer (Go)",
+      "domain": "backend",
+      "seniority": "Senior",
+      "applicationCount": 5,
+      "applicants": [
+        {
+          "personId": "person-001-aisha-rahman",
+          "name": "Aisha Rahman",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-002-diego-fernandez",
+          "name": "Diego Fernandez",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-003-priya-nataraj",
+          "name": "Priya Nataraj",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-004-marcus-bell",
+          "name": "Marcus Bell",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-005-elena-petrova",
+          "name": "Elena Petrova",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-002-senior-frontend-react",
+      "title": "Senior Frontend Engineer (React)",
+      "domain": "frontend",
+      "seniority": "Senior",
+      "applicationCount": 5,
+      "applicants": [
+        {
+          "personId": "person-006-hannah-park",
+          "name": "Hannah Park",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-007-liam-oconnor",
+          "name": "Liam O'Connor",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-008-meera-iyer",
+          "name": "Meera Iyer",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-009-noah-williams",
+          "name": "Noah Williams",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-010-isabella-rossi",
+          "name": "Isabella Rossi",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-003-data-engineer",
+      "title": "Data Engineer",
+      "domain": "data",
+      "seniority": "Mid",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-003-priya-nataraj",
+          "name": "Priya Nataraj",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-011-raj-patel",
+          "name": "Raj Patel",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-012-yuki-tanaka",
+          "name": "Yuki Tanaka",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-013-carlos-mendez",
+          "name": "Carlos Mendez",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-014-fatima-al-sayed",
+          "name": "Fatima Al-Sayed",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-015-james-whitfield",
+          "name": "James Whitfield",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-016-lena-fischer",
+          "name": "Lena Fischer",
+          "status": "Screening"
+        }
+      ]
+    },
+    {
+      "id": "job-004-staff-backend-go",
+      "title": "Staff Backend Engineer (Go)",
+      "domain": "backend",
+      "seniority": "Staff",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-001-aisha-rahman",
+          "name": "Aisha Rahman",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-002-diego-fernandez",
+          "name": "Diego Fernandez",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-019-nina-kowalski",
+          "name": "Nina Kowalski",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-021-chloe-dubois",
+          "name": "Chloe Dubois",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-023-anika-sharma",
+          "name": "Anika Sharma",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-024-mateo-alvarez",
+          "name": "Mateo Alvarez",
+          "status": "Offer"
+        }
+      ]
+    },
+    {
+      "id": "job-005-backend-python",
+      "title": "Backend Engineer (Python)",
+      "domain": "backend",
+      "seniority": "Mid",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-004-marcus-bell",
+          "name": "Marcus Bell",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-016-lena-fischer",
+          "name": "Lena Fischer",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-017-omar-haddad",
+          "name": "Omar Haddad",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-019-nina-kowalski",
+          "name": "Nina Kowalski",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-020-david-osei",
+          "name": "David Osei",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-023-anika-sharma",
+          "name": "Anika Sharma",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-084-charlotte-dubois",
+          "name": "Charlotte Dubois",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-006-java-microservices",
+      "title": "Java Microservices Engineer",
+      "domain": "backend",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-001-aisha-rahman",
+          "name": "Aisha Rahman",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-018-vikram-singh",
+          "name": "Vikram Singh",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-019-nina-kowalski",
+          "name": "Nina Kowalski",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-021-chloe-dubois",
+          "name": "Chloe Dubois",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-022-tom-becker",
+          "name": "Tom Becker",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-023-anika-sharma",
+          "name": "Anika Sharma",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-007-node-backend",
+      "title": "Node.js Backend Engineer",
+      "domain": "backend",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-002-diego-fernandez",
+          "name": "Diego Fernandez",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-003-priya-nataraj",
+          "name": "Priya Nataraj",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-016-lena-fischer",
+          "name": "Lena Fischer",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-020-david-osei",
+          "name": "David Osei",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-021-chloe-dubois",
+          "name": "Chloe Dubois",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-024-mateo-alvarez",
+          "name": "Mateo Alvarez",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-008-dotnet-backend",
+      "title": ".NET Backend Engineer",
+      "domain": "backend",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-004-marcus-bell",
+          "name": "Marcus Bell",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-005-elena-petrova",
+          "name": "Elena Petrova",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-017-omar-haddad",
+          "name": "Omar Haddad",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-018-vikram-singh",
+          "name": "Vikram Singh",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-020-david-osei",
+          "name": "David Osei",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-022-tom-becker",
+          "name": "Tom Becker",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-009-frontend-angular",
+      "title": "Frontend Engineer (Angular)",
+      "domain": "frontend",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-008-meera-iyer",
+          "name": "Meera Iyer",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-025-zoe-bennett",
+          "name": "Zoe Bennett",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-026-ryan-clark",
+          "name": "Ryan Clark",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-027-amelie-laurent",
+          "name": "Amelie Laurent",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-028-daniel-kim",
+          "name": "Daniel Kim",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-029-freya-nielsen",
+          "name": "Freya Nielsen",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-010-frontend-vue",
+      "title": "Vue.js Engineer",
+      "domain": "frontend",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-006-hannah-park",
+          "name": "Hannah Park",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-010-isabella-rossi",
+          "name": "Isabella Rossi",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-025-zoe-bennett",
+          "name": "Zoe Bennett",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-026-ryan-clark",
+          "name": "Ryan Clark",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-027-amelie-laurent",
+          "name": "Amelie Laurent",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-028-daniel-kim",
+          "name": "Daniel Kim",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-011-frontend-platform",
+      "title": "Frontend Platform Engineer",
+      "domain": "frontend",
+      "seniority": "Staff",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-006-hannah-park",
+          "name": "Hannah Park",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-007-liam-oconnor",
+          "name": "Liam O'Connor",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-009-noah-williams",
+          "name": "Noah Williams",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-010-isabella-rossi",
+          "name": "Isabella Rossi",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-028-daniel-kim",
+          "name": "Daniel Kim",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-029-freya-nielsen",
+          "name": "Freya Nielsen",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-012-ios-engineer",
+      "title": "iOS Engineer",
+      "domain": "mobile",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-037-isaac-cohen",
+          "name": "Isaac Cohen",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-038-lucia-fernandez",
+          "name": "Lucia Fern\u00e1ndez",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-040-emily-zhang",
+          "name": "Emily Zhang",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-042-sara-haddad",
+          "name": "Sara Haddad",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-043-oliver-schmidt",
+          "name": "Oliver Schmidt",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-044-mia-johansson",
+          "name": "Mia Johansson",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-013-android-engineer",
+      "title": "Android Engineer",
+      "domain": "mobile",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-037-isaac-cohen",
+          "name": "Isaac Cohen",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-038-lucia-fernandez",
+          "name": "Lucia Fern\u00e1ndez",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-039-arjun-mehta",
+          "name": "Arjun Mehta",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-040-emily-zhang",
+          "name": "Emily Zhang",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-043-oliver-schmidt",
+          "name": "Oliver Schmidt",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-044-mia-johansson",
+          "name": "Mia Johansson",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-014-react-native",
+      "title": "React Native Engineer",
+      "domain": "mobile",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-037-isaac-cohen",
+          "name": "Isaac Cohen",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-039-arjun-mehta",
+          "name": "Arjun Mehta",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-041-felix-braun",
+          "name": "Felix Braun",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-042-sara-haddad",
+          "name": "Sara Haddad",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-043-oliver-schmidt",
+          "name": "Oliver Schmidt",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-044-mia-johansson",
+          "name": "Mia Johansson",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-015-data-analyst",
+      "title": "Data Analyst",
+      "domain": "data",
+      "seniority": "Junior",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-013-carlos-mendez",
+          "name": "Carlos Mendez",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-017-omar-haddad",
+          "name": "Omar Haddad",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-030-aisha-khan",
+          "name": "Aisha Khan",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-031-ben-carter",
+          "name": "Ben Carter",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-032-maria-lopez",
+          "name": "Maria Lopez",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-033-kenji-watanabe",
+          "name": "Kenji Watanabe",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-036-nina-rossi",
+          "name": "Nina Rossi",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-016-data-scientist",
+      "title": "Data Scientist",
+      "domain": "data",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-011-raj-patel",
+          "name": "Raj Patel",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-012-yuki-tanaka",
+          "name": "Yuki Tanaka",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-030-aisha-khan",
+          "name": "Aisha Khan",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-032-maria-lopez",
+          "name": "Maria Lopez",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-033-kenji-watanabe",
+          "name": "Kenji Watanabe",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-036-nina-rossi",
+          "name": "Nina Rossi",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-017-ml-engineer",
+      "title": "Machine Learning Engineer",
+      "domain": "data",
+      "seniority": "Senior",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-014-fatima-al-sayed",
+          "name": "Fatima Al-Sayed",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-015-james-whitfield",
+          "name": "James Whitfield",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-031-ben-carter",
+          "name": "Ben Carter",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-033-kenji-watanabe",
+          "name": "Kenji Watanabe",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-034-olga-ivanova",
+          "name": "Olga Ivanova",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-035-sam-thompson",
+          "name": "Sam Thompson",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-082-yasmine-benali",
+          "name": "Yasmine Benali",
+          "status": "Screening"
+        }
+      ]
+    },
+    {
+      "id": "job-018-ml-platform",
+      "title": "ML Platform Engineer",
+      "domain": "data",
+      "seniority": "Staff",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-011-raj-patel",
+          "name": "Raj Patel",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-014-fatima-al-sayed",
+          "name": "Fatima Al-Sayed",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-032-maria-lopez",
+          "name": "Maria Lopez",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-034-olga-ivanova",
+          "name": "Olga Ivanova",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-035-sam-thompson",
+          "name": "Sam Thompson",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-036-nina-rossi",
+          "name": "Nina Rossi",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-049-lucas-silva",
+          "name": "Lucas Silva",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-019-devops-engineer",
+      "title": "DevOps Engineer",
+      "domain": "infra",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-045-ethan-wood",
+          "name": "Ethan Wood",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-046-grace-liu",
+          "name": "Grace Liu",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-048-ava-martin",
+          "name": "Ava Martin",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-050-mia-chen",
+          "name": "Mia Chen",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-054-ruby-foster",
+          "name": "Ruby Foster",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-055-max-keller",
+          "name": "Max Keller",
+          "status": "Screening"
+        }
+      ]
+    },
+    {
+      "id": "job-020-sre",
+      "title": "Site Reliability Engineer",
+      "domain": "infra",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-047-noah-green",
+          "name": "Noah Green",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-048-ava-martin",
+          "name": "Ava Martin",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-051-jack-wilson",
+          "name": "Jack Wilson",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-052-aria-patel",
+          "name": "Aria Patel",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-053-leo-andersson",
+          "name": "Leo Andersson",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-056-zoe-laurent",
+          "name": "Zoe Laurent",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-021-platform-engineer",
+      "title": "Platform Engineer",
+      "domain": "infra",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-045-ethan-wood",
+          "name": "Ethan Wood",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-047-noah-green",
+          "name": "Noah Green",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-049-lucas-silva",
+          "name": "Lucas Silva",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-050-mia-chen",
+          "name": "Mia Chen",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-054-ruby-foster",
+          "name": "Ruby Foster",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-055-max-keller",
+          "name": "Max Keller",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-022-cloud-engineer-aws",
+      "title": "Cloud Engineer (AWS)",
+      "domain": "infra",
+      "seniority": "Mid",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-005-elena-petrova",
+          "name": "Elena Petrova",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-045-ethan-wood",
+          "name": "Ethan Wood",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-046-grace-liu",
+          "name": "Grace Liu",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-051-jack-wilson",
+          "name": "Jack Wilson",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-052-aria-patel",
+          "name": "Aria Patel",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-054-ruby-foster",
+          "name": "Ruby Foster",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-056-zoe-laurent",
+          "name": "Zoe Laurent",
+          "status": "Screening"
+        }
+      ]
+    },
+    {
+      "id": "job-023-db-reliability",
+      "title": "Database Reliability Engineer",
+      "domain": "infra",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-047-noah-green",
+          "name": "Noah Green",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-048-ava-martin",
+          "name": "Ava Martin",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-051-jack-wilson",
+          "name": "Jack Wilson",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-052-aria-patel",
+          "name": "Aria Patel",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-053-leo-andersson",
+          "name": "Leo Andersson",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-056-zoe-laurent",
+          "name": "Zoe Laurent",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-024-security-engineer",
+      "title": "Security Engineer",
+      "domain": "security",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-057-adam-scott",
+          "name": "Adam Scott",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-058-layla-ahmed",
+          "name": "Layla Ahmed",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-060-nia-edwards",
+          "name": "Nia Edwards",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-062-julia-novak",
+          "name": "Julia Novak",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-064-chloe-adams",
+          "name": "Chloe Adams",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-065-marcus-reed",
+          "name": "Marcus Reed",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-025-appsec",
+      "title": "Application Security Engineer",
+      "domain": "security",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-057-adam-scott",
+          "name": "Adam Scott",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-058-layla-ahmed",
+          "name": "Layla Ahmed",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-059-victor-ivanov",
+          "name": "Victor Ivanov",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-060-nia-edwards",
+          "name": "Nia Edwards",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-061-omar-farooq",
+          "name": "Omar Farooq",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-065-marcus-reed",
+          "name": "Marcus Reed",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-026-cloud-security",
+      "title": "Cloud Security Engineer",
+      "domain": "security",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-059-victor-ivanov",
+          "name": "Victor Ivanov",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-061-omar-farooq",
+          "name": "Omar Farooq",
+          "status": "Offer"
+        },
+        {
+          "personId": "person-062-julia-novak",
+          "name": "Julia Novak",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-063-evan-brooks",
+          "name": "Evan Brooks",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-064-chloe-adams",
+          "name": "Chloe Adams",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-065-marcus-reed",
+          "name": "Marcus Reed",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-027-soc-analyst",
+      "title": "SOC Analyst",
+      "domain": "security",
+      "seniority": "Junior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-057-adam-scott",
+          "name": "Adam Scott",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-058-layla-ahmed",
+          "name": "Layla Ahmed",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-060-nia-edwards",
+          "name": "Nia Edwards",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-061-omar-farooq",
+          "name": "Omar Farooq",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-063-evan-brooks",
+          "name": "Evan Brooks",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-064-chloe-adams",
+          "name": "Chloe Adams",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-028-sdet",
+      "title": "SDET",
+      "domain": "qa",
+      "seniority": "Mid",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-018-vikram-singh",
+          "name": "Vikram Singh",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-066-hannah-cole",
+          "name": "Hannah Cole",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-067-josh-park",
+          "name": "Josh Park",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-068-isabel-gomez",
+          "name": "Isabel Gomez",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-069-tyler-nguyen",
+          "name": "Tyler Nguyen",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-070-anna-kovacs",
+          "name": "Anna Kov\u00e1cs",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-071-liam-walsh",
+          "name": "Liam Walsh",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-029-qa-automation",
+      "title": "QA Automation Engineer",
+      "domain": "qa",
+      "seniority": "Mid",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-066-hannah-cole",
+          "name": "Hannah Cole",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-067-josh-park",
+          "name": "Josh Park",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-068-isabel-gomez",
+          "name": "Isabel Gomez",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-069-tyler-nguyen",
+          "name": "Tyler Nguyen",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-070-anna-kovacs",
+          "name": "Anna Kov\u00e1cs",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-071-liam-walsh",
+          "name": "Liam Walsh",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-030-solutions-architect",
+      "title": "Solutions Architect",
+      "domain": "architecture",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-072-robert-hayes",
+          "name": "Robert Hayes",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-073-priya-rao",
+          "name": "Priya Rao",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-075-sofia-novak",
+          "name": "Sofia Novak",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-077-emma-turner",
+          "name": "Emma Turner",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-079-sarah-kim",
+          "name": "Sarah Kim",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-080-alex-morgan",
+          "name": "Alex Morgan",
+          "status": "Screening"
+        }
+      ]
+    },
+    {
+      "id": "job-031-systems-architect",
+      "title": "Systems Architect",
+      "domain": "architecture",
+      "seniority": "Staff",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-074-james-carter",
+          "name": "James Carter",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-075-sofia-novak",
+          "name": "Sofia Novak",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-076-daniel-wright",
+          "name": "Daniel Wright",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-077-emma-turner",
+          "name": "Emma Turner",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-079-sarah-kim",
+          "name": "Sarah Kim",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-081-chris-evans",
+          "name": "Chris Evans",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-032-staff-distributed",
+      "title": "Staff Engineer (Distributed Systems)",
+      "domain": "architecture",
+      "seniority": "Staff",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-024-mateo-alvarez",
+          "name": "Mateo Alvarez",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-072-robert-hayes",
+          "name": "Robert Hayes",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-073-priya-rao",
+          "name": "Priya Rao",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-074-james-carter",
+          "name": "James Carter",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-076-daniel-wright",
+          "name": "Daniel Wright",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-079-sarah-kim",
+          "name": "Sarah Kim",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-081-chris-evans",
+          "name": "Chris Evans",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-033-engineering-manager",
+      "title": "Engineering Manager",
+      "domain": "architecture",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-072-robert-hayes",
+          "name": "Robert Hayes",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-073-priya-rao",
+          "name": "Priya Rao",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-074-james-carter",
+          "name": "James Carter",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-078-michael-brown",
+          "name": "Michael Brown",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-080-alex-morgan",
+          "name": "Alex Morgan",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-081-chris-evans",
+          "name": "Chris Evans",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-034-llm-engineer",
+      "title": "LLM / GenAI Engineer",
+      "domain": "ai",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-082-yasmine-benali",
+          "name": "Yasmine Benali",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-083-kwame-mensah",
+          "name": "Kwame Mensah",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-085-ethan-ross",
+          "name": "Ethan Ross",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-087-maya-kapoor",
+          "name": "Maya Kapoor",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-089-zara-ali",
+          "name": "Zara Ali",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-090-henry-ford",
+          "name": "Henry Ford",
+          "status": "Interview"
+        }
+      ]
+    },
+    {
+      "id": "job-035-genai-app-dev",
+      "title": "GenAI Application Developer",
+      "domain": "ai",
+      "seniority": "Mid",
+      "applicationCount": 7,
+      "applicants": [
+        {
+          "personId": "person-029-freya-nielsen",
+          "name": "Freya Nielsen",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-083-kwame-mensah",
+          "name": "Kwame Mensah",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-084-charlotte-dubois",
+          "name": "Charlotte Dubois",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-085-ethan-ross",
+          "name": "Ethan Ross",
+          "status": "Screening"
+        },
+        {
+          "personId": "person-087-maya-kapoor",
+          "name": "Maya Kapoor",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-088-liam-harris",
+          "name": "Liam Harris",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-090-henry-ford",
+          "name": "Henry Ford",
+          "status": "Applied"
+        }
+      ]
+    },
+    {
+      "id": "job-036-cv-engineer",
+      "title": "Computer Vision Engineer",
+      "domain": "ai",
+      "seniority": "Senior",
+      "applicationCount": 6,
+      "applicants": [
+        {
+          "personId": "person-082-yasmine-benali",
+          "name": "Yasmine Benali",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-083-kwame-mensah",
+          "name": "Kwame Mensah",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-086-wei-liu",
+          "name": "Wei Liu",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-087-maya-kapoor",
+          "name": "Maya Kapoor",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-089-zara-ali",
+          "name": "Zara Ali",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-090-henry-ford",
+          "name": "Henry Ford",
+          "status": "Rejected"
+        }
+      ]
+    },
+    {
+      "id": "job-037-rag-engineer",
+      "title": "RAG / Information Retrieval Engineer",
+      "domain": "ai",
+      "seniority": "Senior",
+      "applicationCount": 5,
+      "applicants": [
+        {
+          "personId": "person-084-charlotte-dubois",
+          "name": "Charlotte Dubois",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-085-ethan-ross",
+          "name": "Ethan Ross",
+          "status": "Rejected"
+        },
+        {
+          "personId": "person-086-wei-liu",
+          "name": "Wei Liu",
+          "status": "Applied"
+        },
+        {
+          "personId": "person-088-liam-harris",
+          "name": "Liam Harris",
+          "status": "Interview"
+        },
+        {
+          "personId": "person-089-zara-ali",
+          "name": "Zara Ali",
+          "status": "Screening"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "id": "person-059-victor-ivanov",
+  "name": "Victor Ivanov",
+  "email": "victor.ivanov@example.com",
+  "phone": "(555) 059-0059",
+  "location": "Seattle, WA",
+  "yearsExp": 5,
+  "currentTitle": "Application Security Engineer",
+  "currentCompany": "Corva Software",
+  "skills": [
+    "OWASP Top 10",
+    "Threat Modeling",
+    "Secure Code Review",
+    "Web Technologies",
+    "SAST / DAST",
+    "Python",
+    "Kubernetes Security",
+    "CI/CD Security",
+    "Burp Suite",
+    "JavaScript"
+  ],
+  "experience": [
+    {
+      "title": "Application Security Analyst",
+      "company": "Corva Software",
+      "from": "2021-05",
+      "to": "2023-08"
+    },
+    {
+      "title": "Application Security Engineer",
+      "company": "Corva Software",
+      "from": "2023-09",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Information Security, University of Washington",
+  "certifications": "CSSLP (Certified Secure Software Lifecycle Professional)",
+  "summary": "Application security engineer with 5 years embedding security into the SDLC at Corva Software. I lead threat modeling workshops, run secure code reviews, and own the SAST and DAST pipeline across modern web technology stacks.",
+  "strengths": [
+    "Leads threat modeling workshops with product and engineering teams",
+    "Deep OWASP Top 10 knowledge applied to modern web technologies",
+    "Owns the SAST and DAST pipeline that gates every release",
+    "Runs rigorous secure code reviews and partners with platform teams on CI/CD and Kubernetes security"
+  ],
+  "gaps": [
+    "Limited mobile application security exposure",
+    "Less hands-on experience with cloud infrastructure security outside Kubernetes"
+  ],
+  "resumeText": "Application Security Engineer at Corva Software leading AppSec for a web-based SaaS platform. I run threat modeling sessions with product teams, review code for vulnerabilities, and own the SAST and DAST pipeline that gates every release. I drive OWASP Top 10 remediation and partner with platform teams to harden CI/CD and Kubernetes environments.",
+  "primaryDomain": "security"
+}

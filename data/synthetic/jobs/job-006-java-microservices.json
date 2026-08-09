@@ -1,0 +1,23 @@
+{
+  "id": "job-006-java-microservices",
+  "title": "Java Microservices Engineer",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "description": "You will design and build resilient Java microservices on Spring Boot that serve millions of requests a day. You will own event-driven flows over Kafka, model transactional data in PostgreSQL, and package services with Docker for deployment on Kubernetes and AWS. You will lead technical breakdowns, write integration tests, and coach more junior engineers on clean, maintainable service design. You will also join the on-call rotation and take responsibility for the availability of the services you ship.",
+  "requiredSkills": [
+    { "name": "Java", "level": "must-have", "weight": 25 },
+    { "name": "Spring Boot", "level": "must-have", "weight": 20 },
+    { "name": "Kafka", "level": "must-have", "weight": 15 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 10 },
+    { "name": "Docker", "level": "must-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 10 },
+    { "name": "AWS", "level": "nice-to-have", "weight": 5 },
+    { "name": "SQL", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

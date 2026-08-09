@@ -1,0 +1,56 @@
+{
+  "id": "person-047-noah-green",
+  "name": "Noah Green",
+  "email": "noah.green@example.com",
+  "phone": "(555) 047-0047",
+  "location": "Austin, TX",
+  "yearsExp": 6,
+  "currentTitle": "Senior Site Reliability Engineer",
+  "currentCompany": "Meridian Payroll",
+  "skills": [
+    "Linux",
+    "Kubernetes",
+    "Observability (Prometheus / Grafana)",
+    "Incident Management",
+    "Python",
+    "Terraform",
+    "Go",
+    "Bash",
+    "Service Mesh"
+  ],
+  "experience": [
+    {
+      "title": "Systems Engineer",
+      "company": "Northgate Telco",
+      "from": "2020-08",
+      "to": "2022-07"
+    },
+    {
+      "title": "Site Reliability Engineer",
+      "company": "Northgate Telco",
+      "from": "2022-07",
+      "to": "2024-06"
+    },
+    {
+      "title": "Senior Site Reliability Engineer",
+      "company": "Meridian Payroll",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, University of Texas at Austin",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Senior site reliability engineer with 6 years of experience running Linux and Kubernetes at scale, defining SLOs, driving incident management, and building Prometheus and Grafana observability with Python automation.",
+  "strengths": [
+    "Owns SLOs and error budgets for critical production services",
+    "Built Prometheus and Grafana dashboards and alerting used across the org",
+    "Leads incident management as on-call primary and post-incident reviews",
+    "Automates toil reduction with Python and Terraform on Kubernetes"
+  ],
+  "gaps": [
+    "Go usage is tooling-level, not full production service development",
+    "Limited Windows and legacy on-prem systems exposure - largely cloud-native Linux"
+  ],
+  "resumeText": "Noah Green is a Senior Site Reliability Engineer at Meridian Payroll where he owns availability for the payments platform. He defined the SLO framework, built Prometheus and Grafana observability, and drives incident management for on-call rotations. He has spent 6 years operating Linux and Kubernetes infrastructure, previously at Northgate Telco, automating away manual work with Python and Terraform.",
+  "primaryDomain": "infra"
+}

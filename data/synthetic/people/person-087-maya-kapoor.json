@@ -1,0 +1,48 @@
+{
+  "id": "person-087-maya-kapoor",
+  "name": "Maya Kapoor",
+  "email": "maya.kapoor@example.com",
+  "phone": "(555) 087-0087",
+  "location": "Bengaluru, India",
+  "yearsExp": 4,
+  "currentTitle": "Computer Vision Engineer",
+  "currentCompany": "PixelForge AI",
+  "skills": [
+    "Python",
+    "PyTorch",
+    "Deep Learning",
+    "Image Processing",
+    "TensorFlow",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "DataScape Technologies",
+      "from": "2022-07",
+      "to": "2024-03"
+    },
+    {
+      "title": "Computer Vision Engineer",
+      "company": "PixelForge AI",
+      "from": "2024-04",
+      "to": null
+    }
+  ],
+  "education": "B.Tech. in Electronics and Communication, Indian Institute of Technology Madras",
+  "certifications": "TensorFlow Developer Certificate",
+  "summary": "Computer vision engineer with 4 years of experience training deep learning models in PyTorch and TensorFlow for classification and segmentation. Solid on deep learning and image processing fundamentals, with exposure to Docker-based deployment and growing production vision experience.",
+  "strengths": [
+    "Comfortable training classification and segmentation models in PyTorch",
+    "Solid deep learning fundamentals and image processing background",
+    "Experienced with TensorFlow for legacy model codebases",
+    "Containerizes vision services with Docker"
+  ],
+  "gaps": [
+    "No OpenCV experience for production image processing pipelines",
+    "Limited real-time inference optimization and edge deployment",
+    "Computer vision focus is relatively recent within a 4-year career"
+  ],
+  "resumeText": "Maya Kapoor is a Computer Vision Engineer at PixelForge AI with four years of experience. She trains deep learning models in PyTorch and TensorFlow for classification and segmentation, working on image processing fundamentals and shipping services with Docker. She began her career as a software engineer at DataScape Technologies. Her vision background leans on deep learning and preprocessing rather than OpenCV-based pipelines, which she is actively building out.",
+  "primaryDomain": "ai"
+}

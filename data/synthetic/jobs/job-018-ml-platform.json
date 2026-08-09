@@ -1,0 +1,23 @@
+{
+  "id": "job-018-ml-platform",
+  "title": "ML Platform Engineer",
+  "domain": "data",
+  "department": "Data & Analytics",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for an ML Platform Engineer to build the self-serve infrastructure that lets our data scientists train, deploy, and monitor models at scale. You will design and operate Kubernetes-based platforms with MLflow for experiment tracking and model serving, and harden CI/CD pipelines so model releases are fast, auditable, and reproducible. You will also manage infrastructure with Terraform, supporting everything from Kubeflow-based training workloads to Airflow-triggered batch inference. This is a Staff-level role where you will set technical direction and mentor engineers across the platform team.",
+  "seniority": "Staff",
+  "yearsRequired": 6,
+  "requiredSkills": [
+    { "name": "Kubernetes", "level": "must-have", "weight": 20 },
+    { "name": "Python", "level": "must-have", "weight": 20 },
+    { "name": "MLflow", "level": "must-have", "weight": 15 },
+    { "name": "CI/CD", "level": "must-have", "weight": 15 },
+    { "name": "Docker", "level": "must-have", "weight": 10 },
+    { "name": "Terraform", "level": "nice-to-have", "weight": 10 },
+    { "name": "Kubeflow", "level": "nice-to-have", "weight": 5 },
+    { "name": "Airflow", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

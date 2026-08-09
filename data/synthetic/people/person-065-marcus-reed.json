@@ -1,0 +1,43 @@
+{
+  "id": "person-065-marcus-reed",
+  "name": "Marcus Reed",
+  "email": "marcus.reed@example.com",
+  "phone": "(555) 065-0065",
+  "location": "Houston, TX",
+  "yearsExp": 1,
+  "currentTitle": "IT Support Technician",
+  "currentCompany": "Beacon Credit Union",
+  "skills": [
+    "Network Fundamentals",
+    "Log Analysis",
+    "Windows",
+    "Linux",
+    "Scripting (Python)",
+    "Endpoint Detection"
+  ],
+  "experience": [
+    {
+      "title": "IT Support Technician",
+      "company": "Beacon Credit Union",
+      "from": "2025-10",
+      "to": null
+    }
+  ],
+  "education": "A.S. in Information Technology, Houston Community College",
+  "certifications": "CompTIA Network+ (in progress)",
+  "summary": "IT support technician with 1 year of experience transitioning into security operations. Solid network fundamentals and comfort with Windows and Linux administration, but no professional SOC or SIEM experience yet.",
+  "strengths": [
+    "Solid network fundamentals applied in a hands-on support role",
+    "Comfortable administering Windows and Linux systems",
+    "Reviews system logs daily and writes small Python scripts to automate log checks",
+    "Very motivated to break into security operations"
+  ],
+  "gaps": [
+    "No professional SIEM or security operations center experience",
+    "No incident response experience beyond basic support escalations",
+    "No hands-on experience with threat intelligence or commercial security tooling",
+    "Under a year of real professional experience, below the role's minimum"
+  ],
+  "resumeText": "IT Support Technician at Beacon Credit Union supporting Windows and Linux systems across the branch network. I have strong network fundamentals, review system logs daily, and write small Python scripts to automate log checks. I am pursuing a move into security operations and am building toward SOC skills, but I have no hands-on SIEM or incident response experience yet.",
+  "primaryDomain": "security"
+}

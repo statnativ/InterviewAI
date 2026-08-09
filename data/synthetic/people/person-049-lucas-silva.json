@@ -1,0 +1,57 @@
+{
+  "id": "person-049-lucas-silva",
+  "name": "Lucas Silva",
+  "email": "lucas.silva@example.com",
+  "phone": "(555) 049-0049",
+  "location": "New York, NY",
+  "yearsExp": 6,
+  "currentTitle": "Senior Platform Engineer",
+  "currentCompany": "Brookline Media",
+  "skills": [
+    "Kubernetes",
+    "Terraform",
+    "Go",
+    "Cloud Networking",
+    "CI/CD",
+    "Docker",
+    "Python",
+    "MLflow",
+    "ArgoCD",
+    "Helm"
+  ],
+  "experience": [
+    {
+      "title": "DevOps Engineer",
+      "company": "Harborline Analytics",
+      "from": "2020-03",
+      "to": "2022-02"
+    },
+    {
+      "title": "Platform Engineer",
+      "company": "Harborline Analytics",
+      "from": "2022-03",
+      "to": "2024-05"
+    },
+    {
+      "title": "Senior Platform Engineer",
+      "company": "Brookline Media",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Columbia University",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Senior platform engineer with 6 years of experience designing internal platforms on Kubernetes, codifying cloud networking with Terraform, and building Go tooling around GitOps CI/CD pipelines.",
+  "strengths": [
+    "Designs golden-path deployment workflows on Kubernetes with ArgoCD and Helm",
+    "Deep Terraform practice covering cloud networking, IAM, and cluster provisioning",
+    "Writes Go CLIs and operators to improve developer experience",
+    "Runs CI/CD pipelines end to end for platform and product teams"
+  ],
+  "gaps": [
+    "MLflow exposure is recent and limited to experiment tracking support - no Kubeflow or Airflow at scale",
+    "Less hands-on experience with machine learning model serving workloads"
+  ],
+  "resumeText": "Lucas Silva is a Senior Platform Engineer at Brookline Media where he builds the internal platform that product teams deploy onto. He maintains golden paths on Kubernetes with ArgoCD and Helm, manages cloud networking through Terraform, and writes Go-based tooling to reduce friction for developers. Earlier at Harborline Analytics he owned CI/CD delivery. He has recent exposure to MLflow while supporting data science teams, and wants to grow platform support for ML workloads.",
+  "primaryDomain": "infra"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "person-015-james-whitfield",
+  "name": "James Whitfield",
+  "email": "james.whitfield@example.com",
+  "phone": "(555) 012-3460",
+  "location": "Chicago, IL",
+  "yearsExp": 2,
+  "currentTitle": "Analytics Engineer",
+  "currentCompany": "Pinewood E-commerce",
+  "skills": [
+    "SQL",
+    "dbt",
+    "BigQuery",
+    "Looker",
+    "Python",
+    "Git"
+  ],
+  "experience": [
+    {
+      "title": "Analytics Engineer",
+      "company": "Pinewood E-commerce",
+      "from": "2024-04",
+      "to": "2025-10"
+    },
+    {
+      "title": "Analytics Engineer",
+      "company": "Pinewood E-commerce",
+      "from": "2025-10",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Statistics, University of Illinois at Urbana-Champaign",
+  "certifications": "dbt Fundamentals Certificate",
+  "summary": "Junior analytics engineer with two years of experience building dbt transformation layers and SQL models on BigQuery for e-commerce reporting.",
+  "strengths": [
+    "Strong SQL and daily dbt modeling workflow on BigQuery",
+    "Versioned, tested transformations with Git and dbt tests",
+    "Familiar with Looker for downstream reporting"
+  ],
+  "gaps": [
+    "No Apache Spark experience for large-scale distributed data processing",
+    "Minimal experience orchestrating pipelines with Airflow",
+    "Junior-level exposure to production data engineering infrastructure"
+  ],
+  "resumeText": "James Whitfield is a junior Analytics Engineer at Pinewood E-commerce with two years of experience modeling e-commerce data. He owns a dbt layer on BigQuery, writes tested SQL models, and supports Looker reporting for the growth team. He is eager to grow into full data engineering with distributed processing and orchestration.",
+  "primaryDomain": "data"
+}

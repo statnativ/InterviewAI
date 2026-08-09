@@ -1,0 +1,23 @@
+{
+  "id": "job-022-cloud-engineer-aws",
+  "title": "Cloud Engineer (AWS)",
+  "domain": "infra",
+  "department": "Infrastructure",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are seeking a Cloud Engineer to own our AWS footprint and help modernize our infrastructure. You will architect and manage scalable cloud resources, codify them with Terraform, and keep our Linux workloads running smoothly. You will collaborate with application teams on networking, security, and migration initiatives. If you enjoy designing reliable cloud systems and automating everything, we want to hear from you.",
+  "requiredSkills": [
+    { "name": "AWS", "level": "must-have", "weight": 20 },
+    { "name": "Terraform", "level": "must-have", "weight": 15 },
+    { "name": "Linux", "level": "must-have", "weight": 15 },
+    { "name": "Networking", "level": "must-have", "weight": 10 },
+    { "name": "Python", "level": "nice-to-have", "weight": 10 },
+    { "name": "Docker", "level": "nice-to-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 10 },
+    { "name": "Cloud Security", "level": "nice-to-have", "weight": 10 }
+  ],
+  "createdAt": "2026-08-01"
+}

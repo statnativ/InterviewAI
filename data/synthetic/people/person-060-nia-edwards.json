@@ -1,0 +1,50 @@
+{
+  "id": "person-060-nia-edwards",
+  "name": "Nia Edwards",
+  "email": "nia.edwards@example.com",
+  "phone": "(555) 060-0060",
+  "location": "Portland, OR",
+  "yearsExp": 3,
+  "currentTitle": "Application Security Analyst",
+  "currentCompany": "Pixel Foundry",
+  "skills": [
+    "OWASP Top 10",
+    "Threat Modeling",
+    "Secure Code Review",
+    "Web Technologies",
+    "Python",
+    "CI/CD Security",
+    "Burp Suite",
+    "JavaScript"
+  ],
+  "experience": [
+    {
+      "title": "Junior Web Developer",
+      "company": "Pixel Foundry",
+      "from": "2023-05",
+      "to": "2024-08"
+    },
+    {
+      "title": "Application Security Analyst",
+      "company": "Pixel Foundry",
+      "from": "2024-09",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, Oregon State University",
+  "certifications": "CompTIA Security+",
+  "summary": "Application security analyst with 3 years of experience mixing a web development background with OWASP Top 10-based secure code review and manual testing. Solid on threat modeling and web technologies, but SAST and DAST tooling is not something I have operated yet.",
+  "strengths": [
+    "Background in web development makes for practical, accurate secure code review",
+    "Strong OWASP Top 10 knowledge with hands-on manual testing in Burp Suite",
+    "Runs threat modeling sessions with feature teams",
+    "Comfortable across modern web technologies and JavaScript stacks"
+  ],
+  "gaps": [
+    "Has not operated formal SAST or DAST tooling pipelines",
+    "Three years of experience, still building the senior-level depth and influence the role expects",
+    "Less experience leading large, cross-team remediation programs"
+  ],
+  "resumeText": "Application Security Analyst at Pixel Foundry, working with engineers to remediate vulnerabilities across web applications. I draw on a background in web development to review code and reproduce issues found in manual testing. I am comfortable with OWASP Top 10 and threat modeling but have not yet operated formal SAST or DAST pipelines, which I am eager to learn.",
+  "primaryDomain": "security"
+}

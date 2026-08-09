@@ -1,0 +1,49 @@
+{
+  "id": "person-022-tom-becker",
+  "name": "Tom Becker",
+  "email": "tom.becker@example.com",
+  "phone": "(555) 022-0022",
+  "location": "Munich, Germany",
+  "yearsExp": 5,
+  "currentTitle": ".NET Backend Engineer",
+  "currentCompany": "Rhine Cloud",
+  "skills": [
+    "C#",
+    "ASP.NET Core",
+    "SQL Server",
+    "Azure",
+    "REST APIs",
+    "EF Core",
+    "Docker",
+    "Kubernetes"
+  ],
+  "experience": [
+    {
+      "title": ".NET Developer",
+      "company": "Alpine Software",
+      "from": "2021-06",
+      "to": "2023-04"
+    },
+    {
+      "title": ".NET Backend Engineer",
+      "company": "Rhine Cloud",
+      "from": "2023-05",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Technical University of Munich",
+  "certifications": "Microsoft Certified: Azure Developer Associate",
+  "summary": ".NET backend engineer with 5 years building ASP.NET Core REST APIs on SQL Server with EF Core, deployed to Azure and containerized with Docker. Strong emphasis on clean code, testing, and reliable release practice, with growing Kubernetes experience.",
+  "strengths": [
+    "Deep C# and ASP.NET Core expertise",
+    "SQL Server modeling and EF Core data access",
+    "REST API design and versioning",
+    "Azure deployment experience with Docker and Kubernetes"
+  ],
+  "gaps": [
+    "Limited experience outside the Microsoft stack",
+    "No frontend development work beyond minimal integrations"
+  ],
+  "resumeText": ".NET Backend Engineer at Rhine Cloud designing and implementing ASP.NET Core REST APIs, modeling domain data in SQL Server with EF Core, and running services on Azure with Docker-based delivery. Earlier at Alpine Software I wrote C# line-of-business applications and moved them to ASP.NET Core. I value clean, tested code and dependable release processes.",
+  "primaryDomain": "backend"
+}

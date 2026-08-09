@@ -1,0 +1,53 @@
+{
+  "id": "person-018-vikram-singh",
+  "name": "Vikram Singh",
+  "email": "vikram.singh@example.com",
+  "phone": "(555) 018-0018",
+  "location": "Bengaluru, India",
+  "yearsExp": 6,
+  "currentTitle": "Java Microservices Engineer",
+  "currentCompany": "Raiya Payments",
+  "skills": [
+    "Java",
+    "Spring Boot",
+    "Kafka",
+    "PostgreSQL",
+    "Docker",
+    "Kubernetes",
+    "AWS",
+    "SQL",
+    "Test Automation",
+    "Selenium / Playwright",
+    "API Testing",
+    "CI/CD"
+  ],
+  "experience": [
+    {
+      "title": "Java Developer",
+      "company": "Ganga Tech",
+      "from": "2020-08",
+      "to": "2023-02"
+    },
+    {
+      "title": "Java Microservices Engineer",
+      "company": "Raiya Payments",
+      "from": "2023-03",
+      "to": null
+    }
+  ],
+  "education": "B.Tech in Computer Science, IIT Delhi",
+  "certifications": "Oracle Certified Professional, Java SE 17",
+  "summary": "Java engineer with 6 years building event-driven microservices on Spring Boot, streaming with Kafka, and persisting transactional data in PostgreSQL. Services are packaged with Docker and deployed on Kubernetes and AWS, with solid test-automation experience gained from maintaining API and E2E test suites.",
+  "strengths": [
+    "Deep Java and Spring Boot expertise across production services",
+    "Event-driven architecture with Kafka at scale",
+    "PostgreSQL schema design and query optimization",
+    "Automates API and end-to-end tests with Selenium and Playwright"
+  ],
+  "gaps": [
+    "No Python experience for test and scripting work",
+    "Limited frontend exposure beyond basic API integration"
+  ],
+  "resumeText": "Java Microservices Engineer at Raiya Payments designing resilient Spring Boot services behind Kafka event streams and PostgreSQL. I containerize everything with Docker for Kubernetes and AWS deployment, and I own integration and API-level tests in CI/CD. Earlier at Ganga Tech I grew from writing CRUD services to splitting a monolith into deployable microservices.",
+  "primaryDomain": "backend"
+}

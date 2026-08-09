@@ -1,0 +1,44 @@
+{
+  "id": "person-017-omar-haddad",
+  "name": "Omar Haddad",
+  "email": "omar.haddad@example.com",
+  "phone": "(555) 017-0017",
+  "location": "Berlin, Germany",
+  "yearsExp": 3,
+  "currentTitle": "Backend Engineer",
+  "currentCompany": "Northwind Software",
+  "skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "SQL",
+    "SQLAlchemy",
+    "Excel",
+    "Data Visualization (Looker / Tableau)",
+    "Statistics"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Northwind Software",
+      "from": "2023-08",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, TU Berlin",
+  "certifications": "None",
+  "summary": "Backend engineer with 3 years building FastAPI APIs over PostgreSQL and Redis. Strong SQL fundamentals and growing analytics skills in Excel, Looker and Tableau, with a background in statistics that makes cross-functional data work a natural fit.",
+  "strengths": [
+    "Solid Python and FastAPI experience on production APIs",
+    "Strong SQL skills for querying and reporting",
+    "Comfortable with Redis caching and queues",
+    "Statistics and Excel fundamentals useful for analytics work"
+  ],
+  "gaps": [
+    "No hands-on Docker or containerized deployment experience",
+    "Cloud platform experience (AWS, GCP) is still limited"
+  ],
+  "resumeText": "Backend Engineer at Northwind Software writing FastAPI services backed by PostgreSQL and Redis, with SQLAlchemy for data access. I have built several internal reporting tools in Looker and Tableau and regularly turn ad-hoc SQL analyses into Excel summaries for stakeholders. I am comfortable owning features end-to-end and eager to deepen my container and cloud skills.",
+  "primaryDomain": "backend"
+}

@@ -1,0 +1,50 @@
+{
+  "id": "person-020-david-osei",
+  "name": "David Osei",
+  "email": "david.osei@example.com",
+  "phone": "(555) 020-0020",
+  "location": "London, UK",
+  "yearsExp": 5,
+  "currentTitle": "Node.js Backend Engineer",
+  "currentCompany": "Thames Digital",
+  "skills": [
+    "Node.js",
+    "TypeScript",
+    "PostgreSQL",
+    "REST APIs",
+    "Redis",
+    "GraphQL",
+    "Docker",
+    "AWS",
+    "Express"
+  ],
+  "experience": [
+    {
+      "title": "Node.js Developer",
+      "company": "Greenbank Apps",
+      "from": "2021-08",
+      "to": "2023-06"
+    },
+    {
+      "title": "Node.js Backend Engineer",
+      "company": "Thames Digital",
+      "from": "2023-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Manchester",
+  "certifications": "AWS Certified Solutions Architect - Associate",
+  "summary": "Node.js backend engineer with 5 years building TypeScript services with REST and GraphQL contracts over PostgreSQL, using Redis for caching and queues. Production experience running Dockerized services on AWS and a track record of shipping reliable APIs end-to-end.",
+  "strengths": [
+    "Deep Node.js and TypeScript expertise on production services",
+    "Designs clean REST and GraphQL APIs",
+    "PostgreSQL modeling and Redis caching strategies",
+    "Comfortable with Docker and AWS deployment"
+  ],
+  "gaps": [
+    "Limited frontend framework work beyond API integration",
+    "No experience with Java or C# backend ecosystems"
+  ],
+  "resumeText": "Node.js Backend Engineer at Thames Digital building TypeScript APIs with REST and GraphQL contracts, backed by PostgreSQL and Redis, and deployed in Docker on AWS. Previously at Greenbank Apps I grew from writing Express endpoints to owning services end-to-end, introducing Redis caching that cut p95 latency meaningfully. I focus on clean, well-tested code that is easy to operate.",
+  "primaryDomain": "backend"
+}

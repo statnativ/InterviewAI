@@ -1,0 +1,56 @@
+{
+  "id": "person-043-oliver-schmidt",
+  "name": "Oliver Schmidt",
+  "email": "oliver.schmidt@example.com",
+  "phone": "(555) 043-0043",
+  "location": "Munich, DE",
+  "yearsExp": 6,
+  "currentTitle": "React Native Engineer",
+  "currentCompany": "Harbor Labs",
+  "skills": [
+    "React Native",
+    "TypeScript",
+    "JavaScript",
+    "Expo",
+    "CI/CD",
+    "Swift",
+    "Kotlin"
+  ],
+  "experience": [
+    {
+      "title": "Mobile Developer",
+      "company": "Tideside Software",
+      "from": "2020-08",
+      "to": "2022-06"
+    },
+    {
+      "title": "Mobile Developer",
+      "company": "Prism Mobile",
+      "from": "2022-07",
+      "to": "2024-05"
+    },
+    {
+      "title": "React Native Engineer",
+      "company": "Harbor Labs",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.Sc. in Computer Science, Ludwig-Maximilians-Universität München",
+  "certifications": "None",
+  "summary": "Versatile mobile developer with 6 years across iOS, Android, and React Native. Fast at shipping with Expo and JavaScript, but TypeScript depth is limited, he has not built custom native modules, and state is managed mostly with context and prop drilling rather than Redux or Zustand.",
+  "strengths": [
+    "Broad experience across iOS, Android, and React Native",
+    "Fast at shipping features with Expo and CI/CD",
+    "Comfortable in Swift and Kotlin for small native changes",
+    "Pragmatic end-to-end feature ownership"
+  ],
+  "gaps": [
+    "No custom native module development; relies on libraries",
+    "TypeScript usage is shallow, mostly plain JavaScript",
+    "State management limited to context and prop drilling; no Redux or Zustand",
+    "No Detox testing experience"
+  ],
+  "resumeText": "React Native Engineer at Harbor Labs, shipping cross-platform features with Expo and JavaScript. Previously at Prism Mobile and Tideside Software I worked across iOS and Android apps, wearing many hats. I ship fast and own features end to end, and I am actively adding TypeScript rigor, native modules, and proper state management.",
+  "primaryDomain": "mobile"
+}

@@ -1,0 +1,23 @@
+{
+  "id": "job-032-staff-distributed",
+  "title": "Staff Engineer (Distributed Systems)",
+  "domain": "architecture",
+  "department": "Architecture",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Staff",
+  "yearsRequired": 8,
+  "description": "We are hiring a Staff Engineer to design and build the distributed systems backbone that supports millions of concurrent requests. You will architect high-availability Go services backed by PostgreSQL and Kafka, define data flow and consistency guarantees, and set the standard for observability across the platform. You will work closely with platform teams on Kubernetes-based deployments and mentor engineers on system design and scalability. This is a remote, high-impact role for someone who enjoys solving hard distributed-systems problems end to end.",
+  "requiredSkills": [
+    { "name": "Distributed Systems", "level": "must-have", "weight": 25 },
+    { "name": "System Design", "level": "must-have", "weight": 20 },
+    { "name": "Go", "level": "must-have", "weight": 15 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 10 },
+    { "name": "Scalability", "level": "must-have", "weight": 10 },
+    { "name": "Kafka", "level": "nice-to-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 5 },
+    { "name": "Observability", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

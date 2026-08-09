@@ -1,0 +1,48 @@
+{
+  "id": "person-014-fatima-al-sayed",
+  "name": "Fatima Al-Sayed",
+  "email": "fatima.al-sayed@example.com",
+  "phone": "(555) 012-3459",
+  "location": "San Francisco, CA",
+  "yearsExp": 4,
+  "currentTitle": "Data Engineer",
+  "currentCompany": "Lumen Health",
+  "skills": [
+    "Python",
+    "SQL",
+    "Kafka",
+    "BigQuery",
+    "GCP",
+    "REST APIs",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Backend Developer",
+      "company": "Quicksilver Payments",
+      "from": "2022-06",
+      "to": "2024-01"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "Lumen Health",
+      "from": "2024-01",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, San Jose State University",
+  "certifications": "AWS Certified Developer - Associate",
+  "summary": "Data Engineer who moved from backend development into moving data: Python-based service integration, streaming via Kafka, and warehousing in BigQuery.",
+  "strengths": [
+    "Solid Python and SQL for data processing and service integration",
+    "Real-time streaming ingestion with Kafka",
+    "Runs containerized data services with Docker on GCP"
+  ],
+  "gaps": [
+    "No production Apache Spark experience for distributed compute",
+    "No formal data modeling or dimensional schema design experience",
+    "Pipeline background is ingestion and moving data rather than warehouse modeling"
+  ],
+  "resumeText": "Fatima Al-Sayed is a Data Engineer at Lumen Health with four years of experience, the first two in backend development at Quicksilver Payments. She now owns Python-based ingestion services and Kafka streams that move healthcare data into BigQuery. Her focus is reliable data movement; she is expanding into distributed processing and warehouse modeling.",
+  "primaryDomain": "data"
+}

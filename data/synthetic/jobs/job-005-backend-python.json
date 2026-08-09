@@ -1,0 +1,24 @@
+{
+  "id": "job-005-backend-python",
+  "title": "Backend Engineer (Python)",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "Berlin (Remote)",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "You will build and maintain the Python services behind our product APIs, using FastAPI and SQLAlchemy on top of PostgreSQL. You will ship background jobs and async workflows with Celery and Redis, and containerize everything with Docker for a smooth path to production on AWS. Working in a cross-functional team, you will own features end-to-end, write tests, and pair with senior engineers to grow the quality of the codebase. This role participates in a shared on-call rotation so you will also learn to debug production incidents hands-on.",
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "FastAPI", "level": "must-have", "weight": 15 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 15 },
+    { "name": "Redis", "level": "must-have", "weight": 10 },
+    { "name": "Docker", "level": "must-have", "weight": 10 },
+    { "name": "Django", "level": "nice-to-have", "weight": 10 },
+    { "name": "Celery", "level": "nice-to-have", "weight": 5 },
+    { "name": "AWS", "level": "nice-to-have", "weight": 5 },
+    { "name": "SQLAlchemy", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

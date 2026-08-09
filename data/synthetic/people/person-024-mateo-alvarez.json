@@ -1,0 +1,58 @@
+{
+  "id": "person-024-mateo-alvarez",
+  "name": "Mateo Alvarez",
+  "email": "mateo.alvarez@example.com",
+  "phone": "(555) 024-0024",
+  "location": "Mexico City, Mexico",
+  "yearsExp": 10,
+  "currentTitle": "Staff Backend Engineer",
+  "currentCompany": "Andes Systems",
+  "skills": [
+    "Go",
+    "Distributed Systems",
+    "Kubernetes",
+    "PostgreSQL",
+    "System Design",
+    "Scalability",
+    "Kafka",
+    "gRPC",
+    "Terraform",
+    "Observability"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Tercera Labs",
+      "from": "2016-08",
+      "to": "2019-04"
+    },
+    {
+      "title": "Senior Backend Engineer",
+      "company": "Lago Plata",
+      "from": "2019-05",
+      "to": "2022-06"
+    },
+    {
+      "title": "Staff Backend Engineer",
+      "company": "Andes Systems",
+      "from": "2022-07",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computer Science, UNAM",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Staff backend engineer with 10 years building distributed Go systems over PostgreSQL and Kafka, deployed on Kubernetes with Terraform. Led system design and scalability work for multi-region services and mentored senior engineers, with a strong observability practice.",
+  "strengths": [
+    "Deep Go and distributed systems expertise",
+    "Architects high-availability, scalable services",
+    "PostgreSQL consistency and migration strategy",
+    "Kubernetes and Terraform delivery at scale",
+    "Champions observability and mentors engineers"
+  ],
+  "gaps": [
+    "Limited frontend and product-facing work",
+    "Recent focus is architecture-heavy, less day-to-day feature coding"
+  ],
+  "resumeText": "Staff Backend Engineer at Andes Systems owning the architecture of distributed Go services across multiple regions, with event-driven flows over Kafka and PostgreSQL as the source of truth. I drive system design, latency, and consistency work, and standardize observability across the platform. Earlier I scaled services at Lago Plata and began my career writing backend services at Tercera Labs.",
+  "primaryDomain": "backend"
+}

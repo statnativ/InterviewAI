@@ -1,0 +1,49 @@
+{
+  "id": "person-082-yasmine-benali",
+  "name": "Yasmine Benali",
+  "email": "yasmine.benali@example.com",
+  "phone": "(555) 082-0082",
+  "location": "Paris, France",
+  "yearsExp": 5,
+  "currentTitle": "LLM / GenAI Engineer",
+  "currentCompany": "Voxalia AI",
+  "skills": [
+    "Python",
+    "LLM APIs (OpenAI / Anthropic)",
+    "Prompt Engineering",
+    "RAG Patterns",
+    "Vector Databases",
+    "LangChain",
+    "PyTorch",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Machine Learning Engineer",
+      "company": "Meridian Analytics",
+      "from": "2021-09",
+      "to": "2024-03"
+    },
+    {
+      "title": "LLM / GenAI Engineer",
+      "company": "Voxalia AI",
+      "from": "2024-03",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Artificial Intelligence, École Polytechnique",
+  "certifications": "DeepLearning.AI Specialization - LangChain for LLM Application Development",
+  "summary": "LLM / GenAI engineer with 5 years of experience building production applications on OpenAI and Anthropic APIs. Owns prompt engineering and RAG patterns end-to-end, including vector database selection and indexing strategy, with a strong foundation in Python and PyTorch for model work.",
+  "strengths": [
+    "Deep experience integrating OpenAI and Anthropic APIs in production",
+    "Strong prompt engineering and RAG pattern design skills",
+    "Hands-on vector database selection, indexing, and retrieval tuning",
+    "Comfortable training and fine-tuning PyTorch models"
+  ],
+  "gaps": [
+    "Less exposure to large-scale Kubernetes serving for LLM inference",
+    "Frontend experience is limited to internal tooling"
+  ],
+  "resumeText": "Yasmine Benali is an LLM / GenAI Engineer at Voxalia AI with five years of experience. She designs production-grade applications on OpenAI and Anthropic APIs, iterating on prompts and grounding output with RAG patterns over vector databases. She built and owns the vector indexing strategy for a customer-facing support assistant, and previously productionized PyTorch models at Meridian Analytics. Her work spans the full LLM lifecycle from prompt design to retrieval evaluation.",
+  "primaryDomain": "ai"
+}

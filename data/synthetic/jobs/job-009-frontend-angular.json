@@ -1,0 +1,23 @@
+{
+  "id": "job-009-frontend-angular",
+  "title": "Frontend Engineer (Angular)",
+  "domain": "frontend",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Frontend Engineer to design and build scalable, high-performance features in Angular for our enterprise web application. You will own components and services end-to-end, work with RxJS streams, and write unit and integration tests using Jasmine and Karma to keep quality high. You will collaborate with designers and backend engineers to turn requirements into clean, accessible interfaces. If you enjoy the rigor of a typed, reactive codebase and care about accessibility and developer tooling, this role is for you.",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "requiredSkills": [
+    { "name": "Angular", "level": "must-have", "weight": 25 },
+    { "name": "TypeScript", "level": "must-have", "weight": 20 },
+    { "name": "RxJS", "level": "must-have", "weight": 15 },
+    { "name": "HTML5 & CSS", "level": "must-have", "weight": 10 },
+    { "name": "Testing (Jasmine / Karma)", "level": "must-have", "weight": 10 },
+    { "name": "NgRx", "level": "nice-to-have", "weight": 10 },
+    { "name": "Accessibility (a11y)", "level": "nice-to-have", "weight": 5 },
+    { "name": "CI/CD", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

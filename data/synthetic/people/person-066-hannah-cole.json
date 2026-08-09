@@ -1,0 +1,51 @@
+{
+  "id": "person-066-hannah-cole",
+  "name": "Hannah Cole",
+  "email": "hannah.cole@example.com",
+  "phone": "(555) 066-0066",
+  "location": "Austin, TX",
+  "yearsExp": 4,
+  "currentTitle": "SDET",
+  "currentCompany": "Pinecrest Software",
+  "skills": [
+    "Test Automation",
+    "Python",
+    "Selenium / Playwright",
+    "CI/CD",
+    "API Testing",
+    "Java",
+    "Performance Testing",
+    "Git",
+    "Postman",
+    "pytest"
+  ],
+  "experience": [
+    {
+      "title": "QA Tester",
+      "company": "Juniper Field Media",
+      "from": "2022-08",
+      "to": "2023-12"
+    },
+    {
+      "title": "SDET",
+      "company": "Pinecrest Software",
+      "from": "2024-01",
+      "to": null
+    }
+  ],
+  "education": "B.S. Computer Science, Texas State University",
+  "certifications": "ISTQB Foundation Level",
+  "summary": "SDET with 4 years of experience building end-to-end automation frameworks in Python with Selenium and Playwright, wiring test suites into CI/CD pipelines, and driving API-level regression testing across product suites.",
+  "strengths": [
+    "Deep expertise in Python test automation with Selenium and Playwright, including custom page objects and robust waits",
+    "Built and maintained CI/CD test pipelines that run e2e suites on every pull request",
+    "Strong API testing discipline with Postman and pytest against REST and GraphQL services",
+    "Comfortable in Java for legacy framework maintenance alongside the primary Python stack"
+  ],
+  "gaps": [
+    "Limited experience with mobile device automation frameworks",
+    "Performance testing exposure is early-stage; load testing is not yet a specialty"
+  ],
+  "resumeText": "As an SDET at Pinecrest Software I own the test automation strategy for our web product suite, building and maintaining end-to-end frameworks with Selenium and Playwright in Python. I integrated automated checks into GitHub Actions so every PR runs the full e2e and API regression suite, cutting release-blocking bugs significantly. I design API-level tests with Postman and pytest to catch regressions early, and I mentor QA testers on reliable automation patterns.",
+  "primaryDomain": "qa"
+}

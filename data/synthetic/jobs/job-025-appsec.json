@@ -1,0 +1,23 @@
+{
+  "id": "job-025-appsec",
+  "title": "Application Security Engineer",
+  "domain": "security",
+  "department": "Security",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "description": "We are seeking a Senior Application Security Engineer to embed security into every stage of our software development lifecycle. You will lead threat modeling workshops, drive secure code reviews, and guide teams on OWASP Top 10 mitigation strategies across modern web technologies. You will also own the SAST and DAST tooling pipeline, and partner with platform teams to secure CI/CD and Kubernetes environments. This role is ideal for someone who enjoys influencing engineering culture as much as finding vulnerabilities.",
+  "requiredSkills": [
+    { "name": "OWASP Top 10", "level": "must-have", "weight": 25 },
+    { "name": "Threat Modeling", "level": "must-have", "weight": 20 },
+    { "name": "Secure Code Review", "level": "must-have", "weight": 15 },
+    { "name": "Web Technologies", "level": "must-have", "weight": 10 },
+    { "name": "SAST / DAST", "level": "must-have", "weight": 10 },
+    { "name": "Python", "level": "nice-to-have", "weight": 10 },
+    { "name": "Kubernetes Security", "level": "nice-to-have", "weight": 5 },
+    { "name": "CI/CD Security", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

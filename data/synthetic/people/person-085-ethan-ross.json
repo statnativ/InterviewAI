@@ -1,0 +1,47 @@
+{
+  "id": "person-085-ethan-ross",
+  "name": "Ethan Ross",
+  "email": "ethan.ross@example.com",
+  "phone": "(555) 085-0085",
+  "location": "Austin, TX",
+  "yearsExp": 2,
+  "currentTitle": "GenAI Application Developer",
+  "currentCompany": "Brightline Apps",
+  "skills": [
+    "Python",
+    "LLM APIs (OpenAI / Anthropic)",
+    "React",
+    "FastAPI",
+    "Docker",
+    "Prompt Engineering"
+  ],
+  "experience": [
+    {
+      "title": "Junior Full Stack Developer",
+      "company": "Stackhouse Digital",
+      "from": "2024-07",
+      "to": "2026-01"
+    },
+    {
+      "title": "GenAI Application Developer",
+      "company": "Brightline Apps",
+      "from": "2026-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, University of Texas at Austin",
+  "certifications": "None",
+  "summary": "GenAI application developer with 2 years of experience building Python and React applications that call OpenAI APIs. Comfortable in FastAPI and Docker, with growing prompt engineering skills, and eager to deepen RAG-based retrieval work.",
+  "strengths": [
+    "Solid Python, React, and FastAPI fundamentals",
+    "Practical experience calling OpenAI APIs in production apps",
+    "Comfortable containerizing services with Docker"
+  ],
+  "gaps": [
+    "No production RAG pattern or vector store experience yet",
+    "Only a year of focused LLM application work",
+    "Prompt engineering still developing beyond basic templates"
+  ],
+  "resumeText": "Ethan Ross is a GenAI Application Developer at Brightline Apps with two years of experience. He builds Python and React applications that call OpenAI APIs, exposing them through FastAPI services and packaging them with Docker. Previously at Stackhouse Digital he worked as a junior full stack developer shipping web features. He is strong on the application side of GenAI and is actively learning RAG patterns and retrieval pipelines.",
+  "primaryDomain": "ai"
+}

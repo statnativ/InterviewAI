@@ -1,0 +1,55 @@
+{
+  "id": "person-010-isabella-rossi",
+  "name": "Isabella Rossi",
+  "email": "isabella.rossi@example.com",
+  "phone": "(555) 056-7890",
+  "location": "New York, NY",
+  "yearsExp": 6,
+  "currentTitle": "Senior Design Systems Engineer",
+  "currentCompany": "Northline Digital",
+  "skills": [
+    "React",
+    "TypeScript",
+    "CSS & Design Systems",
+    "Storybook",
+    "Figma",
+    "Accessibility (a11y)",
+    "Frontend Performance",
+    "HTML5",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "UI Engineer",
+      "company": "Brightpath Studio",
+      "from": "2020-09",
+      "to": "2022-08"
+    },
+    {
+      "title": "Design Systems Engineer",
+      "company": "Veridian Labs",
+      "from": "2022-09",
+      "to": "2024-10"
+    },
+    {
+      "title": "Senior Design Systems Engineer",
+      "company": "Northline Digital",
+      "from": "2024-11",
+      "to": null
+    }
+  ],
+  "education": "B.F.A. Interaction Design, Parsons School of Design",
+  "certifications": "Design Systems Certification, Nielsen Norman Group",
+  "summary": "Design systems specialist with 6 years of experience building React and TypeScript component libraries in Storybook and Figma, focused on accessibility and design tokens — with a gap in automated testing.",
+  "strengths": [
+    "Expert at architecting token-driven CSS design systems with theming and dark-mode support",
+    "Built and documented React and TypeScript component libraries in Storybook used across multiple product teams",
+    "Strong accessibility (a11y) focus with a rigorous Figma-to-code workflow"
+  ],
+  "gaps": [
+    "Limited automated testing practice — components are reviewed and visually verified but not backed by a Jest or React Testing Library suite",
+    "More depth in design and tokens than in runtime performance tuning of application-level features"
+  ],
+  "resumeText": "Senior Design Systems Engineer at Northline Digital, where I own the React and TypeScript component library documented in Storybook and connected to Figma through shared design tokens. My focus is accessibility, theming, and consistent CSS architecture across our products. I am looking to close my gap in automated component testing by building out a Jest and React Testing Library suite for the system I maintain.",
+  "primaryDomain": "frontend"
+}

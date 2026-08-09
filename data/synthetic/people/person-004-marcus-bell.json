@@ -1,0 +1,48 @@
+{
+  "id": "person-004-marcus-bell",
+  "name": "Marcus Bell",
+  "email": "marcus.bell@example.com",
+  "phone": "(555) 014-0044",
+  "location": "Denver, CO",
+  "yearsExp": 2,
+  "currentTitle": "Backend Developer",
+  "currentCompany": "Harbor Apps",
+  "skills": [
+    "Go",
+    "PostgreSQL",
+    "SQL",
+    "Docker",
+    "REST API",
+    "JavaScript"
+  ],
+  "experience": [
+    {
+      "title": "Junior Backend Developer",
+      "company": "Craftline Studio",
+      "from": "2024-07",
+      "to": "2025-12"
+    },
+    {
+      "title": "Backend Developer",
+      "company": "Harbor Apps",
+      "from": "2026-01",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Colorado State University",
+  "certifications": "None",
+  "summary": "Junior backend developer with 2 years of experience writing Go services against PostgreSQL, mostly REST APIs running in Docker. Strong fundamentals and a fast learner, but early in his career with limited exposure to Kubernetes and no gRPC experience yet.",
+  "strengths": [
+    "Solid Go fundamentals with growing production experience",
+    "Comfortable modeling data and writing queries in PostgreSQL",
+    "Familiar with Docker-based local development workflows",
+    "Fast learner with strong fundamentals in CS"
+  ],
+  "gaps": [
+    "No Kubernetes or container orchestration experience",
+    "No gRPC exposure; has only built REST APIs",
+    "Limited system design experience, mostly single-service work"
+  ],
+  "resumeText": "Backend Developer at Harbor Apps, building Go REST services backed by PostgreSQL. At Craftline Studio I started as a junior and grew into owning CRUD services and writing SQL migrations. I am actively learning Kubernetes and gRPC to move toward distributed systems work.",
+  "primaryDomain": "backend"
+}

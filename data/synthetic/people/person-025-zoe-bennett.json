@@ -1,0 +1,51 @@
+{
+  "id": "person-025-zoe-bennett",
+  "name": "Zoe Bennett",
+  "email": "zoe.bennett@example.com",
+  "phone": "(555) 025-0025",
+  "location": "Denver, CO",
+  "yearsExp": 4,
+  "currentTitle": "Angular Frontend Engineer",
+  "currentCompany": "Northwind Software",
+  "skills": [
+    "Angular",
+    "TypeScript",
+    "RxJS",
+    "HTML5 & CSS",
+    "Testing (Jasmine / Karma)",
+    "NgRx",
+    "Accessibility (a11y)",
+    "CI/CD",
+    "REST APIs",
+    "Git"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Bluepeak Digital",
+      "from": "2022-06",
+      "to": "2024-04"
+    },
+    {
+      "title": "Angular Frontend Engineer",
+      "company": "Northwind Software",
+      "from": "2024-05",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Colorado Boulder",
+  "certifications": "None",
+  "summary": "Frontend engineer with 4 years of experience building enterprise web applications in Angular. I own components and services end-to-end, work with reactive RxJS streams, and maintain healthy unit and integration test suites in Jasmine and Karma to keep releases stable.",
+  "strengths": [
+    "Strong Angular and TypeScript skills on production enterprise apps",
+    "Comfortable with RxJS streams and NgRx state management",
+    "Writes thorough Jasmine and Karma test suites",
+    "Attention to accessibility and responsive HTML5 & CSS"
+  ],
+  "gaps": [
+    "Cloud infrastructure and DevOps beyond CI configuration is limited",
+    "No experience with GraphQL data layers yet"
+  ],
+  "resumeText": "Angular Frontend Engineer at Northwind Software, where I build and maintain components and injectable services for a B2B analytics platform. I implemented RxJS-based data flows, migrated feature state to NgRx, and raised branch coverage past 85% with Jasmine and Karma. Earlier at Bluepeak Digital I shipped responsive, accessible pages in Angular and HTML5 & CSS and collaborated closely with designers and backend engineers.",
+  "primaryDomain": "frontend"
+}

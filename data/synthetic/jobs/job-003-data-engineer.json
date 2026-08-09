@@ -1,0 +1,25 @@
+{
+  "id": "job-003-data-engineer",
+  "title": "Data Engineer",
+  "domain": "data",
+  "department": "Data & Analytics",
+  "location": "New York, NY",
+  "type": "Hybrid",
+  "status": "Open",
+  "description": "We are looking for a Data Engineer to build and maintain reliable batch and streaming data pipelines that feed our analytics warehouse. You will design dbt models and dimensional schemas in BigQuery, collaborating closely with analysts and ML engineers to keep data accurate, fresh, and well-documented. You will also improve pipeline observability and uptime through Airflow orchestration, automated testing, and infrastructure-as-code.",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "requiredSkills": [
+    { "name": "SQL", "level": "must-have", "weight": 20 },
+    { "name": "Python", "level": "must-have", "weight": 15 },
+    { "name": "Apache Spark", "level": "must-have", "weight": 15 },
+    { "name": "Data Modeling", "level": "must-have", "weight": 10 },
+    { "name": "Airflow", "level": "must-have", "weight": 10 },
+    { "name": "dbt", "level": "nice-to-have", "weight": 10 },
+    { "name": "BigQuery", "level": "nice-to-have", "weight": 5 },
+    { "name": "Kafka", "level": "nice-to-have", "weight": 5 },
+    { "name": "Terraform", "level": "nice-to-have", "weight": 5 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

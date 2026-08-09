@@ -1,0 +1,23 @@
+{
+  "id": "job-017-ml-engineer",
+  "title": "Machine Learning Engineer",
+  "domain": "data",
+  "department": "Data & Analytics",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Machine Learning Engineer to productionize models built in PyTorch and TensorFlow and keep them running reliably in our infrastructure. You will own the full model lifecycle, from training pipelines to online and batch serving, packaged with Docker and orchestrated on Kubernetes. You will use MLflow to track experiments and models, and work with feature stores to serve consistent features across training and inference. You will also coordinate with data engineers on Airflow pipelines to keep features and model inputs fresh.",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "PyTorch", "level": "must-have", "weight": 20 },
+    { "name": "ML Ops (MLflow)", "level": "must-have", "weight": 15 },
+    { "name": "Docker", "level": "must-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "must-have", "weight": 10 },
+    { "name": "TensorFlow", "level": "nice-to-have", "weight": 10 },
+    { "name": "Feature Stores", "level": "nice-to-have", "weight": 5 },
+    { "name": "Airflow", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

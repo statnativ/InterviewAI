@@ -1,0 +1,62 @@
+{
+  "id": "person-011-raj-patel",
+  "name": "Raj Patel",
+  "email": "raj.patel@example.com",
+  "phone": "(555) 012-3456",
+  "location": "Jersey City, NJ",
+  "yearsExp": 9,
+  "currentTitle": "Senior Data Engineer",
+  "currentCompany": "Meridian Analytics",
+  "skills": [
+    "SQL",
+    "Python",
+    "Apache Spark",
+    "Data Modeling",
+    "Airflow",
+    "dbt",
+    "BigQuery",
+    "Kafka",
+    "Terraform",
+    "Kubernetes"
+  ],
+  "experience": [
+    {
+      "title": "Data Analyst",
+      "company": "BluePeak Financial",
+      "from": "2017-08",
+      "to": "2019-06"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "BluePeak Financial",
+      "from": "2019-06",
+      "to": "2021-11"
+    },
+    {
+      "title": "Senior Data Engineer",
+      "company": "Harborbyte",
+      "from": "2021-11",
+      "to": "2024-04"
+    },
+    {
+      "title": "Senior Data Engineer",
+      "company": "Meridian Analytics",
+      "from": "2024-04",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Rutgers University",
+  "certifications": "Google Cloud Professional Data Engineer",
+  "summary": "Senior Data Engineer with nine years of experience building reliable batch and streaming pipelines, dimensional models, and orchestration that keeps analytics warehouses accurate and fresh.",
+  "strengths": [
+    "Deep expertise across all core must-haves: SQL, Python, Apache Spark, Data Modeling, and Airflow",
+    "Designs star schemas in BigQuery and transforms them with dbt",
+    "Automates infrastructure with Terraform and runs pipelines on Kubernetes"
+  ],
+  "gaps": [
+    "Less exposure to very large-scale streaming event backlogs outside of Kafka-based prototypes",
+    "Preference for well-defined warehouse modeling over exploratory data science"
+  ],
+  "resumeText": "Raj Patel is a Senior Data Engineer at Meridian Analytics with nine years of experience in data engineering. He owns batch and streaming pipelines powered by Apache Spark and Airflow, designs dimensional models in BigQuery, and drives infrastructure-as-code with Terraform and Kubernetes. He partners closely with analytics and ML teams to keep data accurate, fresh, and well-documented.",
+  "primaryDomain": "data"
+}

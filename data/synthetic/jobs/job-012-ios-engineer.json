@@ -1,0 +1,23 @@
+{
+  "id": "job-012-ios-engineer",
+  "title": "iOS Engineer",
+  "domain": "mobile",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a Mid-level iOS Engineer to build and refine the mobile experience of our product. You will ship features written in Swift with SwiftUI and UIKit, and keep our app architecture clean and testable following the MVVM pattern. Working with Combine and Core Data, you will manage async data flows and local persistence across the app. You will also improve our build and release pipeline using Xcode tooling and Fastlane so we can ship reliably to the App Store. Join a collaborative remote team where your code reaches thousands of users every week.",
+  "requiredSkills": [
+    { "name": "Swift", "level": "must-have", "weight": 25 },
+    { "name": "SwiftUI", "level": "must-have", "weight": 20 },
+    { "name": "UIKit", "level": "must-have", "weight": 15 },
+    { "name": "Xcode & iOS Tooling", "level": "must-have", "weight": 10 },
+    { "name": "App Architecture (MVVM)", "level": "must-have", "weight": 10 },
+    { "name": "Combine", "level": "nice-to-have", "weight": 10 },
+    { "name": "Core Data", "level": "nice-to-have", "weight": 5 },
+    { "name": "CI/CD (Fastlane)", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

@@ -1,0 +1,43 @@
+{
+  "id": "person-054-ruby-foster",
+  "name": "Ruby Foster",
+  "email": "ruby.foster@example.com",
+  "phone": "(555) 054-0054",
+  "location": "Chicago, IL",
+  "yearsExp": 3,
+  "currentTitle": "Database Administrator",
+  "currentCompany": "Falconer Insurance",
+  "skills": [
+    "PostgreSQL",
+    "Performance Tuning",
+    "Linux",
+    "SQL",
+    "Python",
+    "Cloud Databases",
+    "Bash",
+    "pgBackRest"
+  ],
+  "experience": [
+    {
+      "title": "Database Administrator",
+      "company": "Falconer Insurance",
+      "from": "2023-08",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Illinois at Urbana-Champaign",
+  "certifications": "PostgreSQL Professional Certification",
+  "summary": "Database administrator with 3 years of experience tuning PostgreSQL performance, writing SQL, and managing cloud databases on Linux, with replication and high-availability design still a growth area.",
+  "strengths": [
+    "Tunes PostgreSQL queries and indexes for production workloads",
+    "Strong SQL skills across reporting and application workloads",
+    "Manages backups and restores on Linux with pgBackRest and Python automation"
+  ],
+  "gaps": [
+    "No replication or high-availability topology in production - single-node PostgreSQL with nightly backups",
+    "No Patroni or streaming-replication cluster experience",
+    "Growth into HA design and capacity planning is at the learning stage"
+  ],
+  "resumeText": "Ruby Foster is a Database Administrator at Falconer Insurance with three years of experience keeping production PostgreSQL databases healthy. She tunes performance, writes and reviews SQL, and manages cloud databases on Linux with automated backups. Her production experience so far is single-node; she is building toward replication and high-availability design and is excited to grow into a database reliability role.",
+  "primaryDomain": "infra"
+}

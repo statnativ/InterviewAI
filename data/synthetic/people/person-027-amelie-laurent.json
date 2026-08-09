@@ -1,0 +1,51 @@
+{
+  "id": "person-027-amelie-laurent",
+  "name": "Amelie Laurent",
+  "email": "amelie.laurent@example.com",
+  "phone": "(555) 027-0027",
+  "location": "Amsterdam, Netherlands",
+  "yearsExp": 4,
+  "currentTitle": "Vue.js Engineer",
+  "currentCompany": "Northwave Digital",
+  "skills": [
+    "Vue.js",
+    "TypeScript",
+    "Pinia / Vuex",
+    "HTML5 & CSS",
+    "Testing (Vitest)",
+    "Nuxt",
+    "Accessibility (a11y)",
+    "Storybook",
+    "REST APIs",
+    "JavaScript"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Helio Studio",
+      "from": "2022-08",
+      "to": "2024-06"
+    },
+    {
+      "title": "Vue.js Engineer",
+      "company": "Northwave Digital",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Interaction Design, Amsterdam University of Applied Sciences",
+  "certifications": "None",
+  "summary": "Vue.js engineer with 4 years of experience shipping Vue 3 applications with TypeScript and Pinia state management. I build reusable components, write unit tests with Vitest, and maintain a polished component library in Storybook for a fast, consistent SaaS product.",
+  "strengths": [
+    "Strong Vue 3 and Composition API experience",
+    "Typed state management with Pinia and Vuex",
+    "Writes unit tests with Vitest for components and stores",
+    "Maintains a reusable component library in Storybook"
+  ],
+  "gaps": [
+    "No GraphQL experience; backend integration has been REST only",
+    "CI/CD pipeline ownership is still maturing"
+  ],
+  "resumeText": "Vue.js Engineer at Northwave Digital, where I build features for a SaaS analytics platform on Vue 3 and TypeScript. I manage application state with Pinia, ensure component quality with Vitest unit tests, and drive consistency through a Storybook design library. Earlier at Helio Studio I shipped client-facing Vue interfaces with HTML5 & CSS and kept accessibility and performance in mind on every page.",
+  "primaryDomain": "frontend"
+}

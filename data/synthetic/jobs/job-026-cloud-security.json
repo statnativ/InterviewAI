@@ -1,0 +1,23 @@
+{
+  "id": "job-026-cloud-security",
+  "title": "Cloud Security Engineer",
+  "domain": "security",
+  "department": "Security",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 4,
+  "description": "We are hiring a Senior Cloud Security Engineer to protect our AWS-based platform and drive secure-by-design infrastructure. You will architect identity and access controls, harden cloud networking, and deliver infrastructure as code using Terraform. You will also lead SOC 2 compliance efforts, securing Kubernetes workloads and shaping SIEM monitoring for our cloud estate. This role blends deep AWS expertise with a passion for automating security at scale.",
+  "requiredSkills": [
+    { "name": "AWS Security", "level": "must-have", "weight": 25 },
+    { "name": "IAM & Identity", "level": "must-have", "weight": 20 },
+    { "name": "Terraform", "level": "must-have", "weight": 15 },
+    { "name": "Compliance (SOC2)", "level": "must-have", "weight": 10 },
+    { "name": "Cloud Networking", "level": "must-have", "weight": 10 },
+    { "name": "Kubernetes Security", "level": "nice-to-have", "weight": 10 },
+    { "name": "Python", "level": "nice-to-have", "weight": 5 },
+    { "name": "SIEM", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

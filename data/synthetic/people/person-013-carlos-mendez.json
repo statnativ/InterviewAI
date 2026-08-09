@@ -1,0 +1,48 @@
+{
+  "id": "person-013-carlos-mendez",
+  "name": "Carlos Mendez",
+  "email": "carlos.mendez@example.com",
+  "phone": "(555) 012-3458",
+  "location": "Austin, TX",
+  "yearsExp": 3,
+  "currentTitle": "Senior Data Analyst",
+  "currentCompany": "Brightline Retail",
+  "skills": [
+    "SQL",
+    "Python",
+    "Excel",
+    "Tableau",
+    "Looker",
+    "BigQuery",
+    "dbt"
+  ],
+  "experience": [
+    {
+      "title": "Data Analyst",
+      "company": "Brightline Retail",
+      "from": "2023-02",
+      "to": "2025-03"
+    },
+    {
+      "title": "Senior Data Analyst",
+      "company": "Brightline Retail",
+      "from": "2025-03",
+      "to": null
+    }
+  ],
+  "education": "B.A. in Economics, University of Texas at Austin",
+  "certifications": "Google Data Analytics Professional Certificate",
+  "summary": "SQL-heavy data analyst with three years of experience writing analytical queries, building dashboards, and preparing modeled datasets for business reporting.",
+  "strengths": [
+    "Strong SQL querying and performance tuning for analytics workloads",
+    "Comfortable modeling metrics and dimensions in dbt on BigQuery",
+    "Storytelling with Looker and Tableau dashboards"
+  ],
+  "gaps": [
+    "No production Apache Spark experience for large-scale batch processing",
+    "No Airflow experience for orchestrating complex pipeline DAGs",
+    "Engineering background is analyst-first rather than pipeline-first"
+  ],
+  "resumeText": "Carlos Mendez is a Senior Data Analyst at Brightline Retail with three years of experience delivering analytics on top of BigQuery. He writes complex SQL, builds dbt models for business metrics, and owns Looker and Tableau dashboards for leadership. His strength is analysis and reporting rather than building distributed batch pipelines.",
+  "primaryDomain": "data"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "person-032-maria-lopez",
+  "name": "Maria Lopez",
+  "email": "maria.lopez@example.com",
+  "phone": "(555) 032-0032",
+  "location": "San Francisco, CA",
+  "yearsExp": 5,
+  "currentTitle": "Senior Data Scientist",
+  "currentCompany": "Cobalt Health",
+  "skills": [
+    "Python",
+    "Machine Learning",
+    "Statistics",
+    "Pandas",
+    "SQL",
+    "Scikit-learn",
+    "Deep Learning",
+    "Experimentation (A/B Testing)"
+  ],
+  "experience": [
+    {
+      "title": "Data Analyst",
+      "company": "Verde Market Intelligence",
+      "from": "2021-09",
+      "to": "2023-11"
+    },
+    {
+      "title": "Data Scientist",
+      "company": "Verde Market Intelligence",
+      "from": "2023-11",
+      "to": "2025-03"
+    },
+    {
+      "title": "Senior Data Scientist",
+      "company": "Cobalt Health",
+      "from": "2025-03",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Statistics, Stanford University",
+  "certifications": "Deep Learning Specialization, Coursera",
+  "summary": "Senior Data Scientist with five years of experience shipping ML models that drive product decisions. Explores data with Python and Pandas, builds models with Scikit-learn, and validates them through rigorous experimentation and A/B testing.",
+  "strengths": [
+    "End-to-end modeling in Python and Pandas from exploration to deployment",
+    "Strong statistical grounding for causal analysis and experimentation",
+    "Comfortable writing SQL to pull and shape data directly from the warehouse"
+  ],
+  "gaps": [
+    "Less experience with distributed data engineering and feature pipelines",
+    "Deep learning exposure is exploratory rather than production-scale"
+  ],
+  "resumeText": "Maria Lopez is a Senior Data Scientist at Cobalt Health with five years of experience across market intelligence and healthcare. She frames problems, explores data with Python and Pandas, builds Scikit-learn models, and validates them through A/B testing and causal analyses. She writes her own SQL and communicates results to leadership, and is now mentoring junior scientists while exploring deep learning approaches.",
+  "primaryDomain": "data"
+}

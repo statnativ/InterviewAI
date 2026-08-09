@@ -1,0 +1,48 @@
+{
+  "id": "person-070-anna-kovacs",
+  "name": "Anna Kovács",
+  "email": "anna.kovacs@example.com",
+  "phone": "(555) 070-0070",
+  "location": "Budapest, Hungary",
+  "yearsExp": 3,
+  "currentTitle": "QA Engineer",
+  "currentCompany": "Danube Analytics",
+  "skills": [
+    "Manual Testing",
+    "Selenium",
+    "API Testing",
+    "Jira / TestRail",
+    "Test Case Design",
+    "SQL",
+    "Regression Testing"
+  ],
+  "experience": [
+    {
+      "title": "Manual QA Tester",
+      "company": "Tisza Payments",
+      "from": "2023-06",
+      "to": "2024-12"
+    },
+    {
+      "title": "QA Engineer",
+      "company": "Danube Analytics",
+      "from": "2025-01",
+      "to": null
+    }
+  ],
+  "education": "B.Sc. Computer Engineering, Budapest University of Technology and Economics",
+  "certifications": "ISTQB Foundation Level",
+  "summary": "QA generalist with 3 years of experience spanning manual and exploratory testing, test case design, and API validation with Postman, with introductory exposure to Selenium for scripted browser checks.",
+  "strengths": [
+    "Strong test case design and exploratory testing discipline backed by ISTQB foundation training",
+    "Hands-on API testing with Postman against REST endpoints",
+    "Effective defect management and reporting in Jira and TestRail",
+    "Comfortable writing SQL to validate data integrity in test scenarios"
+  ],
+  "gaps": [
+    "Limited scripting ability in JavaScript; browser automation is exploratory rather than framework-driven",
+    "No experience building automated regression suites or integrating tests into CI/CD"
+  ],
+  "resumeText": "I am a QA Engineer at Danube Analytics where I own functional and regression testing for our analytics dashboard. My background is as a QA generalist: I design detailed test cases, run manual and exploratory testing, and validate API behavior with Postman. I have begun using Selenium to script simple browser checks, but my automation is not yet at framework level and I have not wired tests into CI/CD. I track everything in Jira and TestRail and use SQL to verify data correctness in test scenarios.",
+  "primaryDomain": "qa"
+}

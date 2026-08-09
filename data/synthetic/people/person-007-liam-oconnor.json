@@ -1,0 +1,55 @@
+{
+  "id": "person-007-liam-oconnor",
+  "name": "Liam O'Connor",
+  "email": "liam.oconnor@example.com",
+  "phone": "(555) 023-4567",
+  "location": "Austin, TX",
+  "yearsExp": 5,
+  "currentTitle": "Senior Frontend Engineer",
+  "currentCompany": "Redwood Commerce",
+  "skills": [
+    "React",
+    "TypeScript",
+    "CSS & Design Systems",
+    "Testing (Jest / React Testing Library)",
+    "Next.js",
+    "Redux",
+    "GraphQL",
+    "HTML5",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Grayscale Labs",
+      "from": "2021-08",
+      "to": "2023-06"
+    },
+    {
+      "title": "React Developer",
+      "company": "Vector Retail Group",
+      "from": "2023-07",
+      "to": "2025-02"
+    },
+    {
+      "title": "Senior Frontend Engineer",
+      "company": "Redwood Commerce",
+      "from": "2025-03",
+      "to": null
+    }
+  ],
+  "education": "B.A. Computer Science, University of Texas at Austin",
+  "certifications": "Scrum Master Certification (PSM I)",
+  "summary": "React and TypeScript engineer with 5 years of experience shipping e-commerce and SaaS interfaces, writing thorough component tests with Jest and React Testing Library, and contributing to shared design system components.",
+  "strengths": [
+    "Solid command of React, TypeScript, and component-level testing with Jest and React Testing Library",
+    "Practical experience with Next.js, Redux, and GraphQL in production",
+    "Collaborative and pragmatic; ships clean, reviewable code and documents shared patterns"
+  ],
+  "gaps": [
+    "Little formal ownership of frontend performance work — has not run performance budgets or led rendering audits",
+    "Design system exposure is mostly consuming and contributing tokens, not owning the system end to end"
+  ],
+  "resumeText": "Senior Frontend Engineer at Redwood Commerce building checkout and catalog experiences in React, TypeScript, and Next.js. I write and maintain a strong Jest and React Testing Library suite, contribute components to our design system, and refactor legacy state management toward Redux Toolkit. I am comfortable across the full React stack and focus on reliability and maintainable architecture.",
+  "primaryDomain": "frontend"
+}

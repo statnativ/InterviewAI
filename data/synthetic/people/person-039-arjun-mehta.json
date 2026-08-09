@@ -1,0 +1,49 @@
+{
+  "id": "person-039-arjun-mehta",
+  "name": "Arjun Mehta",
+  "email": "arjun.mehta@example.com",
+  "phone": "(555) 039-0039",
+  "location": "Bengaluru, IN",
+  "yearsExp": 4,
+  "currentTitle": "Android Engineer",
+  "currentCompany": "Summit Mobile",
+  "skills": [
+    "Kotlin",
+    "Jetpack Compose",
+    "Android SDK",
+    "Coroutines",
+    "MVVM",
+    "Room",
+    "Retrofit",
+    "Firebase"
+  ],
+  "experience": [
+    {
+      "title": "Android Developer",
+      "company": "PixelForge Studio",
+      "from": "2022-10",
+      "to": "2024-08"
+    },
+    {
+      "title": "Android Engineer",
+      "company": "Summit Mobile",
+      "from": "2024-09",
+      "to": null
+    }
+  ],
+  "education": "B.Tech in Computer Science, Indian Institute of Technology, Delhi",
+  "certifications": "Google Associate Android Developer",
+  "summary": "Android engineer with 4 years of experience building apps in Kotlin with Jetpack Compose. Comfortable with the MVVM pattern on the Android SDK, structured concurrency with Coroutines, and persistence with Room, plus Retrofit networking and Firebase for analytics and push.",
+  "strengths": [
+    "Production Kotlin and Jetpack Compose expertise",
+    "Solid MVVM architecture and Android SDK knowledge",
+    "Manages concurrency cleanly with Coroutines",
+    "Integrates Room, Retrofit, and Firebase across features"
+  ],
+  "gaps": [
+    "Deeply Android-focused; no React Native or cross-platform work",
+    "Little exposure to iOS toolchains"
+  ],
+  "resumeText": "Android Engineer at Summit Mobile, owning end-to-end features in Kotlin with Jetpack Compose and MVVM. At PixelForge Studio I shipped several apps using Room for persistence and Retrofit for networking. I value clean, well-tested code and real ownership over the experience of millions of users.",
+  "primaryDomain": "mobile"
+}

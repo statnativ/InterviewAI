@@ -1,0 +1,43 @@
+{
+  "id": "person-052-aria-patel",
+  "name": "Aria Patel",
+  "email": "aria.patel@example.com",
+  "phone": "(555) 052-0052",
+  "location": "Atlanta, GA",
+  "yearsExp": 2,
+  "currentTitle": "Cloud Engineer",
+  "currentCompany": "Larkspur Financial",
+  "skills": [
+    "AWS",
+    "Terraform",
+    "Linux",
+    "Python",
+    "Docker",
+    "Cloud Security",
+    "IAM",
+    "CloudWatch"
+  ],
+  "experience": [
+    {
+      "title": "Cloud Engineer",
+      "company": "Larkspur Financial",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Georgia Institute of Technology",
+  "certifications": "AWS Certified Developer - Associate",
+  "summary": "Cloud engineer with 2 years of experience automating AWS environments with Terraform and Python on Linux, still building depth in network design and infrastructure at scale.",
+  "strengths": [
+    "Automates AWS provisioning with Terraform and Python scripts",
+    "Comfortable administering Linux servers and deploying Dockerized apps",
+    "Applies cloud security best practices with IAM and least-privilege policies"
+  ],
+  "gaps": [
+    "Networking is a blind spot - VPC and routing work stays near default configurations",
+    "No deep subnet, peering, or complex routing design experience",
+    "Junior-level production footprint with a single-company background"
+  ],
+  "resumeText": "Aria Patel is a Cloud Engineer at Larkspur Financial with two years of experience automating AWS infrastructure. She writes Terraform and Python to provision environments, keeps Linux workloads healthy, and applies IAM and security best practices. Her networking work so far has relied on default VPC setups, and she is actively working to deepen her network design and large-scale infrastructure skills.",
+  "primaryDomain": "infra"
+}

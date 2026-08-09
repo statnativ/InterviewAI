@@ -1,0 +1,44 @@
+{
+  "id": "person-064-chloe-adams",
+  "name": "Chloe Adams",
+  "email": "chloe.adams@example.com",
+  "phone": "(555) 064-0064",
+  "location": "Atlanta, GA",
+  "yearsExp": 1,
+  "currentTitle": "Security Operations Analyst",
+  "currentCompany": "Helios Health",
+  "skills": [
+    "SIEM",
+    "Incident Response",
+    "Network Fundamentals",
+    "Log Analysis",
+    "Endpoint Detection",
+    "Scripting (Python)",
+    "Phishing Analysis",
+    "Windows"
+  ],
+  "experience": [
+    {
+      "title": "Security Operations Analyst",
+      "company": "Helios Health",
+      "from": "2025-10",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Cybersecurity, Georgia State University",
+  "certifications": "CompTIA Security+ (in progress)",
+  "summary": "SOC analyst with 1 year of experience at Helios Health triaging SIEM alerts, analyzing logs, and supporting incident response. Comfortable with network fundamentals and endpoint detection, but threat intelligence is a skill I have not yet applied in a production setting.",
+  "strengths": [
+    "Triages SIEM alerts and performs log analysis daily",
+    "Supports incident response on phishing and malware cases",
+    "Solid network fundamentals with endpoint detection tooling in daily use",
+    "Writes small Python scripts to speed up investigations"
+  ],
+  "gaps": [
+    "No experience with commercial threat intelligence platforms or feeds",
+    "One year in, still building incident response depth beyond alert triage and escalation",
+    "Limited experience tuning detection rules across SIEM platforms"
+  ],
+  "resumeText": "Security Operations Analyst at Helios Health where I monitor SIEM alerts, perform log analysis, and support incident response for a healthcare environment. I have solid network fundamentals and use endpoint detection tools in daily triage, but I have not yet worked with commercial threat intelligence platforms or feeds, which is my priority to learn.",
+  "primaryDomain": "security"
+}

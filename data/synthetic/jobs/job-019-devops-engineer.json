@@ -1,0 +1,22 @@
+{
+  "id": "job-019-devops-engineer",
+  "title": "DevOps Engineer",
+  "domain": "infra",
+  "department": "Infrastructure",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a DevOps Engineer to build and maintain the tooling that powers our delivery pipeline. You will containerize applications, automate infrastructure with Terraform, and operate Kubernetes clusters that host our production services. You will work closely with development teams to make CI/CD fast, reliable, and observable. If you thrive on automation and reducing toil, this role is for you.",
+  "requiredSkills": [
+    { "name": "Docker", "level": "must-have", "weight": 25 },
+    { "name": "Kubernetes", "level": "must-have", "weight": 20 },
+    { "name": "CI/CD (GitHub Actions)", "level": "must-have", "weight": 15 },
+    { "name": "Terraform", "level": "must-have", "weight": 15 },
+    { "name": "Linux", "level": "must-have", "weight": 10 },
+    { "name": "AWS", "level": "nice-to-have", "weight": 10 },
+    { "name": "Helm", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

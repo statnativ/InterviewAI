@@ -1,0 +1,53 @@
+{
+  "id": "person-016-lena-fischer",
+  "name": "Lena Fischer",
+  "email": "lena.fischer@example.com",
+  "phone": "(555) 016-0016",
+  "location": "Berlin, Germany",
+  "yearsExp": 5,
+  "currentTitle": "Backend Engineer",
+  "currentCompany": "Helio Labs",
+  "skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "Docker",
+    "SQLAlchemy",
+    "Celery",
+    "AWS",
+    "SQL",
+    "Airflow",
+    "Data Modeling",
+    "dbt"
+  ],
+  "experience": [
+    {
+      "title": "Python Developer",
+      "company": "Vantage Data",
+      "from": "2021-07",
+      "to": "2023-05"
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "Helio Labs",
+      "from": "2023-06",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computer Science, Technical University of Munich",
+  "certifications": "AWS Certified Developer - Associate",
+  "summary": "Python backend engineer with 5 years of experience shipping FastAPI services on PostgreSQL, caching with Redis, and deploying containerized workloads to AWS. Recently expanded into data tooling, owning Airflow jobs and dbt models that feed the analytics warehouse.",
+  "strengths": [
+    "Solid FastAPI and SQLAlchemy expertise building production Python APIs",
+    "Comfortable with async workflows using Celery and Redis",
+    "Experience containerizing services with Docker and running them on AWS",
+    "Practical data engineering exposure with Airflow and dbt"
+  ],
+  "gaps": [
+    "Limited Java and Node.js exposure outside of Python",
+    "Frontend and UI development is not part of my skill set"
+  ],
+  "resumeText": "Backend Engineer at Helio Labs building FastAPI services over PostgreSQL and Redis, with Celery for background jobs and Docker for delivery to AWS. Previously at Vantage Data I wrote Python pipelines and took on Airflow orchestration and dbt modeling for the analytics team. I care about reliable, tested, observable services and smooth end-to-end ownership of features.",
+  "primaryDomain": "backend"
+}

@@ -1,0 +1,22 @@
+{
+  "id": "job-029-qa-automation",
+  "title": "QA Automation Engineer",
+  "domain": "qa",
+  "department": "Quality",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Draft",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a QA Automation Engineer to build reliable automated tests that keep our applications stable. You will write Selenium-based browser tests in JavaScript and contribute to our shared test automation framework. You will cover API flows, wire test suites into CI/CD, and track coverage and results in Jira and TestRail. If you are detail-oriented and passionate about shipping high-quality software, this role is for you.",
+  "requiredSkills": [
+    { "name": "Selenium", "level": "must-have", "weight": 25 },
+    { "name": "JavaScript", "level": "must-have", "weight": 20 },
+    { "name": "Test Automation", "level": "must-have", "weight": 20 },
+    { "name": "API Testing", "level": "must-have", "weight": 10 },
+    { "name": "CI/CD", "level": "must-have", "weight": 10 },
+    { "name": "Cypress", "level": "nice-to-have", "weight": 10 },
+    { "name": "Jira / TestRail", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

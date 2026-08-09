@@ -1,0 +1,42 @@
+{
+  "id": "person-026-ryan-clark",
+  "name": "Ryan Clark",
+  "email": "ryan.clark@example.com",
+  "phone": "(555) 026-0026",
+  "location": "Columbus, OH",
+  "yearsExp": 2,
+  "currentTitle": "Junior Frontend Developer",
+  "currentCompany": "Brightline Solutions",
+  "skills": [
+    "Angular",
+    "TypeScript",
+    "RxJS",
+    "HTML5 & CSS",
+    "JavaScript",
+    "Bootstrap",
+    "REST APIs",
+    "Git"
+  ],
+  "experience": [
+    {
+      "title": "Junior Frontend Developer",
+      "company": "Brightline Solutions",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Web Development, Ohio State University",
+  "certifications": "None",
+  "summary": "Junior frontend developer with 2 years of experience building Angular-based internal tools. I write typed components, consume RxJS observables, and build responsive HTML5 & CSS layouts, and I am still growing into a test-first mindset for my code.",
+  "strengths": [
+    "Solid Angular component and service fundamentals",
+    "Comfortable with TypeScript types and RxJS observables",
+    "Responsive HTML5 & CSS layouts using Bootstrap"
+  ],
+  "gaps": [
+    "No formal Jasmine or Karma test suites written yet",
+    "Limited experience with state management libraries beyond RxJS subjects"
+  ],
+  "resumeText": "Junior Frontend Developer at Brightline Solutions, building Angular dashboards and form-heavy internal tools used by operations staff. I write typed components in TypeScript, handle server data with RxJS, and style responsive HTML5 & CSS interfaces. I have mostly relied on manual testing and code review so far and am eager to adopt a structured testing workflow for my work.",
+  "primaryDomain": "frontend"
+}

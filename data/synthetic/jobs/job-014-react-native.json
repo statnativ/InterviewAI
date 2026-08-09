@@ -1,0 +1,23 @@
+{
+  "id": "job-014-react-native",
+  "title": "React Native Engineer",
+  "domain": "mobile",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a Mid-level React Native Engineer to build cross-platform mobile experiences for both iOS and Android from a single codebase. You will write product features with React Native and TypeScript, and manage application state cleanly with Redux or Zustand. You will bridge into native code when needed, build and share reusable native modules, and keep release velocity high with an Expo-based workflow and CI/CD. You will also write reliable end-to-end tests with Detox to protect the experience our users rely on. Join a remote team that ships fast and cares deeply about quality.",
+  "requiredSkills": [
+    { "name": "React Native", "level": "must-have", "weight": 25 },
+    { "name": "TypeScript", "level": "must-have", "weight": 20 },
+    { "name": "JavaScript", "level": "must-have", "weight": 15 },
+    { "name": "Native Modules", "level": "must-have", "weight": 10 },
+    { "name": "State Management (Redux / Zustand)", "level": "must-have", "weight": 10 },
+    { "name": "Expo", "level": "nice-to-have", "weight": 10 },
+    { "name": "Testing (Detox)", "level": "nice-to-have", "weight": 5 },
+    { "name": "CI/CD", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

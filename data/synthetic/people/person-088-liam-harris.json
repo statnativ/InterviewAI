@@ -1,0 +1,48 @@
+{
+  "id": "person-088-liam-harris",
+  "name": "Liam Harris",
+  "email": "liam.harris@example.com",
+  "phone": "(555) 088-0088",
+  "location": "Seattle, WA",
+  "yearsExp": 5,
+  "currentTitle": "RAG / Information Retrieval Engineer",
+  "currentCompany": "Corvid Search",
+  "skills": [
+    "Python",
+    "Vector Databases",
+    "Embeddings",
+    "RAG Patterns",
+    "NLP",
+    "LangChain",
+    "Elasticsearch"
+  ],
+  "experience": [
+    {
+      "title": "NLP Engineer",
+      "company": "LinguaSoft",
+      "from": "2021-07",
+      "to": "2023-11"
+    },
+    {
+      "title": "RAG / Information Retrieval Engineer",
+      "company": "Corvid Search",
+      "from": "2023-12",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computational Linguistics, University of Washington",
+  "certifications": "None",
+  "summary": "RAG / information retrieval engineer with 5 years of experience designing vector database schemas and indexing millions of documents. Owns embedding generation and RAG pipeline tuning including hybrid search and reranking, with strong NLP grounding for chunking and query understanding.",
+  "strengths": [
+    "Deep vector database schema design and index management at scale",
+    "Production embedding generation and freshness handling",
+    "Strong RAG pattern tuning across hybrid search and reranking",
+    "Solid NLP background for chunking, query understanding, and evaluation"
+  ],
+  "gaps": [
+    "Less hands-on LLM prompt engineering beyond retrieval contexts",
+    "Limited frontend and product-facing development experience"
+  ],
+  "resumeText": "Liam Harris is a RAG / Information Retrieval Engineer at Corvid Search with five years of experience. He designs vector database schemas and indexes millions of documents, manages embedding generation and updates for accuracy and freshness, and owns the retrieval pipeline from hybrid search to reranking. He applies NLP techniques to chunking, query understanding, and evaluation, and prototypes with LangChain and Elasticsearch. Previously at LinguaSoft he built NLP systems. His focus is retrieval quality at scale.",
+  "primaryDomain": "ai"
+}

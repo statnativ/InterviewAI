@@ -1,0 +1,23 @@
+{
+  "id": "job-024-security-engineer",
+  "title": "Security Engineer",
+  "domain": "security",
+  "department": "Security",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for a Security Engineer to help defend our infrastructure and applications against evolving threats. You will perform penetration testing, harden Linux environments, and secure network boundaries across our platform. You will also tune SIEM detections, collaborate with engineering on cloud security posture, and apply OWASP guidance to our software development lifecycle. This is a hands-on role where you will directly reduce risk and improve our security maturity.",
+  "requiredSkills": [
+    { "name": "Application Security", "level": "must-have", "weight": 20 },
+    { "name": "Network Security", "level": "must-have", "weight": 15 },
+    { "name": "Linux", "level": "must-have", "weight": 15 },
+    { "name": "Penetration Testing", "level": "must-have", "weight": 15 },
+    { "name": "Python", "level": "must-have", "weight": 10 },
+    { "name": "SIEM", "level": "nice-to-have", "weight": 10 },
+    { "name": "Cloud Security", "level": "nice-to-have", "weight": 10 },
+    { "name": "OWASP", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

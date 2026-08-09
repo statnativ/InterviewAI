@@ -1,0 +1,24 @@
+{
+  "id": "job-002-senior-frontend-react",
+  "title": "Senior Frontend Engineer (React)",
+  "domain": "frontend",
+  "department": "Engineering",
+  "location": "San Francisco, CA",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Senior Frontend Engineer to build and evolve our design system while shipping customer-facing features across our React and Next.js web platform. You will own frontend performance budgets, champion accessibility, and collaborate closely with product and design to turn ambiguous ideas into polished, testable interfaces. You will mentor other engineers on TypeScript, testing, and component architecture best practices. If you care deeply about the details that make interfaces feel fast, inclusive, and delightful, this role is for you.",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "requiredSkills": [
+    { "name": "React", "level": "must-have", "weight": 20 },
+    { "name": "TypeScript", "level": "must-have", "weight": 20 },
+    { "name": "CSS & Design Systems", "level": "must-have", "weight": 15 },
+    { "name": "Testing (Jest / React Testing Library)", "level": "must-have", "weight": 10 },
+    { "name": "Frontend Performance", "level": "must-have", "weight": 10 },
+    { "name": "Next.js", "level": "nice-to-have", "weight": 10 },
+    { "name": "GraphQL", "level": "nice-to-have", "weight": 5 },
+    { "name": "Accessibility (a11y)", "level": "nice-to-have", "weight": 5 },
+    { "name": "Storybook", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

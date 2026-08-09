@@ -1,0 +1,59 @@
+{
+  "id": "person-055-max-keller",
+  "name": "Max Keller",
+  "email": "max.keller@example.com",
+  "phone": "(555) 055-0055",
+  "location": "Columbus, OH",
+  "yearsExp": 8,
+  "currentTitle": "Senior DevOps Engineer",
+  "currentCompany": "Northwood Supply Chain",
+  "skills": [
+    "Docker",
+    "Kubernetes",
+    "Terraform",
+    "Linux",
+    "Jenkins",
+    "GitLab CI",
+    "Ansible",
+    "Bash",
+    "Nginx",
+    "AWS",
+    "Helm"
+  ],
+  "experience": [
+    {
+      "title": "Systems Administrator",
+      "company": "Brightwater Utility",
+      "from": "2018-06",
+      "to": "2020-09"
+    },
+    {
+      "title": "DevOps Engineer",
+      "company": "Brightwater Utility",
+      "from": "2020-10",
+      "to": "2023-02"
+    },
+    {
+      "title": "Senior DevOps Engineer",
+      "company": "Northwood Supply Chain",
+      "from": "2023-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Technology, University of Colorado Boulder",
+  "certifications": "Red Hat Certified Engineer (RHCE)",
+  "summary": "Senior DevOps engineer with 8 years of infrastructure experience running Docker and Kubernetes on Linux and automating with Terraform, having built delivery pipelines on Jenkins and GitLab rather than GitHub Actions.",
+  "strengths": [
+    "Long-running Linux administration and systems engineering background",
+    "Operates Kubernetes clusters and Dockerized workloads in production",
+    "Automates infrastructure with Terraform and Ansible across environments",
+    "Self-hosted pipeline experience with Jenkins and GitLab CI"
+  ],
+  "gaps": [
+    "No GitHub Actions experience - all CI/CD work runs on Jenkins and GitLab CI",
+    "Prefers self-hosted tooling, less exposure to cloud-native managed services",
+    "Limited experience with GitHub-ecosystem workflows and its marketplace"
+  ],
+  "resumeText": "Max Keller is a Senior DevOps Engineer at Northwood Supply Chain with eight years of infrastructure experience. He operates Docker and Kubernetes workloads on Linux, automates infrastructure with Terraform and Ansible, and has built self-hosted CI/CD pipelines on Jenkins and GitLab CI. He is a generalist who values reliable self-hosted tooling, and is now looking to adopt GitHub Actions workflows.",
+  "primaryDomain": "infra"
+}

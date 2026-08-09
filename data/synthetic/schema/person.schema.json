@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "person.schema.json",
+  "title": "Person",
+  "description": "A synthetic candidate's CV (the person, not the application). Raw signals only — NO score, NO scorecard, NO verdict. One file per unique person; they may hold 1-3 applications to different jobs.",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "email",
+    "phone",
+    "location",
+    "yearsExp",
+    "currentTitle",
+    "currentCompany",
+    "skills",
+    "experience",
+    "education",
+    "certifications",
+    "summary",
+    "strengths",
+    "gaps",
+    "resumeText",
+    "primaryDomain"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^person-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "name": { "type": "string", "minLength": 3 },
+    "email": { "type": "string", "format": "email" },
+    "phone": { "type": "string" },
+    "location": { "type": "string" },
+    "yearsExp": { "type": "integer", "minimum": 0, "maximum": 35 },
+    "currentTitle": { "type": "string" },
+    "currentCompany": { "type": "string" },
+    "skills": {
+      "type": "array",
+      "minItems": 3,
+      "items": { "type": "string", "minLength": 2 }
+    },
+    "experience": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": ["title", "company", "from", "to"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string" },
+          "company": { "type": "string" },
+          "from": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$" },
+          "to": {
+            "anyOf": [
+              { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$" },
+              { "type": "null" }
+            ]
+          }
+        }
+      }
+    },
+    "education": { "type": "string" },
+    "certifications": { "type": "string" },
+    "summary": { "type": "string", "minLength": 20 },
+    "strengths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "gaps": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "resumeText": { "type": "string", "minLength": 80 },
+    "primaryDomain": {
+      "type": "string",
+      "enum": ["backend", "frontend", "mobile", "data", "infra", "security", "qa", "architecture", "ai"]
+    }
+  }
+}

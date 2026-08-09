@@ -1,0 +1,47 @@
+{
+  "id": "person-034-olga-ivanova",
+  "name": "Olga Ivanova",
+  "email": "olga.ivanova@example.com",
+  "phone": "(555) 034-0034",
+  "location": "Remote",
+  "yearsExp": 5,
+  "currentTitle": "Machine Learning Engineer",
+  "currentCompany": "Lumina Analytics",
+  "skills": [
+    "Python",
+    "PyTorch",
+    "ML Ops (MLflow)",
+    "Docker",
+    "Kubernetes",
+    "TensorFlow",
+    "Airflow"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Nortek Software",
+      "from": "2021-07",
+      "to": "2023-03"
+    },
+    {
+      "title": "Machine Learning Engineer",
+      "company": "Lumina Analytics",
+      "from": "2023-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Illinois at Chicago",
+  "certifications": "AWS Certified Solutions Architect - Associate",
+  "summary": "Machine Learning Engineer with five years of experience, the first two in backend development. Productionizes PyTorch models with Docker and Kubernetes, tracks experiments and models with MLflow, and owns the full model lifecycle from training pipelines to serving.",
+  "strengths": [
+    "Productionizes PyTorch models packaged with Docker and orchestrated on Kubernetes",
+    "Tracks experiments, model registries, and serving with ML Ops (MLflow)",
+    "Python engineering fundamentals from a backend background for reliable services"
+  ],
+  "gaps": [
+    "Feature store experience is limited and mostly via inference-time compute",
+    "Airflow integration is handled by data engineers rather than owned directly"
+  ],
+  "resumeText": "Olga Ivanova is a Machine Learning Engineer at Lumina Analytics with five years of experience, starting as a backend engineer at Nortek Software before moving into ML. She owns the full model lifecycle for PyTorch and TensorFlow models, packaging them with Docker, orchestrating on Kubernetes, and tracking experiments and models in MLflow. She works closely with data engineers to keep feature pipelines fresh and is focused on reliable, reproducible model serving.",
+  "primaryDomain": "data"
+}

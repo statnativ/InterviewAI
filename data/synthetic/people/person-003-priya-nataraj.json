@@ -1,0 +1,56 @@
+{
+  "id": "person-003-priya-nataraj",
+  "name": "Priya Nataraj",
+  "email": "priya.nataraj@example.com",
+  "phone": "(555) 013-0033",
+  "location": "Chicago, IL",
+  "yearsExp": 4,
+  "currentTitle": "Django Backend Engineer",
+  "currentCompany": "GreenLoop Energy",
+  "skills": [
+    "Python",
+    "Django",
+    "PostgreSQL",
+    "SQL",
+    "Redis",
+    "Docker",
+    "Celery",
+    "System Design"
+  ],
+  "experience": [
+    {
+      "title": "Python Developer",
+      "company": "DataCraft Solutions",
+      "from": "2022-06",
+      "to": "2024-02"
+    },
+    {
+      "title": "Backend Developer",
+      "company": "Meridian Learning",
+      "from": "2024-03",
+      "to": "2026-03"
+    },
+    {
+      "title": "Django Backend Engineer",
+      "company": "GreenLoop Energy",
+      "from": "2026-04",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Data Science, Northwestern University",
+  "certifications": "None",
+  "summary": "Backend developer with 4 years of experience building Python/Django services on PostgreSQL, with strong SQL and data-handling skills that make her a good fit for data engineering work. Runs reliable background pipelines with Celery and Redis, and is currently expanding her platform skills to Go and container orchestration.",
+  "strengths": [
+    "Strong Python and Django development across several production services",
+    "Excellent SQL and PostgreSQL skills, including complex analytics queries",
+    "Comfortable with data pipelines, Celery workers, and Redis caching",
+    "Grasps system design fundamentals for web services"
+  ],
+  "gaps": [
+    "No professional Go experience; primary language is Python",
+    "Has not worked with Kubernetes or container orchestration in production",
+    "No gRPC exposure; services are REST/JSON based"
+  ],
+  "resumeText": "Django Backend Engineer at GreenLoop Energy, maintaining analytics and reporting services on PostgreSQL. Previously at Meridian Learning I built Celery-backed data pipelines and optimized slow queries, and I ship everything through Docker. I am deliberately working toward Go and cloud-native skills to broaden my backend range.",
+  "primaryDomain": "backend"
+}

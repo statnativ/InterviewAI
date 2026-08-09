@@ -1,0 +1,50 @@
+{
+  "id": "person-084-charlotte-dubois",
+  "name": "Charlotte Dubois",
+  "email": "charlotte.dubois@example.com",
+  "phone": "(555) 084-0084",
+  "location": "Lyon, France",
+  "yearsExp": 4,
+  "currentTitle": "GenAI Application Developer",
+  "currentCompany": "Lumen Assist",
+  "skills": [
+    "Python",
+    "LLM APIs (OpenAI / Anthropic)",
+    "React",
+    "FastAPI",
+    "RAG Patterns",
+    "Docker",
+    "LangChain",
+    "PostgreSQL",
+    "Redis"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Citrus Digital",
+      "from": "2022-08",
+      "to": "2024-05"
+    },
+    {
+      "title": "GenAI Application Developer",
+      "company": "Lumen Assist",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computer Science, Université Claude Bernard Lyon 1",
+  "certifications": "Meta Front-End Developer Professional Certificate",
+  "summary": "Full-stack GenAI application developer with 4 years of experience building AI-powered features end to end. Writes Python services in FastAPI that call OpenAI and Anthropic APIs, implements RAG flows over vector stores, and builds the React frontends that stream responses, all containerized with Docker.",
+  "strengths": [
+    "End-to-end full-stack delivery from FastAPI services to React UIs",
+    "Production RAG flow implementation over vector stores",
+    "Confident with PostgreSQL, Redis, and Docker in deployment",
+    "Strong API design and streaming response handling"
+  ],
+  "gaps": [
+    "Less depth in model fine-tuning and ML training work",
+    "Vector database tuning is mostly operational rather than index strategy design"
+  ],
+  "resumeText": "Charlotte Dubois is a GenAI Application Developer at Lumen Assist with four years of experience. She builds full-stack AI features end to end: Python services in FastAPI calling OpenAI and Anthropic APIs, RAG flows backed by vector stores, and React frontends that stream responses to users. She packages everything with Docker and works daily with PostgreSQL and Redis. Previously at Citrus Digital she built Python and React web services. She bridges product needs and ML pipelines effectively.",
+  "primaryDomain": "ai"
+}

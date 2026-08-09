@@ -1,0 +1,64 @@
+{
+  "id": "person-072-robert-hayes",
+  "name": "Robert Hayes",
+  "email": "robert.hayes@example.com",
+  "phone": "(555) 072-0072",
+  "location": "Austin, TX",
+  "yearsExp": 9,
+  "currentTitle": "Principal Solutions Architect",
+  "currentCompany": "Meridian Cloud",
+  "skills": [
+    "Cloud Architecture (AWS / Azure)",
+    "System Design",
+    "Microservices",
+    "Enterprise Integration",
+    "Cost Optimization",
+    "Containerization",
+    "Security Architecture",
+    "Migration Strategies",
+    "AWS",
+    "Terraform",
+    "REST APIs"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Northwind Telecom",
+      "from": "2017-08",
+      "to": "2020-05"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Northwind Telecom",
+      "from": "2020-06",
+      "to": "2022-10"
+    },
+    {
+      "title": "Solutions Architect",
+      "company": "Meridian Cloud",
+      "from": "2022-11",
+      "to": "2025-03"
+    },
+    {
+      "title": "Principal Solutions Architect",
+      "company": "Meridian Cloud",
+      "from": "2025-04",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Computer Science, University of Texas at Austin",
+  "certifications": "AWS Certified Solutions Architect - Professional",
+  "summary": "Principal Solutions Architect with 9 years of experience owning end-to-end technical design for customer engagements. Translates business requirements into secure, cost-effective cloud architectures spanning microservices, enterprise integration patterns, and containerized workloads across AWS and Azure.",
+  "strengths": [
+    "Deep cloud architecture expertise across AWS and Azure with migration strategy ownership",
+    "Strong system design and microservices background for modernizing legacy estates",
+    "Enterprise integration pattern experience connecting on-prem and cloud systems",
+    "Drives cost optimization and cloud spend governance across client portfolios"
+  ],
+  "gaps": [
+    "Limited hands-on frontend and mobile development exposure",
+    "Recent role is heavily client-facing, with less day-to-day code contribution"
+  ],
+  "resumeText": "Principal Solutions Architect at Meridian Cloud, owning the technical design of cloud and legacy engagements end to end. I translate business requirements into secure, cost-effective architectures spanning microservices, enterprise integration patterns, and containerized workloads, and set the guardrails for security and cloud spend. Previously at Northwind Telecom I built the engineering foundation that prepared me to architect at scale.",
+  "primaryDomain": "architecture"
+}

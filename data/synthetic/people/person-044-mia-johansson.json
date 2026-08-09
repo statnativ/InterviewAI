@@ -1,0 +1,41 @@
+{
+  "id": "person-044-mia-johansson",
+  "name": "Mia Johansson",
+  "email": "mia.johansson@example.com",
+  "phone": "(555) 044-0044",
+  "location": "Stockholm, SE",
+  "yearsExp": 1,
+  "currentTitle": "Junior iOS Developer",
+  "currentCompany": "Fjord Apps",
+  "skills": [
+    "Swift",
+    "SwiftUI",
+    "Combine",
+    "Core Data"
+  ],
+  "experience": [
+    {
+      "title": "Junior iOS Developer",
+      "company": "Fjord Apps",
+      "from": "2025-09",
+      "to": null
+    }
+  ],
+  "education": "B.Sc. in Computer Science, KTH Royal Institute of Technology",
+  "certifications": "None",
+  "summary": "Junior iOS developer with 1 year of experience building SwiftUI-first apps in Swift. Comfortable with SwiftUI, Combine, and Core Data in small apps, but has no UIKit experience, minimal Xcode tooling depth, and has not worked with the MVVM pattern yet.",
+  "strengths": [
+    "Fast learner with strong Swift fundamentals",
+    "Hands-on SwiftUI and Combine experience",
+    "Uses Core Data for local storage in small apps",
+    "Excited to grow into a mid-level role"
+  ],
+  "gaps": [
+    "No UIKit experience; only SwiftUI",
+    "Limited Xcode tooling and release pipeline knowledge",
+    "Has not applied MVVM architecture in a real project",
+    "Below the 3-year experience bar for the role"
+  ],
+  "resumeText": "Junior iOS Developer at Fjord Apps, where I build SwiftUI screens in Swift using Combine and Core Data. I am early in my career and focused on mastering the full iOS toolkit, from UIKit and MVVM to Xcode tooling, so I can grow into a mid-level iOS engineer.",
+  "primaryDomain": "mobile"
+}

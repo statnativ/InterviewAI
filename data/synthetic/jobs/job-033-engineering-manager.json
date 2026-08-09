@@ -1,0 +1,23 @@
+{
+  "id": "job-033-engineering-manager",
+  "title": "Engineering Manager",
+  "domain": "architecture",
+  "department": "Architecture",
+  "location": "San Francisco, CA",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 6,
+  "description": "We are looking for an Engineering Manager to lead a team of architects and engineers building our core platform. You will own team delivery through Agile practices, drive performance management and career growth, and provide technical mentorship across design and architecture decisions. You will act as the primary bridge to product and executive stakeholders, translating business goals into engineering plans and communicating trade-offs clearly. This on-site role in San Francisco values leaders who build strong teams and ship reliably.",
+  "requiredSkills": [
+    { "name": "Team Leadership", "level": "must-have", "weight": 25 },
+    { "name": "Technical Mentorship", "level": "must-have", "weight": 20 },
+    { "name": "Agile Delivery", "level": "must-have", "weight": 15 },
+    { "name": "Performance Management", "level": "must-have", "weight": 10 },
+    { "name": "Stakeholder Communication", "level": "must-have", "weight": 10 },
+    { "name": "Software Architecture", "level": "nice-to-have", "weight": 10 },
+    { "name": "Hiring & Onboarding", "level": "nice-to-have", "weight": 5 },
+    { "name": "Metrics & KPIs", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

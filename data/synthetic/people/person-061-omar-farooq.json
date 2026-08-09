@@ -1,0 +1,52 @@
+{
+  "id": "person-061-omar-farooq",
+  "name": "Omar Farooq",
+  "email": "omar.farooq@example.com",
+  "phone": "(555) 061-0061",
+  "location": "New York, NY",
+  "yearsExp": 5,
+  "currentTitle": "Cloud Security Engineer",
+  "currentCompany": "Nexa Infra",
+  "skills": [
+    "AWS Security",
+    "IAM & Identity",
+    "Terraform",
+    "Compliance (SOC2)",
+    "Cloud Networking",
+    "Kubernetes Security",
+    "Python",
+    "SIEM",
+    "AWS",
+    "Infrastructure as Code"
+  ],
+  "experience": [
+    {
+      "title": "Cloud Engineer",
+      "company": "Nexa Infra",
+      "from": "2021-02",
+      "to": "2023-05"
+    },
+    {
+      "title": "Cloud Security Engineer",
+      "company": "Nexa Infra",
+      "from": "2023-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Systems, New York University",
+  "certifications": "AWS Certified Security – Specialty, HashiCorp Certified: Terraform Associate",
+  "summary": "Cloud security engineer with 5 years of experience securing AWS environments at Nexa Infra. I architect identity and access controls, harden cloud networking, deliver infrastructure as code with Terraform, and lead SOC 2 compliance efforts.",
+  "strengths": [
+    "Designs least-privilege IAM policies and identity controls across multi-account AWS estates",
+    "Harden VPC and cloud networking boundaries by default",
+    "Builds secure infrastructure as code with Terraform",
+    "Leads SOC 2 compliance evidence and control mapping",
+    "Secures Kubernetes workloads and shapes SIEM monitoring for the cloud estate"
+  ],
+  "gaps": [
+    "No application-level penetration testing experience",
+    "Limited exposure to on-premises and legacy infrastructure"
+  ],
+  "resumeText": "Cloud Security Engineer at Nexa Infra protecting a multi-account AWS estate. I design IAM policies on the principle of least privilege, harden VPC and cloud networking, and build secure infrastructure as code with Terraform. I lead SOC 2 compliance work, secure Kubernetes workloads, and shape SIEM monitoring across the cloud footprint.",
+  "primaryDomain": "security"
+}

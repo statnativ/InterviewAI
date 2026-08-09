@@ -1,0 +1,42 @@
+{
+  "id": "person-046-grace-liu",
+  "name": "Grace Liu",
+  "email": "grace.liu@example.com",
+  "phone": "(555) 046-0046",
+  "location": "Seattle, WA",
+  "yearsExp": 2,
+  "currentTitle": "DevOps Engineer",
+  "currentCompany": "Pinevale Retail",
+  "skills": [
+    "Docker",
+    "Kubernetes",
+    "CI/CD (GitHub Actions)",
+    "AWS",
+    "Helm",
+    "Python",
+    "Nginx"
+  ],
+  "experience": [
+    {
+      "title": "DevOps Engineer",
+      "company": "Pinevale Retail",
+      "from": "2024-05",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, University of Washington",
+  "certifications": "Docker Certified Associate",
+  "summary": "DevOps engineer with 2 years of experience shipping Dockerized services to Kubernetes with GitHub Actions pipelines on AWS, still building depth in infrastructure tooling.",
+  "strengths": [
+    "Builds and maintains GitHub Actions pipelines that deploy Docker images to Kubernetes",
+    "Practical AWS usage across ECR, EKS, and managed runners",
+    "Writes Python tooling to automate release and health-check tasks"
+  ],
+  "gaps": [
+    "No Terraform experience - infrastructure is managed with CloudFormation and the AWS console",
+    "Limited direct Linux administration; relies on managed runners and pre-built AMIs",
+    "Junior-level exposure to production hardening and capacity planning"
+  ],
+  "resumeText": "Grace Liu is a DevOps Engineer at Pinevale Retail with two years of experience containerizing services and automating deployments. She owns GitHub Actions pipelines that build Docker images and roll them out to a Kubernetes cluster on AWS. She is now focused on growing into infrastructure as code with Terraform and deeper Linux operations to complement her app-side DevOps skills.",
+  "primaryDomain": "infra"
+}

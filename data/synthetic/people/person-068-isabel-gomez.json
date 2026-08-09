@@ -1,0 +1,51 @@
+{
+  "id": "person-068-isabel-gomez",
+  "name": "Isabel Gomez",
+  "email": "isabel.gomez@example.com",
+  "phone": "(555) 068-0068",
+  "location": "Phoenix, AZ",
+  "yearsExp": 4,
+  "currentTitle": "QA Automation Engineer",
+  "currentCompany": "Silverline Health",
+  "skills": [
+    "Selenium",
+    "JavaScript",
+    "Test Automation",
+    "API Testing",
+    "CI/CD",
+    "Cypress",
+    "Jira / TestRail",
+    "TypeScript",
+    "GitLab CI",
+    "Newman"
+  ],
+  "experience": [
+    {
+      "title": "QA Analyst",
+      "company": "Canyon Payroll Systems",
+      "from": "2022-05",
+      "to": "2024-02"
+    },
+    {
+      "title": "QA Automation Engineer",
+      "company": "Silverline Health",
+      "from": "2024-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. Software Engineering, Arizona State University",
+  "certifications": "ISTQB Certified Tester Foundation Level",
+  "summary": "QA Automation Engineer with 4 years of experience building Selenium-based browser test suites in JavaScript, covering API flows with Newman and Postman, and wiring everything into GitLab CI/CD with coverage tracked in Jira and TestRail.",
+  "strengths": [
+    "Expert in Selenium WebDriver test frameworks written in JavaScript, including parallel execution and retry handling",
+    "Built comprehensive API test suites with Newman and Postman integrated into CI/CD pipelines",
+    "Experience with Cypress for modern component-level and e2e coverage",
+    "Track coverage and results in Jira and TestRail, reporting quality metrics to stakeholders"
+  ],
+  "gaps": [
+    "Limited exposure to load and performance testing tooling",
+    "Mostly web-focused; less experience automating desktop or mobile applications"
+  ],
+  "resumeText": "I am a QA Automation Engineer at Silverline Health where I lead our Selenium and JavaScript test automation framework. I write and maintain browser tests for our patient portal, cover API flows with Newman, and have wired the entire suite into GitLab CI/CD so it runs on every merge request. I report coverage and results in Jira and TestRail, and I have introduced Cypress for faster component-level checks. Before that I was a QA Analyst at Canyon Payroll Systems where I built the foundation of my testing discipline.",
+  "primaryDomain": "qa"
+}

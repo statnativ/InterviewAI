@@ -1,0 +1,47 @@
+{
+  "id": "person-089-zara-ali",
+  "name": "Zara Ali",
+  "email": "zara.ali@example.com",
+  "phone": "(555) 089-0089",
+  "location": "Dubai, UAE",
+  "yearsExp": 3,
+  "currentTitle": "RAG Engineer",
+  "currentCompany": "Nova Retrieval",
+  "skills": [
+    "Python",
+    "Vector Databases",
+    "RAG Patterns",
+    "LangChain",
+    "Elasticsearch"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Sandstone Payments",
+      "from": "2023-08",
+      "to": "2025-04"
+    },
+    {
+      "title": "RAG Engineer",
+      "company": "Nova Retrieval",
+      "from": "2025-05",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, American University of Sharjah",
+  "certifications": "None",
+  "summary": "RAG engineer with 3 years of experience, the last of it building retrieval pipelines over vector databases with LangChain. Practical with RAG patterns and Elasticsearch hybrid retrieval, with a backend background in Python that supports solid engineering fundamentals.",
+  "strengths": [
+    "Practical RAG pipeline development with LangChain",
+    "Hands-on vector database indexing in production",
+    "Strong Python backend fundamentals from prior engineering work",
+    "Comfortable with Elasticsearch for hybrid retrieval"
+  ],
+  "gaps": [
+    "Limited dedicated embeddings generation and update experience",
+    "NLP grounding is light beyond retrieval-specific techniques",
+    "RAG focus is recent within a 3-year career"
+  ],
+  "resumeText": "Zara Ali is a RAG Engineer at Nova Retrieval with three years of experience. She builds retrieval-augmented generation pipelines over vector databases using LangChain, and uses Elasticsearch for hybrid and keyword retrieval. She spent two years as a backend engineer at Sandstone Payments before moving into RAG work. Her strengths are pipeline engineering and vector indexing; her NLP and dedicated embeddings experience is still maturing.",
+  "primaryDomain": "ai"
+}

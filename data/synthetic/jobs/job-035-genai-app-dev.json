@@ -1,0 +1,23 @@
+{
+  "id": "job-035-genai-app-dev",
+  "title": "GenAI Application Developer",
+  "domain": "ai",
+  "department": "AI / ML",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are hiring a Mid-level GenAI Application Developer to build full-stack AI-powered features end to end. You will write Python services in FastAPI that call OpenAI and Anthropic APIs, and implement RAG flows backed by vector stores to answer user questions from our content. You will build the React frontend that presents streaming responses, and package everything with Docker for easy deployment. You will also apply prompt engineering and LangChain where they simplify the pipeline, working closely with ML engineers and product designers.",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "requiredSkills": [
+    { "name": "Python", "level": "must-have", "weight": 25 },
+    { "name": "LLM APIs (OpenAI / Anthropic)", "level": "must-have", "weight": 20 },
+    { "name": "React", "level": "must-have", "weight": 15 },
+    { "name": "FastAPI", "level": "must-have", "weight": 10 },
+    { "name": "RAG Patterns", "level": "must-have", "weight": 10 },
+    { "name": "Docker", "level": "nice-to-have", "weight": 10 },
+    { "name": "LangChain", "level": "nice-to-have", "weight": 5 },
+    { "name": "Prompt Engineering", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

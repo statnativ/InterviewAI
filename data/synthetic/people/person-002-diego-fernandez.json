@@ -1,0 +1,55 @@
+{
+  "id": "person-002-diego-fernandez",
+  "name": "Diego Fernandez",
+  "email": "diego.fernandez@example.com",
+  "phone": "(555) 012-0022",
+  "location": "Austin, TX",
+  "yearsExp": 6,
+  "currentTitle": "Senior Backend Engineer",
+  "currentCompany": "Vertex Labs",
+  "skills": [
+    "Go",
+    "PostgreSQL",
+    "Kubernetes",
+    "gRPC",
+    "System Design",
+    "Redis",
+    "Docker",
+    "Observability"
+  ],
+  "experience": [
+    {
+      "title": "Backend Developer",
+      "company": "Aurora Media",
+      "from": "2020-09",
+      "to": "2023-05"
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "PayCrest",
+      "from": "2023-06",
+      "to": "2025-01"
+    },
+    {
+      "title": "Senior Backend Engineer",
+      "company": "Vertex Labs",
+      "from": "2025-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, University of Texas at Austin",
+  "certifications": "None",
+  "summary": "Senior backend engineer with 6 years of experience building Go microservices backed by PostgreSQL, shipped on Kubernetes and exposed over gRPC. Comfortable owning system design for a service from API contract through observability, and mentoring teammates on Go best practices.",
+  "strengths": [
+    "Solid Go and gRPC skills across multiple production services",
+    "Hands-on Kubernetes and Docker deployment experience",
+    "Comfortable with system design for resilient microservices",
+    "Good PostgreSQL modeling and query optimization instincts"
+  ],
+  "gaps": [
+    "Limited production experience with Kafka streaming",
+    "Terraform and infrastructure-as-code work is at a beginner level"
+  ],
+  "resumeText": "Senior Backend Engineer at Vertex Labs, building Go gRPC services that run on Kubernetes with PostgreSQL persistence. At PayCrest I led the design and rollout of a payments event service, improving throughput 3x with Redis caching and structured observability. I own services end-to-end and mentor two mid-level engineers.",
+  "primaryDomain": "backend"
+}

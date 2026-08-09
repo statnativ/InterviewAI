@@ -1,0 +1,50 @@
+{
+  "id": "person-063-evan-brooks",
+  "name": "Evan Brooks",
+  "email": "evan.brooks@example.com",
+  "phone": "(555) 063-0063",
+  "location": "Phoenix, AZ",
+  "yearsExp": 2,
+  "currentTitle": "SOC Analyst",
+  "currentCompany": "Ridgepoint Security",
+  "skills": [
+    "SIEM",
+    "Incident Response",
+    "Network Fundamentals",
+    "Log Analysis",
+    "Threat Intelligence",
+    "Endpoint Detection",
+    "Scripting (Python)",
+    "Splunk"
+  ],
+  "experience": [
+    {
+      "title": "Junior SOC Analyst",
+      "company": "Ridgepoint Security",
+      "from": "2024-09",
+      "to": "2025-10"
+    },
+    {
+      "title": "SOC Analyst",
+      "company": "Ridgepoint Security",
+      "from": "2025-11",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Technology, Arizona State University",
+  "certifications": "CompTIA Security+, CompTIA CySA+",
+  "summary": "SOC analyst with 2 years of hands-on monitoring and response experience at Ridgepoint Security. I triage SIEM alerts, analyze logs, investigate incidents end to end, and use threat intelligence to sharpen detection rules.",
+  "strengths": [
+    "Monitors and triages SIEM alerts across multiple customer environments",
+    "Runs incident response from detection through containment and recovery",
+    "Strong log analysis skills for investigating suspicious activity",
+    "Applies threat intelligence feeds to tune detection rules",
+    "Comfortable with network fundamentals and endpoint detection tooling"
+  ],
+  "gaps": [
+    "No experience operating cloud-native SIEM at very large scale",
+    "Less experience leading complex multi-tenant incident response"
+  ],
+  "resumeText": "SOC Analyst at Ridgepoint Security monitoring SIEM alerts across customer environments. I perform log analysis, investigate suspicious network activity, and follow incident response playbooks from detection through containment. I use threat intelligence feeds to tune detection rules and have grown from a junior into a fully fledged analyst in two years.",
+  "primaryDomain": "security"
+}

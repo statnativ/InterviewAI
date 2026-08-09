@@ -1,0 +1,47 @@
+{
+  "id": "person-040-emily-zhang",
+  "name": "Emily Zhang",
+  "email": "emily.zhang@example.com",
+  "phone": "(555) 040-0040",
+  "location": "Vancouver, CA",
+  "yearsExp": 2,
+  "currentTitle": "Android Developer",
+  "currentCompany": "Northwind Apps",
+  "skills": [
+    "Kotlin",
+    "Android SDK",
+    "Coroutines",
+    "Room",
+    "Retrofit"
+  ],
+  "experience": [
+    {
+      "title": "Junior Android Developer",
+      "company": "Crest Mobile",
+      "from": "2024-06",
+      "to": "2025-11"
+    },
+    {
+      "title": "Android Developer",
+      "company": "Northwind Apps",
+      "from": "2025-12",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of British Columbia",
+  "certifications": "None",
+  "summary": "Android developer with 2 years of experience writing Kotlin against the Android SDK. Comfortable with Coroutines, Room, and Retrofit, but still building UIs with XML views rather than Jetpack Compose and has not yet adopted the MVVM pattern in a team codebase.",
+  "strengths": [
+    "Solid Kotlin and Android SDK fundamentals",
+    "Confident with Coroutines and async work",
+    "Uses Room for persistence and Retrofit for networking",
+    "Ships features reliably in XML-based views"
+  ],
+  "gaps": [
+    "No Jetpack Compose experience yet; uses XML layouts",
+    "Has not applied the MVVM pattern in production",
+    "Limited testing and build tooling exposure"
+  ],
+  "resumeText": "Android Developer at Northwind Apps, shipping features in Kotlin with XML-based views, backed by Coroutines, Room, and Retrofit. At Crest Mobile I grew from junior into owning screens and API integration. I am currently learning Jetpack Compose and MVVM to modernize my toolkit.",
+  "primaryDomain": "mobile"
+}

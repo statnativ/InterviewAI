@@ -1,0 +1,63 @@
+{
+  "id": "person-076-daniel-wright",
+  "name": "Daniel Wright",
+  "email": "daniel.wright@example.com",
+  "phone": "(555) 076-0076",
+  "location": "Chicago, IL",
+  "yearsExp": 10,
+  "currentTitle": "Staff Engineer (Distributed Systems)",
+  "currentCompany": "Aurora Stream",
+  "skills": [
+    "Distributed Systems",
+    "System Design",
+    "Go",
+    "PostgreSQL",
+    "Scalability",
+    "Kafka",
+    "Kubernetes",
+    "Observability",
+    "gRPC",
+    "Redis"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Riverline Payments",
+      "from": "2016-05",
+      "to": "2019-02"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Riverline Payments",
+      "from": "2019-03",
+      "to": "2021-12"
+    },
+    {
+      "title": "Staff Engineer",
+      "company": "Quorum Fintech",
+      "from": "2022-01",
+      "to": "2024-08"
+    },
+    {
+      "title": "Staff Engineer (Distributed Systems)",
+      "company": "Aurora Stream",
+      "from": "2024-09",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Illinois at Urbana-Champaign",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Staff Engineer with 10 years of experience designing and building the distributed systems backbone that supports millions of concurrent requests. Architects high-availability Go services backed by PostgreSQL and Kafka, defines data flow and consistency guarantees, and sets observability standards across the platform.",
+  "strengths": [
+    "Deep Go expertise building high-availability distributed services",
+    "Strong system design and scalability for large-scale event-driven architectures",
+    "Production PostgreSQL and Kafka experience with consistency guarantee design",
+    "Sets observability standards and mentors engineers on system design"
+  ],
+  "gaps": [
+    "Limited exposure to frontend and mobile platforms",
+    "Core focus is infrastructure-scale services rather than product feature work"
+  ],
+  "resumeText": "Staff Engineer at Aurora Stream, designing and building the distributed systems backbone that supports millions of concurrent requests. I architect high-availability Go services backed by PostgreSQL and Kafka, define data flow and consistency guarantees, and set the observability standard across the platform. I mentor engineers on system design and scalability end to end.",
+  "primaryDomain": "architecture"
+}

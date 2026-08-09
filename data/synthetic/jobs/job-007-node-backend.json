@@ -1,0 +1,23 @@
+{
+  "id": "job-007-node-backend",
+  "title": "Node.js Backend Engineer",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "London (Remote)",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "You will build the Node.js APIs that power our core product, writing TypeScript services with REST and GraphQL contracts. You will model data in PostgreSQL, use Redis for caching and queues, and run your work in Docker from local development through production on AWS. You will collaborate with frontend and product teams to ship features end-to-end, with regular code review and mentoring from senior engineers. You will also take part in the on-call rotation and learn to operate the services you build.",
+  "requiredSkills": [
+    { "name": "Node.js", "level": "must-have", "weight": 25 },
+    { "name": "TypeScript", "level": "must-have", "weight": 15 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 15 },
+    { "name": "REST APIs", "level": "must-have", "weight": 10 },
+    { "name": "Redis", "level": "must-have", "weight": 10 },
+    { "name": "GraphQL", "level": "nice-to-have", "weight": 10 },
+    { "name": "Docker", "level": "nice-to-have", "weight": 10 },
+    { "name": "AWS", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

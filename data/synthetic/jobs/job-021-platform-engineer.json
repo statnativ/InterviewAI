@@ -1,0 +1,23 @@
+{
+  "id": "job-021-platform-engineer",
+  "title": "Platform Engineer",
+  "domain": "infra",
+  "department": "Infrastructure",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "description": "We are looking for a Senior Platform Engineer to design and operate the internal platform that product teams build on. You will create golden paths for deploying services on Kubernetes, abstract cloud networking, and manage GitOps delivery with Terraform and CI/CD. You will write Go-based tooling to improve developer experience and reduce friction across the organization. This is a foundational role that scales engineering productivity.",
+  "requiredSkills": [
+    { "name": "Kubernetes", "level": "must-have", "weight": 25 },
+    { "name": "Terraform", "level": "must-have", "weight": 20 },
+    { "name": "Go", "level": "must-have", "weight": 15 },
+    { "name": "Cloud Networking", "level": "must-have", "weight": 10 },
+    { "name": "CI/CD", "level": "must-have", "weight": 10 },
+    { "name": "ArgoCD", "level": "nice-to-have", "weight": 10 },
+    { "name": "Observability", "level": "nice-to-have", "weight": 5 },
+    { "name": "Helm", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

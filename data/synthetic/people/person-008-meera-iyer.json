@@ -1,0 +1,55 @@
+{
+  "id": "person-008-meera-iyer",
+  "name": "Meera Iyer",
+  "email": "meera.iyer@example.com",
+  "phone": "(555) 034-5678",
+  "location": "Seattle, WA",
+  "yearsExp": 6,
+  "currentTitle": "Senior Angular Engineer",
+  "currentCompany": "Cascade Health Systems",
+  "skills": [
+    "Angular",
+    "TypeScript",
+    "RxJS",
+    "NgRx",
+    "CSS & Design Systems",
+    "Testing (Jest / React Testing Library)",
+    "Frontend Performance",
+    "HTML5",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Bluepeak Solutions",
+      "from": "2020-08",
+      "to": "2022-07"
+    },
+    {
+      "title": "Angular Developer",
+      "company": "FinTrust Software",
+      "from": "2022-08",
+      "to": "2024-06"
+    },
+    {
+      "title": "Senior Angular Engineer",
+      "company": "Cascade Health Systems",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "M.S. Information Systems, University of Washington",
+  "certifications": "Google Angular Developer Certification",
+  "summary": "Angular and TypeScript engineer with 6 years of experience building enterprise web applications, with strong testing, state management, and performance skills — though all professional experience is in Angular, not React.",
+  "strengths": [
+    "Deep TypeScript expertise, including advanced generics and typed reactive streams with RxJS and NgRx",
+    "Built and enforced component design standards and testing practices with Jest",
+    "Strong track record optimizing Angular bundle sizes and load performance for enterprise dashboards"
+  ],
+  "gaps": [
+    "No professional React experience — career has been Angular-focused, so React hooks and ecosystem are new territory",
+    "Never worked on a Next.js or server-side React application"
+  ],
+  "resumeText": "Senior Angular Engineer at Cascade Health Systems, where I own the component library, Jest testing strategy, and performance optimization for our patient-portal dashboard. I have 6 years of enterprise frontend experience built on Angular, TypeScript, RxJS, and NgRx. I am eager to bring my TypeScript and design-systems strengths to a React team and am actively learning the React ecosystem.",
+  "primaryDomain": "frontend"
+}

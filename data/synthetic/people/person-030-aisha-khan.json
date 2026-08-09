@@ -1,0 +1,48 @@
+{
+  "id": "person-030-aisha-khan",
+  "name": "Aisha Khan",
+  "email": "aisha.khan@example.com",
+  "phone": "(555) 030-0030",
+  "location": "New York, NY",
+  "yearsExp": 3,
+  "currentTitle": "Data Analyst",
+  "currentCompany": "Northstar Fintech",
+  "skills": [
+    "SQL",
+    "Data Visualization (Looker / Tableau)",
+    "Excel",
+    "Statistics",
+    "Python",
+    "Looker",
+    "Tableau",
+    "Google Analytics"
+  ],
+  "experience": [
+    {
+      "title": "Data Analyst",
+      "company": "Cobalt Retail Analytics",
+      "from": "2023-08",
+      "to": "2025-06"
+    },
+    {
+      "title": "Data Analyst",
+      "company": "Northstar Fintech",
+      "from": "2025-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Business Analytics, University of Texas at Austin",
+  "certifications": "Google Data Analytics Certificate",
+  "summary": "Data Analyst with three years of experience turning product and marketing data into insights. Writes warehouse SQL, builds polished Looker and Tableau dashboards, and drives decisions with Excel and solid statistical fundamentals.",
+  "strengths": [
+    "Strong SQL against data warehouses for ad-hoc and recurring reporting",
+    "Builds polished Looker and Tableau dashboards for retention, conversion, and revenue metrics",
+    "Excel fluency and applied statistics for exploratory analysis and A/B-style reporting"
+  ],
+  "gaps": [
+    "No dbt or Airflow exposure for production data pipelines",
+    "Limited experience designing and owning A/B test experiments end to end"
+  ],
+  "resumeText": "Aisha Khan is a Data Analyst at Northstar Fintech with three years of experience in retail and fintech analytics. She writes SQL against the warehouse, builds Looker and Tableau dashboards for growth and finance teams, and uses Excel and statistics for deep-dive analyses of retention, conversion, and revenue. She is comfortable with Python for analysis and is growing toward a more technical analytics practice.",
+  "primaryDomain": "data"
+}

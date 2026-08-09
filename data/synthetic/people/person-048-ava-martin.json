@@ -1,0 +1,43 @@
+{
+  "id": "person-048-ava-martin",
+  "name": "Ava Martin",
+  "email": "ava.martin@example.com",
+  "phone": "(555) 048-0048",
+  "location": "Denver, CO",
+  "yearsExp": 3,
+  "currentTitle": "Site Reliability Engineer",
+  "currentCompany": "Clearwater Health",
+  "skills": [
+    "Linux",
+    "Kubernetes",
+    "Incident Management",
+    "Python",
+    "Terraform",
+    "Datadog",
+    "Bash",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Site Reliability Engineer",
+      "company": "Clearwater Health",
+      "from": "2023-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Colorado Boulder",
+  "certifications": "AWS Certified DevOps Engineer - Associate",
+  "summary": "Site reliability engineer with 3 years of experience operating Linux and Kubernetes workloads, managing incidents end to end, and automating with Python, with observability delivered through Datadog rather than a Prometheus stack.",
+  "strengths": [
+    "Runs incident management as primary on-call for health platform services",
+    "Strong Linux administration and Kubernetes troubleshooting",
+    "Automates operational tasks with Python and manages infrastructure with Terraform"
+  ],
+  "gaps": [
+    "Observability is done with Datadog - no hands-on Prometheus or Grafana deployment",
+    "Less experience designing SLOs and error budgets from scratch",
+    "Single-company experience so far - narrower production footprint"
+  ],
+  "resumeText": "Ava Martin is a Site Reliability Engineer at Clearwater Health with three years of experience keeping patient-facing services available. She owns incident management, operates Linux and Kubernetes infrastructure, and automates operations with Python. Her observability work runs on Datadog, and she is eager to extend her skills to the Prometheus and Grafana stack used by larger platform teams.",
+  "primaryDomain": "infra"
+}

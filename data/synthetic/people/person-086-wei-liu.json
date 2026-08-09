@@ -1,0 +1,48 @@
+{
+  "id": "person-086-wei-liu",
+  "name": "Wei Liu",
+  "email": "wei.liu@example.com",
+  "phone": "(555) 086-0086",
+  "location": "Shanghai, China",
+  "yearsExp": 6,
+  "currentTitle": "Senior Computer Vision Engineer",
+  "currentCompany": "Aurora Vision Systems",
+  "skills": [
+    "Python",
+    "PyTorch",
+    "OpenCV",
+    "Deep Learning",
+    "Image Processing",
+    "TensorFlow",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Computer Vision Engineer",
+      "company": "Sightline Robotics",
+      "from": "2020-09",
+      "to": "2023-04"
+    },
+    {
+      "title": "Senior Computer Vision Engineer",
+      "company": "Aurora Vision Systems",
+      "from": "2023-05",
+      "to": null
+    }
+  ],
+  "education": "Ph.D. in Computer Science, Shanghai Jiao Tong University",
+  "certifications": "NVIDIA Deep Learning Institute - Computer Vision Fundamentals",
+  "summary": "Senior computer vision engineer with 6 years of experience designing detection, segmentation, and classification models in PyTorch and TensorFlow. Deep expertise in OpenCV-based image processing pipelines and deep learning training, with containerized model serving via Docker.",
+  "strengths": [
+    "Deep expertise building detection and segmentation models in PyTorch",
+    "Production OpenCV pipelines for preprocessing and image processing",
+    "Strong deep learning fundamentals across training and inference",
+    "Ships models as containerized Docker services"
+  ],
+  "gaps": [
+    "Less hands-on LLM and natural language application work",
+    "Limited frontend and product-facing development experience"
+  ],
+  "resumeText": "Wei Liu is a Senior Computer Vision Engineer at Aurora Vision Systems with six years of experience. He designs deep learning models for detection, segmentation, and classification in PyTorch and TensorFlow, and builds OpenCV-based preprocessing pipelines for real-world imagery. He tunes training and inference for production and serves models as Docker containers. Previously at Sightline Robotics he shipped vision systems for industrial robotics. His focus is robust, deployable computer vision.",
+  "primaryDomain": "ai"
+}

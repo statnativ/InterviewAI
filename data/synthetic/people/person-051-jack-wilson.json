@@ -1,0 +1,51 @@
+{
+  "id": "person-051-jack-wilson",
+  "name": "Jack Wilson",
+  "email": "jack.wilson@example.com",
+  "phone": "(555) 051-0051",
+  "location": "Portland, OR",
+  "yearsExp": 4,
+  "currentTitle": "Cloud Engineer",
+  "currentCompany": "Skyreach Media",
+  "skills": [
+    "AWS",
+    "Terraform",
+    "Linux",
+    "Networking",
+    "Python",
+    "Docker",
+    "Kubernetes",
+    "Cloud Security",
+    "VPC",
+    "IAM"
+  ],
+  "experience": [
+    {
+      "title": "Cloud Engineer",
+      "company": "Meridian Cloud",
+      "from": "2022-09",
+      "to": "2024-06"
+    },
+    {
+      "title": "Cloud Engineer",
+      "company": "Skyreach Media",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Systems, University of Washington",
+  "certifications": "AWS Certified Solutions Architect - Associate",
+  "summary": "Cloud engineer with 4 years of experience owning AWS footprints, codifying infrastructure with Terraform, and keeping Linux workloads and networking reliable across production environments.",
+  "strengths": [
+    "Designs and automates AWS infrastructure with Terraform across VPCs and IAM",
+    "Strong Linux administration and hardening of production workloads",
+    "Solid networking background spanning VPC design, routing, and load balancing",
+    "Migrates on-prem workloads to AWS with minimal downtime"
+  ],
+  "gaps": [
+    "Limited exposure to GCP and Azure for multi-cloud work",
+    "Kubernetes usage is real but not the primary focus of the role"
+  ],
+  "resumeText": "Jack Wilson is a Cloud Engineer at Skyreach Media with four years of experience running AWS infrastructure. He codifies environments with Terraform, designs VPC networking and IAM, and keeps Linux workloads running reliably. Previously at Meridian Cloud he led migrations of on-premise services onto AWS. He is seeking a role where he can own and modernize a larger AWS footprint.",
+  "primaryDomain": "infra"
+}

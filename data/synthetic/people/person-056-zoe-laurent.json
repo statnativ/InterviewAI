@@ -1,0 +1,49 @@
+{
+  "id": "person-056-zoe-laurent",
+  "name": "Zoe Laurent",
+  "email": "zoe.laurent@example.com",
+  "phone": "(555) 056-0056",
+  "location": "Sacramento, CA",
+  "yearsExp": 1,
+  "currentTitle": "Associate Cloud Engineer",
+  "currentCompany": "Goldenstate Health",
+  "skills": [
+    "AWS",
+    "Terraform",
+    "Python",
+    "Docker",
+    "Cloud Security",
+    "IAM",
+    "CloudWatch"
+  ],
+  "experience": [
+    {
+      "title": "Cloud Support Engineer",
+      "company": "Goldenstate Health",
+      "from": "2025-08",
+      "to": "2026-02"
+    },
+    {
+      "title": "Associate Cloud Engineer",
+      "company": "Goldenstate Health",
+      "from": "2026-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Oregon",
+  "certifications": "AWS Certified Cloud Practitioner",
+  "summary": "Junior cloud engineer with 1 year of experience provisioning AWS resources with Terraform and automating tasks in Python, early in building Linux administration and networking depth.",
+  "strengths": [
+    "Starts adopting Terraform for AWS provisioning under senior guidance",
+    "Writes Python automation for routine cloud operations",
+    "Applies cloud security fundamentals with IAM and CloudWatch monitoring"
+  ],
+  "gaps": [
+    "Well below the 3-year experience bar for a Cloud Engineer role",
+    "Limited direct Linux administration - mostly managed services and AMIs",
+    "Minimal networking experience beyond default security groups and basic routing",
+    "Still early in owning production incidents end to end"
+  ],
+  "resumeText": "Zoe Laurent is an Associate Cloud Engineer at Goldenstate Health with one year of experience working in AWS. She provisions resources with Terraform, automates routine operations in Python, and applies IAM and CloudWatch to keep environments observable. She is early in her infrastructure career, with Linux administration and networking still developing, and is looking for a role where she can grow quickly.",
+  "primaryDomain": "infra"
+}

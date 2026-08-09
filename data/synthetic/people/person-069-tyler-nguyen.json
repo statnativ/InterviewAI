@@ -1,0 +1,47 @@
+{
+  "id": "person-069-tyler-nguyen",
+  "name": "Tyler Nguyen",
+  "email": "tyler.nguyen@example.com",
+  "phone": "(555) 069-0069",
+  "location": "Seattle, WA",
+  "yearsExp": 2,
+  "currentTitle": "QA Automation Engineer",
+  "currentCompany": "Foundry Labs",
+  "skills": [
+    "Selenium",
+    "JavaScript",
+    "Test Automation",
+    "Cypress",
+    "Jira / TestRail",
+    "Node.js",
+    "Mocha"
+  ],
+  "experience": [
+    {
+      "title": "QA Tester",
+      "company": "Portside Logistics",
+      "from": "2024-04",
+      "to": "2025-06"
+    },
+    {
+      "title": "QA Automation Engineer",
+      "company": "Foundry Labs",
+      "from": "2025-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. Computer Science, University of Washington",
+  "certifications": "None",
+  "summary": "QA Automation Engineer with 2 years of experience writing Selenium browser tests in JavaScript and Node.js for internal web tools, moving from manual testing into test automation in the last year.",
+  "strengths": [
+    "Practical experience building Selenium WebDriver suites with JavaScript and Mocha",
+    "Comfortable with Cypress for smaller, faster end-to-end checks",
+    "Organized test cases and defect tracking in Jira and TestRail"
+  ],
+  "gaps": [
+    "Automated test suites are not yet connected to a CI/CD pipeline; builds are triggered manually",
+    "Limited experience with automated API testing; most API coverage is still manual"
+  ],
+  "resumeText": "I am a QA Automation Engineer at Foundry Labs where I write Selenium-based browser tests in JavaScript for our fleet-management dashboard. I moved from manual QA testing at Portside Logistics into automation, and in the past year I have built a growing regression suite using Mocha and Node.js. I also use Cypress for focused component flows. My main growth areas are wiring the suites into CI/CD and automating API-level coverage, which I currently handle manually with Jira and TestRail tracking.",
+  "primaryDomain": "qa"
+}

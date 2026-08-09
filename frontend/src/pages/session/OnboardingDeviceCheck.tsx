@@ -1,0 +1,127 @@
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { CandidateShell } from "@/components/layout/CandidateShell";
+import { Card, CardContent } from "@/components/ui/Card";
+import { Button } from "@/components/ui/Button";
+import { useAppStore } from "@/store/useAppStore";
+import { Camera, Mic, CheckCircle2, XCircle } from "lucide-react";
+
+export function OnboardingDeviceCheck() {
+  const { interviewId } = useParams();
+  const navigate = useNavigate();
+  const interview = useAppStore((s) => s.interviews.find((i) => i.id === interviewId));
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [camStatus, setCamStatus] = useState<"idle" | "ok" | "denied">("idle");
+  const [micStatus, setMicStatus] = useState<"idle" | "ok" | "denied">("idle");
+  const streamRef = useRef<MediaStream | null>(null);
+
+  useEffect(() => {
+    return () => {
+      streamRef.current?.getTracks().forEach((t) => t.stop());
+    };
+  }, []);
+
+  const testDevices = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true,
+      });
+      streamRef.current = stream;
+      if (videoRef.current) videoRef.current.srcObject = stream;
+      setCamStatus("ok");
+      setMicStatus("ok");
+    } catch {
+      setCamStatus("denied");
+      setMicStatus("denied");
+    }
+  };
+
+  const nextRoute =
+    interview?.mode === "Voice"
+      ? `/session/${interviewId}/voice`
+      : `/session/${interviewId}/chat`;
+
+  return (
+    <CandidateShell minimal>
+      <div className="mx-auto max-w-lg px-6 py-14">
+        <h1 className="text-center text-2xl font-semibold text-neutral-900">
+          Device check
+        </h1>
+        <p className="mt-1 text-center text-sm text-neutral-500">
+          Let's make sure your camera and microphone are working.
+        </p>
+
+        <Card className="mt-8">
+          <CardContent>
+            <div className="flex aspect-video items-center justify-center overflow-hidden rounded-md bg-neutral-900">
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                className="h-full w-full object-cover"
+              />
+              {camStatus === "idle" && (
+                <Camera className="absolute h-10 w-10 text-neutral-600" />
+              )}
+            </div>
+
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center justify-between rounded-md border border-neutral-200 px-3 py-2">
+                <span className="flex items-center gap-2 text-sm text-neutral-700">
+                  <Camera className="h-4 w-4" /> Camera
+                </span>
+                {camStatus === "ok" && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-status-strong-text">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Working
+                  </span>
+                )}
+                {camStatus === "denied" && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-status-weak-text">
+                    <XCircle className="h-3.5 w-3.5" /> Permission denied
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center justify-between rounded-md border border-neutral-200 px-3 py-2">
+                <span className="flex items-center gap-2 text-sm text-neutral-700">
+                  <Mic className="h-4 w-4" /> Microphone
+                </span>
+                {micStatus === "ok" && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-status-strong-text">
+                    <CheckCircle2 className="h-3.5 w-3.5" /> Working
+                  </span>
+                )}
+                {micStatus === "denied" && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-status-weak-text">
+                    <XCircle className="h-3.5 w-3.5" /> Permission denied
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {camStatus === "idle" && (
+              <Button variant="secondary" className="mt-4 w-full" onClick={testDevices}>
+                Test camera & microphone
+              </Button>
+            )}
+            {camStatus === "denied" && (
+              <p className="mt-3 text-xs text-neutral-500">
+                You can still continue — you'll be prompted again when the
+                interview starts, or you can proceed audio/video-off.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Button
+          className="mt-6 w-full"
+          size="lg"
+          onClick={() => navigate(nextRoute)}
+        >
+          Continue to interview
+        </Button>
+      </div>
+    </CandidateShell>
+  );
+}

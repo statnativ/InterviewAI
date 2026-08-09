@@ -1,0 +1,63 @@
+{
+  "id": "person-078-michael-brown",
+  "name": "Michael Brown",
+  "email": "michael.brown@example.com",
+  "phone": "(555) 078-0078",
+  "location": "San Francisco, CA",
+  "yearsExp": 8,
+  "currentTitle": "Engineering Manager",
+  "currentCompany": "Cobalt Reach",
+  "skills": [
+    "Team Leadership",
+    "Technical Mentorship",
+    "Agile Delivery",
+    "Performance Management",
+    "Stakeholder Communication",
+    "Software Architecture",
+    "Hiring & Onboarding",
+    "Metrics & KPIs",
+    "Scrum",
+    "Java"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Ironclad Systems",
+      "from": "2018-06",
+      "to": "2020-09"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Ironclad Systems",
+      "from": "2020-10",
+      "to": "2022-06"
+    },
+    {
+      "title": "Tech Lead",
+      "company": "Ironclad Systems",
+      "from": "2022-07",
+      "to": "2023-12"
+    },
+    {
+      "title": "Engineering Manager",
+      "company": "Cobalt Reach",
+      "from": "2024-01",
+      "to": null
+    }
+  ],
+  "education": "M.B.A., University of California, Berkeley (Haas)",
+  "certifications": "Certified ScrumMaster (CSM)",
+  "summary": "Engineering Manager with 8 years of experience leading teams of architects and engineers building a core platform. Owns team delivery through Agile practices, drives performance management and career growth, and provides technical mentorship across design and architecture decisions while bridging product and executive stakeholders.",
+  "strengths": [
+    "Strong team leadership with a proven track record of delivery through Agile",
+    "Active technical mentorship of senior engineers and architects",
+    "Runs performance management, career growth, and hiring cycles effectively",
+    "Clear stakeholder communication bridging business goals and engineering plans"
+  ],
+  "gaps": [
+    "Hands-on coding has decreased as management responsibilities grew",
+    "Frontend and mobile engineering exposure is limited"
+  ],
+  "resumeText": "Engineering Manager at Cobalt Reach, leading a team of architects and engineers building the core platform. I own team delivery through Agile practices, drive performance management and career growth, and provide technical mentorship on design and architecture decisions. I act as the bridge to product and executive stakeholders, translating business goals into engineering plans.",
+  "primaryDomain": "architecture"
+}

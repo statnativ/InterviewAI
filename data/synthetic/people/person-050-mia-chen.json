@@ -1,0 +1,44 @@
+{
+  "id": "person-050-mia-chen",
+  "name": "Mia Chen",
+  "email": "mia.chen@example.com",
+  "phone": "(555) 050-0050",
+  "location": "San Jose, CA",
+  "yearsExp": 3,
+  "currentTitle": "Platform Engineer",
+  "currentCompany": "Vantage Commerce",
+  "skills": [
+    "Kubernetes",
+    "Terraform",
+    "CI/CD",
+    "Cloud Networking",
+    "Docker",
+    "Python",
+    "Helm",
+    "ArgoCD",
+    "Bash"
+  ],
+  "experience": [
+    {
+      "title": "Platform Engineer",
+      "company": "Vantage Commerce",
+      "from": "2023-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Systems, San Jose State University",
+  "certifications": "HashiCorp Certified: Terraform Associate",
+  "summary": "Platform engineer with 3 years of experience managing Kubernetes clusters, automating cloud networking with Terraform, and running CI/CD delivery, with automation written in Python rather than Go.",
+  "strengths": [
+    "Operates Kubernetes clusters and Helm release workflows for product teams",
+    "Codifies cloud networking and shared infrastructure with Terraform",
+    "Owns CI/CD pipelines and ArgoCD-based GitOps delivery"
+  ],
+  "gaps": [
+    "No production Go experience - all tooling is written in Python and Bash",
+    "Service mesh and advanced platform abstractions are still learning territory",
+    "Growing into ownership, currently at mid level"
+  ],
+  "resumeText": "Mia Chen is a Platform Engineer at Vantage Commerce with three years of experience running the internal platform. She manages Kubernetes clusters, writes Terraform for cloud networking, and keeps CI/CD pipelines healthy with ArgoCD. Her automation is written in Python and Bash; she is building toward writing platform tooling in Go and taking on broader platform ownership.",
+  "primaryDomain": "infra"
+}

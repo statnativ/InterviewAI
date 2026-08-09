@@ -1,0 +1,23 @@
+{
+  "id": "job-008-dotnet-backend",
+  "title": ".NET Backend Engineer",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "You will design and implement REST APIs with ASP.NET Core and C#, modeling domain data in SQL Server with EF Core. You will run services on Azure, containerize them with Docker, and gradually move workloads toward Kubernetes. Working within an experienced team, you will own features end-to-end with strong emphasis on clean code, testing, and reliable release practices. You will join the on-call rotation and receive direct mentorship to grow toward a senior role.",
+  "requiredSkills": [
+    { "name": "C#", "level": "must-have", "weight": 25 },
+    { "name": "ASP.NET Core", "level": "must-have", "weight": 20 },
+    { "name": "SQL Server", "level": "must-have", "weight": 15 },
+    { "name": "Azure", "level": "must-have", "weight": 10 },
+    { "name": "REST APIs", "level": "must-have", "weight": 10 },
+    { "name": "Kubernetes", "level": "nice-to-have", "weight": 10 },
+    { "name": "Docker", "level": "nice-to-have", "weight": 5 },
+    { "name": "EF Core", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

@@ -1,0 +1,49 @@
+{
+  "id": "person-058-layla-ahmed",
+  "name": "Layla Ahmed",
+  "email": "layla.ahmed@example.com",
+  "phone": "(555) 058-0058",
+  "location": "Chicago, IL",
+  "yearsExp": 2,
+  "currentTitle": "Security Engineer",
+  "currentCompany": "Crestline Fintech",
+  "skills": [
+    "Application Security",
+    "Network Security",
+    "Linux",
+    "Python",
+    "SIEM",
+    "OWASP",
+    "Threat Intelligence",
+    "Vulnerability Management"
+  ],
+  "experience": [
+    {
+      "title": "Security Analyst",
+      "company": "Crestline Fintech",
+      "from": "2024-08",
+      "to": "2025-11"
+    },
+    {
+      "title": "Security Engineer",
+      "company": "Crestline Fintech",
+      "from": "2025-12",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Security, DePaul University",
+  "certifications": "CompTIA Security+",
+  "summary": "Security engineer with 2 years of experience in application security, Linux hardening, and SIEM monitoring at Crestline Fintech. Strong in vulnerability management and OWASP-informed reviews, though penetration testing is an area I am still developing.",
+  "strengths": [
+    "Performs OWASP-informed application security reviews with development teams",
+    "Harden Linux servers and harden network boundaries in a fintech environment",
+    "Monitors and triages SIEM alerts daily",
+    "Automates vulnerability management workflows with Python"
+  ],
+  "gaps": [
+    "No penetration testing experience; has not led an external security engagement",
+    "No hands-on exploit development or red-team exposure"
+  ],
+  "resumeText": "Layla Ahmed is a Security Engineer at Crestline Fintech where she performs application security reviews, hardens Linux servers, and monitors SIEM alerts across the fintech platform. She triages vulnerabilities and works with developers on OWASP-based fixes. She is actively building hands-on penetration testing skills and has not yet led an external pentest engagement.",
+  "primaryDomain": "security"
+}

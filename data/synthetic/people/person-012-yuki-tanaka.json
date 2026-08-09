@@ -1,0 +1,54 @@
+{
+  "id": "person-012-yuki-tanaka",
+  "name": "Yuki Tanaka",
+  "email": "yuki.tanaka@example.com",
+  "phone": "(555) 012-3457",
+  "location": "Seattle, WA",
+  "yearsExp": 5,
+  "currentTitle": "Data Engineer",
+  "currentCompany": "Northwind Logistics",
+  "skills": [
+    "SQL",
+    "Python",
+    "Apache Spark",
+    "Data Modeling",
+    "Airflow",
+    "dbt",
+    "BigQuery",
+    "Kafka"
+  ],
+  "experience": [
+    {
+      "title": "Data Analyst",
+      "company": "Cascade Health Systems",
+      "from": "2021-05",
+      "to": "2023-08"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "Cascade Health Systems",
+      "from": "2023-08",
+      "to": "2025-02"
+    },
+    {
+      "title": "Data Engineer",
+      "company": "Northwind Logistics",
+      "from": "2025-02",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Information Management, University of Washington",
+  "certifications": "Databricks Certified Data Engineer Associate",
+  "summary": "Data Engineer with five years of experience turning raw operational data into modeled, governed datasets using SQL, Python, Apache Spark, and Airflow pipelines.",
+  "strengths": [
+    "Covers every must-have: SQL, Python, Apache Spark, Data Modeling, and Airflow",
+    "Builds dbt transformation layers on BigQuery",
+    "Streams real-time events with Kafka into batch warehouses"
+  ],
+  "gaps": [
+    "Less hands-on infrastructure-as-code work with Terraform",
+    "Limited experience running pipelines on Kubernetes clusters"
+  ],
+  "resumeText": "Yuki Tanaka is a Data Engineer at Northwind Logistics with five years of experience across analytics and engineering roles. She builds Apache Spark batch pipelines orchestrated with Airflow, models dimensional schemas in BigQuery using dbt, and ingests streaming events through Kafka. She is comfortable owning the full pipeline lifecycle from ingestion to curated analytics tables.",
+  "primaryDomain": "data"
+}

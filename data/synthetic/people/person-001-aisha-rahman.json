@@ -1,0 +1,64 @@
+{
+  "id": "person-001-aisha-rahman",
+  "name": "Aisha Rahman",
+  "email": "aisha.rahman@example.com",
+  "phone": "(555) 011-0011",
+  "location": "San Francisco, CA",
+  "yearsExp": 10,
+  "currentTitle": "Staff Backend Engineer",
+  "currentCompany": "Lumen Systems",
+  "skills": [
+    "Go",
+    "PostgreSQL",
+    "Kubernetes",
+    "gRPC",
+    "System Design",
+    "Kafka",
+    "Redis",
+    "Terraform",
+    "Observability",
+    "Docker",
+    "AWS"
+  ],
+  "experience": [
+    {
+      "title": "Backend Engineer",
+      "company": "Nimbus Analytics",
+      "from": "2016-04",
+      "to": "2019-02"
+    },
+    {
+      "title": "Senior Backend Engineer",
+      "company": "BrightPath Commerce",
+      "from": "2019-03",
+      "to": "2021-11"
+    },
+    {
+      "title": "Staff Backend Engineer",
+      "company": "Tidepool Health",
+      "from": "2021-12",
+      "to": "2024-06"
+    },
+    {
+      "title": "Staff Backend Engineer",
+      "company": "Lumen Systems",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of California, Berkeley",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Staff backend engineer with 10 years of experience designing and running distributed Go services at scale. Deep expertise across the full backend stack, from schema design in PostgreSQL to gRPC service boundaries and Kubernetes-based deployment, with a strong track record mentoring engineers and driving system design.",
+  "strengths": [
+    "Deep Go and gRPC expertise building high-throughput services",
+    "Strong system design background for distributed and event-driven architectures",
+    "Production experience scaling PostgreSQL and operating Kubernetes clusters",
+    "Mentors mid-level engineers and leads design discussions"
+  ],
+  "gaps": [
+    "Limited hands-on frontend and mobile development exposure",
+    "Recent work is infrastructure-heavy, with less day-to-day product feature coding"
+  ],
+  "resumeText": "Staff Backend Engineer at Lumen Systems, where I own distributed Go services end-to-end, from design through deployment on Kubernetes. Previously at Tidepool Health, I led the migration of a monolith into gRPC microservices backed by PostgreSQL and Kafka, cutting p99 latency by 40%. I design, mentor, and drive system design reviews across my teams.",
+  "primaryDomain": "backend"
+}

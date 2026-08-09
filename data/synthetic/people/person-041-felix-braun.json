@@ -1,0 +1,49 @@
+{
+  "id": "person-041-felix-braun",
+  "name": "Felix Braun",
+  "email": "felix.braun@example.com",
+  "phone": "(555) 041-0041",
+  "location": "Berlin, DE",
+  "yearsExp": 4,
+  "currentTitle": "React Native Engineer",
+  "currentCompany": "Clearpath Apps",
+  "skills": [
+    "React Native",
+    "TypeScript",
+    "JavaScript",
+    "Native Modules",
+    "State Management (Redux / Zustand)",
+    "Expo",
+    "Testing (Detox)",
+    "CI/CD"
+  ],
+  "experience": [
+    {
+      "title": "React Native Developer",
+      "company": "Orbit Mobile",
+      "from": "2022-08",
+      "to": "2024-07"
+    },
+    {
+      "title": "React Native Engineer",
+      "company": "Clearpath Apps",
+      "from": "2024-08",
+      "to": null
+    }
+  ],
+  "education": "B.Sc. in Computer Science, Technical University of Berlin",
+  "certifications": "Meta React Native Professional Certificate",
+  "summary": "React Native engineer with 4 years of experience shipping cross-platform apps for iOS and Android from a single TypeScript codebase. Strong on native modules, Redux and Zustand state management, Expo-based workflows, and Detox end-to-end testing.",
+  "strengths": [
+    "Production React Native and TypeScript expertise",
+    "Builds and maintains native modules for iOS and Android",
+    "Manages app state cleanly with Redux and Zustand",
+    "Ships with Expo and keeps quality high with Detox tests"
+  ],
+  "gaps": [
+    "Focused on React Native; no pure native Android or iOS app work",
+    "Less depth in Swift or Kotlin"
+  ],
+  "resumeText": "React Native Engineer at Clearpath Apps, shipping cross-platform features in TypeScript with Redux and Zustand, and writing native modules when needed. At Orbit Mobile I set up an Expo workflow with Detox tests and CI/CD. I enjoy fast shipping, clean state, and reliable releases.",
+  "primaryDomain": "mobile"
+}

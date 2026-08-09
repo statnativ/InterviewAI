@@ -1,0 +1,49 @@
+{
+  "id": "person-045-ethan-wood",
+  "name": "Ethan Wood",
+  "email": "ethan.wood@example.com",
+  "phone": "(555) 045-0045",
+  "location": "Phoenix, AZ",
+  "yearsExp": 4,
+  "currentTitle": "DevOps Engineer",
+  "currentCompany": "Driftline Logistics",
+  "skills": [
+    "Docker",
+    "Kubernetes",
+    "CI/CD (GitHub Actions)",
+    "Terraform",
+    "Linux",
+    "AWS",
+    "Helm",
+    "Bash"
+  ],
+  "experience": [
+    {
+      "title": "DevOps Engineer",
+      "company": "CoreStack Labs",
+      "from": "2022-09",
+      "to": "2024-06"
+    },
+    {
+      "title": "DevOps Engineer",
+      "company": "Driftline Logistics",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, Arizona State University",
+  "certifications": "AWS Certified Solutions Architect - Associate",
+  "summary": "DevOps engineer with 4 years of experience containerizing applications with Docker, running Kubernetes clusters, and automating infrastructure end-to-end with Terraform and GitHub Actions on Linux.",
+  "strengths": [
+    "Full CI/CD ownership with GitHub Actions, from build to production rollout",
+    "Hands-on Docker and Kubernetes operations across staging and production",
+    "Infrastructure as code with Terraform covering AWS resources and cluster config",
+    "Comfortable administering Linux hosts, hardening images and debugging container runtimes"
+  ],
+  "gaps": [
+    "Limited multi-cloud exposure - most experience is on AWS",
+    "Observability work is practical rather than deep SRE-grade SLO engineering"
+  ],
+  "resumeText": "Ethan Wood is a DevOps Engineer at Driftline Logistics where he owns the delivery pipeline built on GitHub Actions, containerizing services with Docker and running them on a Kubernetes cluster managed through Terraform. Previously at CoreStack Labs he automated AWS infrastructure, cut deploy times in half, and maintained a fleet of hardened Linux hosts. He is looking to grow deeper into platform and reliability work.",
+  "primaryDomain": "infra"
+}

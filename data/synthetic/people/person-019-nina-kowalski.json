@@ -1,0 +1,42 @@
+{
+  "id": "person-019-nina-kowalski",
+  "name": "Nina Kowalski",
+  "email": "nina.kowalski@example.com",
+  "phone": "(555) 019-0019",
+  "location": "Warsaw, Poland",
+  "yearsExp": 3,
+  "currentTitle": "Java Developer",
+  "currentCompany": "Wawel Systems",
+  "skills": [
+    "Java",
+    "Spring Boot",
+    "PostgreSQL",
+    "Docker",
+    "SQL",
+    "JUnit",
+    "Hibernate"
+  ],
+  "experience": [
+    {
+      "title": "Java Developer",
+      "company": "Wawel Systems",
+      "from": "2023-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Warsaw",
+  "certifications": "None",
+  "summary": "Java developer with 3 years building REST services on Spring Boot with PostgreSQL and JUnit-driven tests. Comfortable containerizing applications with Docker, though event-driven streaming with Kafka is still an area I am actively learning.",
+  "strengths": [
+    "Solid Java and Spring Boot development skills",
+    "PostgreSQL modeling and SQL query work",
+    "Strong testing habits with JUnit and integration tests",
+    "Docker containerization for local and deployed services"
+  ],
+  "gaps": [
+    "No production Kafka or event-streaming experience",
+    "Cloud deployment experience is still limited to basic AWS"
+  ],
+  "resumeText": "Java Developer at Wawel Systems building Spring Boot REST services on PostgreSQL, containerized with Docker and tested with JUnit. I have delivered features end-to-end across web and internal tooling teams. I am currently studying Kafka and event-driven patterns to move into more distributed service design.",
+  "primaryDomain": "backend"
+}

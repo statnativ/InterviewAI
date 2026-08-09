@@ -1,0 +1,46 @@
+{
+  "id": "person-083-kwame-mensah",
+  "name": "Kwame Mensah",
+  "email": "kwame.mensah@example.com",
+  "phone": "(555) 083-0083",
+  "location": "Accra, Ghana",
+  "yearsExp": 3,
+  "currentTitle": "LLM Engineer",
+  "currentCompany": "Horizon AI Labs",
+  "skills": [
+    "Python",
+    "LLM APIs (OpenAI / Anthropic)",
+    "Prompt Engineering",
+    "RAG Patterns",
+    "LangChain"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Tema Tech Group",
+      "from": "2023-09",
+      "to": "2025-05"
+    },
+    {
+      "title": "LLM Engineer",
+      "company": "Horizon AI Labs",
+      "from": "2025-05",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Ghana",
+  "certifications": "AWS Certified Cloud Practitioner",
+  "summary": "LLM engineer with 3 years of experience building Python services that call OpenAI and Anthropic APIs, with a focus on prompt engineering and RAG-based retrieval flows. Strong on application logic and prompt iteration, currently growing into vector database ownership.",
+  "strengths": [
+    "Solid Python and API integration skills with OpenAI and Anthropic",
+    "Practical prompt engineering and RAG flow experience",
+    "Quick to prototype features with LangChain"
+  ],
+  "gaps": [
+    "No hands-on vector database selection or indexing experience",
+    "Limited fine-tuning background beyond off-the-shelf models",
+    "Still building depth on retrieval evaluation and reranking"
+  ],
+  "resumeText": "Kwame Mensah is an LLM Engineer at Horizon AI Labs with three years of experience. He builds Python services that call OpenAI and Anthropic APIs, crafting prompts and wiring RAG-style retrieval flows with LangChain to answer questions from internal documents. He previously worked as a software engineer at Tema Tech Group building API services. His focus is production LLM applications, and he is actively learning vector databases.",
+  "primaryDomain": "ai"
+}

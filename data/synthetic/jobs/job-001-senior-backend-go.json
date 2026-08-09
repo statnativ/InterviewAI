@@ -1,0 +1,24 @@
+{
+  "id": "job-001-senior-backend-go",
+  "title": "Senior Backend Engineer (Go)",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "description": "We are scaling our distributed platform and need a Senior Backend Engineer who will own services end-to-end, from design through deployment. You will build high-throughput Go services backed by PostgreSQL and Kafka, and ship infrastructure with Kubernetes and Terraform. You will also mentor mid-level engineers, drive system design discussions, and participate in the on-call rotation to keep our services healthy. Join us to have a direct impact on reliability and performance at scale.",
+  "requiredSkills": [
+    { "name": "Go", "level": "must-have", "weight": 20 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 15 },
+    { "name": "Kubernetes", "level": "must-have", "weight": 15 },
+    { "name": "gRPC", "level": "must-have", "weight": 15 },
+    { "name": "System Design", "level": "must-have", "weight": 10 },
+    { "name": "Kafka", "level": "nice-to-have", "weight": 10 },
+    { "name": "Terraform", "level": "nice-to-have", "weight": 5 },
+    { "name": "Redis", "level": "nice-to-have", "weight": 5 },
+    { "name": "Observability", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

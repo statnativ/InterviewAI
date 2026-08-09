@@ -1,0 +1,39 @@
+{
+  "id": "person-031-ben-carter",
+  "name": "Ben Carter",
+  "email": "ben.carter@example.com",
+  "phone": "(555) 031-0031",
+  "location": "Chicago, IL",
+  "yearsExp": 1,
+  "currentTitle": "Junior Data Analyst",
+  "currentCompany": "Brightline Marketing",
+  "skills": [
+    "SQL",
+    "Excel",
+    "Python",
+    "Google Analytics"
+  ],
+  "experience": [
+    {
+      "title": "Junior Data Analyst",
+      "company": "Brightline Marketing",
+      "from": "2025-08",
+      "to": null
+    }
+  ],
+  "education": "B.A. in Economics, University of Illinois at Chicago",
+  "certifications": "None",
+  "summary": "Junior Data Analyst with one year of experience writing SQL and building Excel reports for marketing campaigns. Solid on fundamentals but still building visualization and formal statistics skills.",
+  "strengths": [
+    "Writes SQL queries for marketing performance reporting",
+    "Comfortable in Excel with pivot tables and formula-driven models",
+    "Basic Python for data cleanup and ad-hoc scripts"
+  ],
+  "gaps": [
+    "No Statistics training beyond an introductory course",
+    "No Data Visualization (Looker / Tableau) experience; relies on Excel charts",
+    "Under one year beyond junior level, below the two-year bar for the role"
+  ],
+  "resumeText": "Ben Carter is a Junior Data Analyst at Brightline Marketing with one year of experience. He writes SQL against a small marketing warehouse, builds weekly Excel reports for campaign performance, and uses basic Python for data cleaning. He is detail-oriented and fast to learn but has not yet built dashboards in Looker or Tableau and has only introductory statistics. He is looking for his next step into a more senior analyst role.",
+  "primaryDomain": "data"
+}

@@ -1,0 +1,47 @@
+{
+  "id": "person-036-nina-rossi",
+  "name": "Nina Rossi",
+  "email": "nina.rossi@example.com",
+  "phone": "(555) 036-0036",
+  "location": "Remote",
+  "yearsExp": 3,
+  "currentTitle": "Machine Learning Engineer",
+  "currentCompany": "Aurora AI Institute",
+  "skills": [
+    "Python",
+    "PyTorch",
+    "ML Ops (MLflow)",
+    "Docker",
+    "TensorFlow",
+    "Scikit-learn"
+  ],
+  "experience": [
+    {
+      "title": "Data Scientist",
+      "company": "Aurora AI Institute",
+      "from": "2023-05",
+      "to": "2024-08"
+    },
+    {
+      "title": "Machine Learning Engineer",
+      "company": "Aurora AI Institute",
+      "from": "2024-08",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Artificial Intelligence, Politecnico di Milano",
+  "certifications": "TensorFlow Developer Certificate",
+  "summary": "Machine Learning Engineer with three years of experience, evolving from data scientist into model productionization. Strong in Python, PyTorch, and MLflow, packages models with Docker, but has no Kubernetes experience for orchestration.",
+  "strengths": [
+    "Trains and fine-tunes PyTorch and TensorFlow models with strong Python fundamentals",
+    "Tracks experiments and model versions with ML Ops (MLflow)",
+    "Packages and ships models as Docker containers for internal services"
+  ],
+  "gaps": [
+    "No Kubernetes experience; models run as single Docker containers on a VM",
+    "Limited CI/CD ownership for model release pipelines",
+    "Less exposure to large-scale distributed model serving"
+  ],
+  "resumeText": "Nina Rossi is a Machine Learning Engineer at Aurora AI Institute with three years of experience, moving from data scientist into model productionization. She trains PyTorch and TensorFlow models in Python, tracks experiments and models with MLflow, and packages services as Docker containers. Her deployments are single-container on a VM today, so she is actively looking to learn Kubernetes-based orchestration to run models reliably at scale.",
+  "primaryDomain": "data"
+}

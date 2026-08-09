@@ -1,0 +1,42 @@
+{
+  "id": "person-009-noah-williams",
+  "name": "Noah Williams",
+  "email": "noah.williams@example.com",
+  "phone": "(555) 045-6789",
+  "location": "Denver, CO",
+  "yearsExp": 2,
+  "currentTitle": "Junior Frontend Developer",
+  "currentCompany": "Acorn Digital",
+  "skills": [
+    "React",
+    "TypeScript",
+    "Testing (Jest / React Testing Library)",
+    "JavaScript (ES6+)",
+    "Redux",
+    "HTML5",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "Junior Frontend Developer",
+      "company": "Acorn Digital",
+      "from": "2024-08",
+      "to": null
+    }
+  ],
+  "education": "B.S. Web Development, University of Colorado Boulder",
+  "certifications": "freeCodeCamp Front End Development Libraries Certificate",
+  "summary": "Junior frontend developer with 2 years of experience building React and TypeScript interfaces and writing component tests, still building experience with design systems and performance work.",
+  "strengths": [
+    "Comfortable building React components with hooks, TypeScript typing, and Redux state",
+    "Writes unit tests with Jest and React Testing Library for critical components",
+    "Fast learner with a strong foundation in semantic HTML and modern CSS"
+  ],
+  "gaps": [
+    "No formal experience with design systems or token-based styling workflows",
+    "Little exposure to frontend performance profiling, budgets, or rendering optimization",
+    "Only 2 years of experience — below the senior level this role requires"
+  ],
+  "resumeText": "Junior Frontend Developer at Acorn Digital, building marketing and client dashboard pages in React and TypeScript. I write Jest and React Testing Library tests for shared components and work with Redux for state management. I am early in my career and focused on deepening my CSS, design-system, and performance skills while growing into a more senior frontend engineer.",
+  "primaryDomain": "frontend"
+}

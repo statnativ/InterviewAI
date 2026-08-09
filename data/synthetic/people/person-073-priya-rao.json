@@ -1,0 +1,54 @@
+{
+  "id": "person-073-priya-rao",
+  "name": "Priya Rao",
+  "email": "priya.rao@example.com",
+  "phone": "(555) 073-0073",
+  "location": "Seattle, WA",
+  "yearsExp": 5,
+  "currentTitle": "Solutions Architect",
+  "currentCompany": "Bluepeak Analytics",
+  "skills": [
+    "Cloud Architecture (AWS / Azure)",
+    "System Design",
+    "Microservices",
+    "AWS",
+    "Docker",
+    "Terraform",
+    "REST APIs",
+    "Python"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Quantia Labs",
+      "from": "2021-08",
+      "to": "2023-06"
+    },
+    {
+      "title": "Cloud Engineer",
+      "company": "Quantia Labs",
+      "from": "2023-07",
+      "to": "2024-12"
+    },
+    {
+      "title": "Solutions Architect",
+      "company": "Bluepeak Analytics",
+      "from": "2025-01",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, University of Washington",
+  "certifications": "AWS Certified Solutions Architect - Associate",
+  "summary": "Solutions Architect with 5 years of experience designing cloud-native systems on AWS. Strong in system design and microservices architecture for greenfield products, with growing focus on enterprise integration and cloud cost control.",
+  "strengths": [
+    "Solid AWS architecture skills with Infrastructure-as-Code via Terraform",
+    "Strong microservices and system design for greenfield cloud products",
+    "Comfortable translating product requirements into buildable architectures"
+  ],
+  "gaps": [
+    "Limited enterprise integration pattern experience with legacy on-prem systems",
+    "Cost optimization work is still early stage; cloud spend governance is not yet a core strength"
+  ],
+  "resumeText": "Priya Rao is a Solutions Architect at Bluepeak Analytics with five years of experience, starting as a Software Engineer and moving through a Cloud Engineer role at Quantia Labs before stepping into architecture. She designs AWS-based microservices systems and containerized deployments, and is actively building her enterprise integration and cost optimization skills.",
+  "primaryDomain": "architecture"
+}

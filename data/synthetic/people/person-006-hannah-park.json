@@ -1,0 +1,59 @@
+{
+  "id": "person-006-hannah-park",
+  "name": "Hannah Park",
+  "email": "hannah.park@example.com",
+  "phone": "(555) 011-2345",
+  "location": "San Francisco, CA",
+  "yearsExp": 8,
+  "currentTitle": "Staff Frontend Engineer",
+  "currentCompany": "Lumen Analytics",
+  "skills": [
+    "React",
+    "TypeScript",
+    "CSS & Design Systems",
+    "Testing (Jest / React Testing Library)",
+    "Frontend Performance",
+    "Next.js",
+    "GraphQL",
+    "Accessibility (a11y)",
+    "Storybook",
+    "Redux",
+    "HTML5",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Brightwheel Media",
+      "from": "2018-08",
+      "to": "2021-06"
+    },
+    {
+      "title": "Senior Frontend Engineer",
+      "company": "Cinderblock Software",
+      "from": "2021-07",
+      "to": "2024-03"
+    },
+    {
+      "title": "Staff Frontend Engineer",
+      "company": "Lumen Analytics",
+      "from": "2024-04",
+      "to": null
+    }
+  ],
+  "education": "B.S. Computer Science, University of California, Berkeley",
+  "certifications": "Meta Front-End Developer Professional Certificate",
+  "summary": "Senior React engineer with 8 years of experience building and scaling design systems, owning frontend performance budgets, and mentoring engineers on TypeScript, testing, and component architecture.",
+  "strengths": [
+    "Deep expertise in React and TypeScript, including concurrent rendering and data fetching patterns",
+    "Owned design system evolution and frontend performance budgets (LCP, CLS) for customer-facing products",
+    "Strong testing discipline with Jest and React Testing Library; champions accessible, well-documented components",
+    "Mentors engineers on component architecture and scalable state management"
+  ],
+  "gaps": [
+    "No experience with native mobile or cross-platform frameworks outside the web platform",
+    "Limited hands-on exposure to server-side runtime work beyond Next.js API routes"
+  ],
+  "resumeText": "Staff Frontend Engineer at Lumen Analytics, where I lead the design system and performance initiatives for our Next.js web platform. Previously I shipped testable, accessible React interfaces at scale and cut LCP by 40% through code splitting and rendering audits. I write with Jest and React Testing Library, pair closely with design on tokens, and mentor engineers on TypeScript and component architecture.",
+  "primaryDomain": "frontend"
+}

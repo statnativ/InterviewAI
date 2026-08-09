@@ -1,0 +1,50 @@
+{
+  "id": "person-062-julia-novak",
+  "name": "Julia Novak",
+  "email": "julia.novak@example.com",
+  "phone": "(555) 062-0062",
+  "location": "Raleigh, NC",
+  "yearsExp": 3,
+  "currentTitle": "Cloud Security Engineer",
+  "currentCompany": "BlueBridge Services",
+  "skills": [
+    "AWS Security",
+    "IAM & Identity",
+    "Terraform",
+    "Cloud Networking",
+    "Kubernetes Security",
+    "Python",
+    "SIEM",
+    "AWS"
+  ],
+  "experience": [
+    {
+      "title": "Systems Administrator",
+      "company": "BlueBridge Services",
+      "from": "2023-04",
+      "to": "2024-10"
+    },
+    {
+      "title": "Cloud Security Engineer",
+      "company": "BlueBridge Services",
+      "from": "2024-11",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Cybersecurity, North Carolina State University",
+  "certifications": "AWS Solutions Architect – Associate",
+  "summary": "Cloud security engineer with 3 years of experience hardening AWS environments at BlueBridge Services, with a focus on IAM, Terraform-based infrastructure as code, and cloud networking. Compliance frameworks like SOC 2 are an area I have not yet worked on directly.",
+  "strengths": [
+    "Implements least-privilege IAM and identity controls in AWS",
+    "Writes Terraform modules that bake in security by default",
+    "Secures VPC and cloud networking topologies",
+    "Hardens Kubernetes workloads and contributes to SIEM monitoring"
+  ],
+  "gaps": [
+    "No direct SOC 2 compliance or formal audit experience",
+    "Strong on AWS but limited Azure or GCP exposure",
+    "Compliance documentation and control evidence are still growth areas"
+  ],
+  "resumeText": "Cloud Security Engineer at BlueBridge Services, where I harden AWS accounts, implement least-privilege IAM, and write Terraform modules for secure infrastructure. I secure Kubernetes workloads and contribute to SIEM monitoring, but I have not yet been involved in SOC 2 audits or formal compliance programs.",
+  "primaryDomain": "security"
+}

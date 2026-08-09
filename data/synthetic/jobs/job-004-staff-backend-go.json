@@ -1,0 +1,24 @@
+{
+  "id": "job-004-staff-backend-go",
+  "title": "Staff Backend Engineer (Go)",
+  "domain": "backend",
+  "department": "Engineering",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Staff",
+  "yearsRequired": 8,
+  "description": "As Staff Backend Engineer you will own the architecture of our core Go services that power a distributed, multi-region platform. You will set technical direction for latency, consistency, and reliability, working across service boundaries with gRPC and event-driven messaging. You will design schemas and migration strategies on PostgreSQL, and drive the adoption of Kubernetes and Terraform for delivery at scale. Mentoring senior and mid-level engineers, championing observability practices, and participating in the on-call rotation are core parts of this role.",
+  "requiredSkills": [
+    { "name": "Go", "level": "must-have", "weight": 25 },
+    { "name": "Distributed Systems", "level": "must-have", "weight": 15 },
+    { "name": "Kubernetes", "level": "must-have", "weight": 15 },
+    { "name": "PostgreSQL", "level": "must-have", "weight": 10 },
+    { "name": "System Design", "level": "must-have", "weight": 10 },
+    { "name": "gRPC", "level": "nice-to-have", "weight": 10 },
+    { "name": "Kafka", "level": "nice-to-have", "weight": 5 },
+    { "name": "Terraform", "level": "nice-to-have", "weight": 5 },
+    { "name": "Observability", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

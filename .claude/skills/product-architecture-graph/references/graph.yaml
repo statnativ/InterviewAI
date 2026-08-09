@@ -1,0 +1,157 @@
+version: 1
+name: product-architecture-review
+entrypoint: intake
+max_review_rounds: 3
+
+model_roles:
+  fast_mapper:
+    purpose: repository inventory, extraction, and summarization
+    preferred_traits: [long_context, low_cost, tool_use]
+  product_reasoner:
+    purpose: product strategy, user value, scope, metrics, and adoption
+    preferred_traits: [reasoning, product_judgment]
+  architecture_reasoner:
+    purpose: architecture, code, data, security, scalability, and operability
+    preferred_traits: [deep_reasoning, code_understanding, systems_design]
+  adversarial_reasoner:
+    purpose: independent challenge, failure analysis, and anti-consensus review
+    preferred_traits: [reasoning, independence]
+  evidence_judge:
+    purpose: evidence validation, contradiction detection, and claim grading
+    preferred_traits: [precision, structured_output, low_creativity]
+  artifact_writer:
+    purpose: ADRs, product decisions, diagrams, risks, and action plans
+    preferred_traits: [structured_output, reliable_writing]
+
+nodes:
+  intake:
+    model_role: fast_mapper
+    task: identify review mode, target decision, scope, constraints, and available materials
+    writes: [review_request, decision_under_review, constraints, unknowns]
+    next: repository_mapper
+
+  repository_mapper:
+    model_role: fast_mapper
+    task: inspect repository structure and gather relevant product, code, configuration, test, infrastructure, and history evidence
+    writes: [repository_map, evidence_index, current_stack, current_architecture]
+    next: specialist_fanout
+
+  specialist_fanout:
+    type: parallel
+    branches: [product_challenger, architecture_challenger, stack_evaluator, failure_modeler]
+    join: evidence_judge
+
+  product_challenger:
+    model_role: product_reasoner
+    task: challenge user problem, evidence, scope, journeys, adoption, metrics, rollout, and product-architecture alignment
+    reads: [review_request, repository_map, evidence_index, constraints]
+    writes: [product_findings, product_questions, product_risks]
+
+  architecture_challenger:
+    model_role: architecture_reasoner
+    task: challenge boundaries, data ownership, contracts, coupling, consistency, security, scalability, deployment, rollback, observability, and complexity
+    reads: [repository_map, evidence_index, current_stack, current_architecture, constraints]
+    writes: [architecture_findings, architecture_questions, architecture_risks]
+
+  stack_evaluator:
+    model_role: architecture_reasoner
+    task: classify each major technology as retain, optimize, isolate, incrementally replace, migrate, or prototype before deciding
+    reads: [current_stack, evidence_index, constraints]
+    writes: [stack_assessment, migration_options, stack_risks]
+
+  failure_modeler:
+    model_role: adversarial_reasoner
+    task: simulate plausible product and system failures, including dependency, data, concurrency, security, deployment, and operational failures
+    reads: [repository_map, current_architecture, evidence_index]
+    writes: [failure_scenarios, failure_questions, resilience_gaps]
+
+  evidence_judge:
+    model_role: evidence_judge
+    task: grade claims, reject unsupported conclusions, reconcile contradictions, and prioritize unresolved decisions
+    reads: [product_findings, architecture_findings, stack_assessment, failure_scenarios, evidence_index]
+    writes: [validated_findings, rejected_claims, conflicts, unresolved_decisions, severity_rankings]
+    routes:
+      - when: critical_evidence_missing
+        to: human_gate
+      - when: specialist_rework_needed
+        to: targeted_rework_router
+      - otherwise: synthesizer
+
+  targeted_rework_router:
+    type: router
+    routes:
+      product: product_challenger
+      architecture: architecture_challenger
+      stack: stack_evaluator
+      failure: failure_modeler
+    then: evidence_judge
+
+  synthesizer:
+    model_role: architecture_reasoner
+    task: produce a unified recommendation with tradeoffs, alternatives, confidence, invalidation conditions, and explicit decision boundaries
+    reads: [validated_findings, conflicts, unresolved_decisions, severity_rankings, constraints]
+    writes: [executive_assessment, recommendations, required_decisions, experiments, confidence]
+    routes:
+      - when: consequential_decisions_unresolved
+        to: human_gate
+      - otherwise: artifact_fanout
+
+  human_gate:
+    type: human_review
+    task: ask one demanding, decision-focused question at a time and capture the answer, accepted tradeoff, deferral, or requested evidence
+    reads: [required_decisions, unresolved_decisions, recommendations]
+    writes: [human_answers, accepted_tradeoffs, deferred_decisions, new_constraints, review_round]
+    routes:
+      - when: answer_requires_product_reanalysis
+        to: product_challenger
+      - when: answer_requires_architecture_reanalysis
+        to: architecture_challenger
+      - when: answer_requires_stack_reanalysis
+        to: stack_evaluator
+      - when: answer_requires_failure_reanalysis
+        to: failure_modeler
+      - when: review_round_limit_reached
+        to: artifact_fanout
+      - when: all_critical_decisions_resolved
+        to: artifact_fanout
+      - otherwise: evidence_judge
+
+  artifact_fanout:
+    type: parallel
+    branches: [adr_writer, product_decision_writer, diagrammer, risk_register_writer, action_planner]
+    join: final_verdict
+
+  adr_writer:
+    model_role: artifact_writer
+    task: create or update architecture decision records for accepted or proposed architecture decisions
+    writes: [adrs]
+
+  product_decision_writer:
+    model_role: artifact_writer
+    task: create product decision records with evidence, scope, non-goals, metrics, and revisit triggers
+    writes: [product_decisions]
+
+  diagrammer:
+    model_role: artifact_writer
+    task: create Mermaid diagrams only where they clarify context, components, flows, states, failures, or migrations
+    writes: [diagrams]
+
+  risk_register_writer:
+    model_role: artifact_writer
+    task: produce a deduplicated, prioritized risk register without inventing owners
+    writes: [risk_register]
+
+  action_planner:
+    model_role: artifact_writer
+    task: produce dependency-ordered implementation actions with acceptance criteria and decision links
+    writes: [implementation_actions]
+
+  final_verdict:
+    model_role: evidence_judge
+    task: verify artifact consistency and issue the final verdict with conditions, confidence, and unresolved risks
+    reads: [executive_assessment, recommendations, adrs, product_decisions, diagrams, risk_register, implementation_actions]
+    writes: [final_verdict, final_summary]
+    next: end
+
+  end:
+    type: terminal

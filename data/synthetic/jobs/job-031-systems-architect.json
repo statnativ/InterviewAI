@@ -1,0 +1,22 @@
+{
+  "id": "job-031-systems-architect",
+  "title": "Systems Architect",
+  "domain": "architecture",
+  "department": "Architecture",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Staff",
+  "yearsRequired": 8,
+  "description": "We are seeking a Systems Architect to design the core infrastructure that powers our data-intensive products at global scale. You will own the high-level technical vision for distributed systems, database topologies, and the security boundaries that protect them. You will lead design reviews, champion scalability trade-offs, and guide teams toward event-driven and cloud-native patterns. This staff-level role is fully remote and expects deep, hands-on systems thinking with clear communication across engineering leadership.",
+  "requiredSkills": [
+    { "name": "Distributed Systems", "level": "must-have", "weight": 25 },
+    { "name": "System Design", "level": "must-have", "weight": 20 },
+    { "name": "Database Design", "level": "must-have", "weight": 15 },
+    { "name": "Scalability", "level": "must-have", "weight": 15 },
+    { "name": "Security", "level": "must-have", "weight": 10 },
+    { "name": "Event-Driven Architecture", "level": "nice-to-have", "weight": 10 },
+    { "name": "Cloud Platforms", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

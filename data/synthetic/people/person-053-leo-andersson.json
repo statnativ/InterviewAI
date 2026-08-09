@@ -1,0 +1,57 @@
+{
+  "id": "person-053-leo-andersson",
+  "name": "Leo Andersson",
+  "email": "leo.andersson@example.com",
+  "phone": "(555) 053-0053",
+  "location": "Boston, MA",
+  "yearsExp": 6,
+  "currentTitle": "Database Reliability Engineer",
+  "currentCompany": "Harborpoint Insurance",
+  "skills": [
+    "PostgreSQL",
+    "Performance Tuning",
+    "Replication & HA",
+    "Linux",
+    "SQL",
+    "Kubernetes",
+    "Cloud Databases",
+    "Python",
+    "Patroni",
+    "pgBouncer"
+  ],
+  "experience": [
+    {
+      "title": "Database Administrator",
+      "company": "Wexford Analytics",
+      "from": "2020-02",
+      "to": "2022-03"
+    },
+    {
+      "title": "Database Engineer",
+      "company": "Wexford Analytics",
+      "from": "2022-04",
+      "to": "2024-06"
+    },
+    {
+      "title": "Database Reliability Engineer",
+      "company": "Harborpoint Insurance",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Michigan",
+  "certifications": "AWS Certified Database - Specialty",
+  "summary": "Database reliability engineer with 6 years of experience tuning PostgreSQL performance, operating replication and high-availability topologies, and keeping production database fleets fast and dependable on Linux.",
+  "strengths": [
+    "Deep PostgreSQL performance tuning across query plans, indexing, and configuration",
+    "Designs replication and HA architectures with Patroni and streaming replication",
+    "Strong SQL expertise and schema design for high-throughput workloads",
+    "Automates database operations on Linux with Python and manages cloud databases"
+  ],
+  "gaps": [
+    "Primary production database is PostgreSQL - no equivalent depth in MySQL or Oracle",
+    "Kubernetes-based database deployment is being adopted, not yet fully owned"
+  ],
+  "resumeText": "Leo Andersson is a Database Reliability Engineer at Harborpoint Insurance with six years of experience keeping the data tier available and fast. He tunes PostgreSQL performance, designs replication and high-availability topologies with Patroni, and writes clean SQL for production workloads. Earlier at Wexford Analytics he progressed from Database Administrator to Database Engineer, scaling the same discipline across their analytics platform.",
+  "primaryDomain": "infra"
+}

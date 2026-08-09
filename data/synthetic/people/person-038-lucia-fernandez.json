@@ -1,0 +1,47 @@
+{
+  "id": "person-038-lucia-fernandez",
+  "name": "Lucia Fernández",
+  "email": "lucia.fernandez@example.com",
+  "phone": "(555) 038-0038",
+  "location": "Madrid, ES",
+  "yearsExp": 2,
+  "currentTitle": "iOS Developer",
+  "currentCompany": "Harbor Mobile",
+  "skills": [
+    "Swift",
+    "SwiftUI",
+    "Xcode & iOS Tooling",
+    "Combine",
+    "Core Data"
+  ],
+  "experience": [
+    {
+      "title": "Junior iOS Developer",
+      "company": "Nimbus Apps",
+      "from": "2024-07",
+      "to": "2026-01"
+    },
+    {
+      "title": "iOS Developer",
+      "company": "Harbor Mobile",
+      "from": "2026-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, Universidad Politécnica de Madrid",
+  "certifications": "None",
+  "summary": "Junior-to-mid iOS developer with 2 years of experience building SwiftUI-first apps in Swift. Comfortable shipping screens and wiring up Combine and Core Data, though she has not yet built UIKit interfaces or applied the MVVM pattern in a production codebase.",
+  "strengths": [
+    "Strong Swift and SwiftUI fundamentals",
+    "Hands-on with Combine for reactive data flows",
+    "Uses Core Data for local persistence",
+    "Familiar with Xcode tooling and app store submission"
+  ],
+  "gaps": [
+    "No production UIKit experience; mostly SwiftUI-only",
+    "Has not applied the MVVM pattern in a real codebase",
+    "Limited testing and CI/CD exposure"
+  ],
+  "resumeText": "iOS Developer at Harbor Mobile, shipping SwiftUI screens backed by Combine and Core Data. At Nimbus Apps I started as a junior, owning small features and learning the app release process. I am currently working on moving toward MVVM and gaining UIKit experience to round out my iOS toolkit.",
+  "primaryDomain": "mobile"
+}

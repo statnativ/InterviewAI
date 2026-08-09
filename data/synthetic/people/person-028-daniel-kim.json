@@ -1,0 +1,42 @@
+{
+  "id": "person-028-daniel-kim",
+  "name": "Daniel Kim",
+  "email": "daniel.kim@example.com",
+  "phone": "(555) 028-0028",
+  "location": "Toronto, ON",
+  "yearsExp": 2,
+  "currentTitle": "Junior Frontend Developer",
+  "currentCompany": "Mapleleaf Apps",
+  "skills": [
+    "Vue.js",
+    "TypeScript",
+    "Pinia / Vuex",
+    "HTML5 & CSS",
+    "JavaScript",
+    "Tailwind CSS",
+    "REST APIs",
+    "Git"
+  ],
+  "experience": [
+    {
+      "title": "Junior Frontend Developer",
+      "company": "Mapleleaf Apps",
+      "from": "2024-08",
+      "to": null
+    }
+  ],
+  "education": "Diploma in Frontend Development, George Brown College",
+  "certifications": "None",
+  "summary": "Junior frontend developer with 2 years of experience building customer-facing Vue.js interfaces. I write typed components in TypeScript, manage state with Pinia, and style responsive HTML5 & CSS using Tailwind, and I am working toward adding automated tests to my workflow.",
+  "strengths": [
+    "Comfortable with Vue 3 components and the Composition API",
+    "Typed state management with Pinia and Vuex",
+    "Responsive, clean layouts with Tailwind CSS and HTML5 & CSS"
+  ],
+  "gaps": [
+    "No Vitest test suites written yet; testing is mostly manual",
+    "No SSR or Nuxt experience so far"
+  ],
+  "resumeText": "Junior Frontend Developer at Mapleleaf Apps, building consumer-facing Vue.js pages and a growing set of reusable components. I work in TypeScript, coordinate application state through Pinia, and implement responsive designs with Tailwind CSS. I have not yet introduced automated unit testing into my day-to-day work and am looking to level that up alongside my component work.",
+  "primaryDomain": "frontend"
+}

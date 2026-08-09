@@ -1,0 +1,53 @@
+{
+  "id": "person-075-sofia-novak",
+  "name": "Sofia Novak",
+  "email": "sofia.novak@example.com",
+  "phone": "(555) 075-0075",
+  "location": "Portland, OR",
+  "yearsExp": 6,
+  "currentTitle": "Systems Architect",
+  "currentCompany": "Halcyon Compute",
+  "skills": [
+    "Distributed Systems",
+    "System Design",
+    "Scalability",
+    "Event-Driven Architecture",
+    "Kubernetes",
+    "Kafka",
+    "Python"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Cinder Data",
+      "from": "2020-06",
+      "to": "2022-04"
+    },
+    {
+      "title": "Backend Engineer",
+      "company": "Cinder Data",
+      "from": "2022-05",
+      "to": "2024-01"
+    },
+    {
+      "title": "Systems Architect",
+      "company": "Halcyon Compute",
+      "from": "2024-02",
+      "to": null
+    }
+  ],
+  "education": "M.S. in Distributed Systems, Oregon State University",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Systems Architect with 6 years of experience designing distributed, event-driven systems on Kubernetes. Strong on system design and horizontal scalability for streaming workloads, with a growing focus on database topology and security architecture.",
+  "strengths": [
+    "Solid distributed systems and scalability design for Kafka-based streaming",
+    "Runs Kubernetes-native platforms in production",
+    "Leads system design reviews for high-concurrency services"
+  ],
+  "gaps": [
+    "Database design depth is limited; relies on managed storage rather than custom topologies",
+    "Security experience is operational, not architecture-level threat modeling"
+  ],
+  "resumeText": "Sofia Novak is a Systems Architect at Halcyon Compute with six years of experience. She designs distributed, event-driven systems on Kubernetes and Kafka, with a focus on horizontal scalability. Her database and security architecture skills are still developing, which she is actively rounding out in her current role.",
+  "primaryDomain": "architecture"
+}

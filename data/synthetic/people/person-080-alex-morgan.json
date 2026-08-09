@@ -1,0 +1,54 @@
+{
+  "id": "person-080-alex-morgan",
+  "name": "Alex Morgan",
+  "email": "alex.morgan@example.com",
+  "phone": "(555) 080-0080",
+  "location": "Remote",
+  "yearsExp": 8,
+  "currentTitle": "Solutions Architect",
+  "currentCompany": "NovaGrid Consulting",
+  "skills": [
+    "Cloud Architecture (AWS / Azure)",
+    "System Design",
+    "Microservices",
+    "Cost Optimization",
+    "AWS",
+    "Kubernetes",
+    "Terraform",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Software Engineer",
+      "company": "Pinnacle Retail",
+      "from": "2018-03",
+      "to": "2020-08"
+    },
+    {
+      "title": "Senior Software Engineer",
+      "company": "Pinnacle Retail",
+      "from": "2020-09",
+      "to": "2023-02"
+    },
+    {
+      "title": "Solutions Architect",
+      "company": "NovaGrid Consulting",
+      "from": "2023-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Information Systems, Arizona State University",
+  "certifications": "AWS Certified Solutions Architect - Professional",
+  "summary": "Architecture generalist and Solutions Architect with 8 years of experience across cloud, microservices, and cost optimization on AWS. Strong in greenfield system design, with an explicitly stated gap in enterprise integration patterns for legacy systems.",
+  "strengths": [
+    "Broad cloud architecture expertise across AWS and Azure",
+    "Solid microservices and system design for greenfield platforms",
+    "Drives cost optimization and rightsizing across cloud workloads"
+  ],
+  "gaps": [
+    "No enterprise integration pattern experience with legacy on-prem systems",
+    "Migration strategy work is limited to lift-and-shift scenarios"
+  ],
+  "resumeText": "Alex Morgan is a Solutions Architect at NovaGrid Consulting with eight years of experience. He has worked across cloud architecture, microservices, and cost optimization for greenfield platforms, building a generalist architecture profile. He has no enterprise integration experience, and positions himself as a greenfield and modernization-focused architect.",
+  "primaryDomain": "architecture"
+}

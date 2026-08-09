@@ -1,0 +1,24 @@
+{
+  "id": "job-011-frontend-platform",
+  "title": "Frontend Platform Engineer",
+  "domain": "frontend",
+  "department": "Engineering",
+  "location": "San Francisco, CA",
+  "type": "Full-time",
+  "status": "Open",
+  "description": "We are looking for a Staff-level Frontend Platform Engineer to build and operate the shared infrastructure that powers our web applications, including build tooling, CI/CD pipelines, and monorepo tooling. You will drive frontend performance initiatives across the organization, own the developer experience for hundreds of engineers, and champion design systems and testing standards. You will partner with architecture and platform teams to define long-term technical strategy. If you excel at making frontend development faster, more reliable, and more consistent at scale, this role is for you.",
+  "seniority": "Staff",
+  "yearsRequired": 8,
+  "requiredSkills": [
+    { "name": "TypeScript", "level": "must-have", "weight": 20 },
+    { "name": "React", "level": "must-have", "weight": 15 },
+    { "name": "Build Tooling (Vite / Webpack)", "level": "must-have", "weight": 15 },
+    { "name": "CI/CD", "level": "must-have", "weight": 15 },
+    { "name": "Frontend Performance", "level": "must-have", "weight": 10 },
+    { "name": "Monorepos (Turborepo)", "level": "nice-to-have", "weight": 10 },
+    { "name": "GraphQL", "level": "nice-to-have", "weight": 5 },
+    { "name": "Design Systems", "level": "nice-to-have", "weight": 5 },
+    { "name": "Testing (Jest / React Testing Library)", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

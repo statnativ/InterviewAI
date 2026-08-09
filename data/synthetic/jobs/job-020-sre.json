@@ -1,0 +1,23 @@
+{
+  "id": "job-020-sre",
+  "title": "Site Reliability Engineer",
+  "domain": "infra",
+  "department": "Infrastructure",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Paused",
+  "seniority": "Senior",
+  "yearsRequired": 5,
+  "description": "We are hiring a Senior Site Reliability Engineer to guarantee the availability and performance of our production platform. You will define SLOs, drive incident management practices, and build observability using Prometheus and Grafana. You will operate Kubernetes and Linux infrastructure at scale and automate away manual work. This role is central to keeping our services fast, resilient, and always available.",
+  "requiredSkills": [
+    { "name": "Linux", "level": "must-have", "weight": 20 },
+    { "name": "Kubernetes", "level": "must-have", "weight": 20 },
+    { "name": "Observability (Prometheus / Grafana)", "level": "must-have", "weight": 15 },
+    { "name": "Incident Management", "level": "must-have", "weight": 15 },
+    { "name": "Python", "level": "must-have", "weight": 10 },
+    { "name": "Terraform", "level": "nice-to-have", "weight": 10 },
+    { "name": "Go", "level": "nice-to-have", "weight": 5 },
+    { "name": "Service Mesh", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

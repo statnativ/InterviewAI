@@ -1,0 +1,22 @@
+{
+  "id": "job-028-sdet",
+  "title": "SDET",
+  "domain": "qa",
+  "department": "Quality",
+  "location": "Remote",
+  "type": "Full-time",
+  "status": "Open",
+  "seniority": "Mid",
+  "yearsRequired": 3,
+  "description": "We are looking for an SDET to own the test automation strategy across our product suite. You will design, build, and maintain end-to-end automation frameworks using Selenium or Playwright with Python. You will integrate automated checks into CI/CD pipelines and drive API-level testing to catch regressions early. If you enjoy finding bugs before customers do and making quality a first-class concern, this role is for you.",
+  "requiredSkills": [
+    { "name": "Test Automation", "level": "must-have", "weight": 25 },
+    { "name": "Python", "level": "must-have", "weight": 20 },
+    { "name": "Selenium / Playwright", "level": "must-have", "weight": 20 },
+    { "name": "CI/CD", "level": "must-have", "weight": 10 },
+    { "name": "API Testing", "level": "must-have", "weight": 10 },
+    { "name": "Java", "level": "nice-to-have", "weight": 10 },
+    { "name": "Performance Testing", "level": "nice-to-have", "weight": 5 }
+  ],
+  "createdAt": "2026-08-01"
+}

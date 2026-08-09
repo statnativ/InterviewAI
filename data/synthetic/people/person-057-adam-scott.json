@@ -1,0 +1,52 @@
+{
+  "id": "person-057-adam-scott",
+  "name": "Adam Scott",
+  "email": "adam.scott@example.com",
+  "phone": "(555) 057-0057",
+  "location": "Austin, TX",
+  "yearsExp": 4,
+  "currentTitle": "Security Engineer",
+  "currentCompany": "Vertex Cyber",
+  "skills": [
+    "Application Security",
+    "Network Security",
+    "Linux",
+    "Penetration Testing",
+    "Python",
+    "SIEM",
+    "Cloud Security",
+    "OWASP",
+    "Burp Suite",
+    "Nmap"
+  ],
+  "experience": [
+    {
+      "title": "Security Analyst",
+      "company": "Vertex Cyber",
+      "from": "2022-09",
+      "to": "2024-06"
+    },
+    {
+      "title": "Security Engineer",
+      "company": "Vertex Cyber",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Texas at Austin",
+  "certifications": "CompTIA Security+, CEH (Certified Ethical Hacker)",
+  "summary": "Security engineer with 4 years of hands-on experience in penetration testing, Linux hardening, and network security at Vertex Cyber, where I tune SIEM detections and drive application security reviews across our platform.",
+  "strengths": [
+    "Hands-on penetration testing experience against internal web services and network infrastructure",
+    "Deep Linux hardening and system administration skills in production",
+    "Tunes SIEM detection rules and correlates alerts across network boundaries",
+    "Automates security checks with Python to reduce manual toil",
+    "Applies OWASP guidance to the software development lifecycle"
+  ],
+  "gaps": [
+    "Limited exposure to cloud-native Kubernetes security",
+    "No formal SOC 2 or compliance audit experience"
+  ],
+  "resumeText": "Security Engineer at Vertex Cyber defending production infrastructure and applications. I lead penetration testing engagements against internal services, harden Linux hosts, and secure network boundaries. I tune SIEM detection rules and apply OWASP guidance to the SDLC, automating recurring checks with Python to reduce manual toil.",
+  "primaryDomain": "security"
+}

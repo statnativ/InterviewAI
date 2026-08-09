@@ -1,0 +1,42 @@
+{
+  "id": "person-021-chloe-dubois",
+  "name": "Chloe Dubois",
+  "email": "chloe.dubois@example.com",
+  "phone": "(555) 021-0021",
+  "location": "Paris, France",
+  "yearsExp": 2,
+  "currentTitle": "Node.js Developer",
+  "currentCompany": "Maison Labs",
+  "skills": [
+    "Node.js",
+    "TypeScript",
+    "PostgreSQL",
+    "REST APIs",
+    "Express",
+    "JavaScript",
+    "Docker"
+  ],
+  "experience": [
+    {
+      "title": "Node.js Developer",
+      "company": "Maison Labs",
+      "from": "2024-07",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Software Engineering, Ecole Polytechnique",
+  "certifications": "None",
+  "summary": "Node.js developer with 2 years building TypeScript REST APIs on PostgreSQL, using Express and unit-tested business logic. Comfortable containerizing services with Docker, and actively learning caching patterns with Redis to grow toward a mid-level role.",
+  "strengths": [
+    "Solid TypeScript and Node.js API development",
+    "PostgreSQL data modeling and query writing",
+    "Clean REST API design with Express",
+    "Docker experience for local and shared environments"
+  ],
+  "gaps": [
+    "No production Redis or advanced caching experience",
+    "GraphQL exposure is limited to reading and minor extensions"
+  ],
+  "resumeText": "Node.js Developer at Maison Labs writing TypeScript REST APIs over PostgreSQL with Express, containerized in Docker for consistent development and staging environments. I have shipped several features end-to-end with a focus on clear tests and code review feedback. I am now exploring Redis and GraphQL to expand my backend toolkit.",
+  "primaryDomain": "backend"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "person-035-sam-thompson",
+  "name": "Sam Thompson",
+  "email": "sam.thompson@example.com",
+  "phone": "(555) 035-0035",
+  "location": "Austin, TX",
+  "yearsExp": 7,
+  "currentTitle": "Senior ML Platform Engineer",
+  "currentCompany": "Harborview Analytics",
+  "skills": [
+    "Kubernetes",
+    "Python",
+    "MLflow",
+    "CI/CD",
+    "Docker",
+    "Terraform",
+    "Kubeflow",
+    "Airflow"
+  ],
+  "experience": [
+    {
+      "title": "Data Engineer",
+      "company": "Harborview Analytics",
+      "from": "2019-08",
+      "to": "2021-11"
+    },
+    {
+      "title": "ML Platform Engineer",
+      "company": "Harborview Analytics",
+      "from": "2021-11",
+      "to": "2024-02"
+    },
+    {
+      "title": "Senior ML Platform Engineer",
+      "company": "Harborview Analytics",
+      "from": "2024-02",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Engineering, University of Texas at Austin",
+  "certifications": "Certified Kubernetes Administrator (CKA)",
+  "summary": "Senior ML Platform Engineer with seven years of experience building self-serve Kubernetes platforms for ML. Operates MLflow for experiment tracking and model serving, hardens CI/CD for reproducible model releases, and manages infrastructure with Terraform.",
+  "strengths": [
+    "Designs and operates Kubernetes-based ML platforms with MLflow at scale",
+    "Builds and hardens CI/CD pipelines for fast, auditable, reproducible model releases",
+    "Manages platform infrastructure with Terraform and supports Kubeflow training workloads"
+  ],
+  "gaps": [
+    "Less hands-on data science work; focused on platform and infrastructure",
+    "Deep learning training optimization is handled by the data science teams"
+  ],
+  "resumeText": "Sam Thompson is a Senior ML Platform Engineer at Harborview Analytics with seven years of experience, starting as a data engineer before moving into the ML platform space. He designs and operates Kubernetes-based platforms with MLflow for experiment tracking and model serving, hardens CI/CD so model releases are fast and reproducible, and manages infrastructure with Terraform. He mentors engineers across the platform team and sets technical direction for self-serve ML infrastructure.",
+  "primaryDomain": "data"
+}

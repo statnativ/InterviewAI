@@ -1,0 +1,47 @@
+{
+  "id": "person-071-liam-walsh",
+  "name": "Liam Walsh",
+  "email": "liam.walsh@example.com",
+  "phone": "(555) 071-0071",
+  "location": "Denver, CO",
+  "yearsExp": 1,
+  "currentTitle": "Junior QA Tester",
+  "currentCompany": "Redrock Retail Systems",
+  "skills": [
+    "Manual Testing",
+    "Test Automation",
+    "Selenium / Playwright",
+    "Jira",
+    "HTML",
+    "CSS"
+  ],
+  "experience": [
+    {
+      "title": "QA Intern",
+      "company": "Redrock Retail Systems",
+      "from": "2025-06",
+      "to": "2026-02"
+    },
+    {
+      "title": "Junior QA Tester",
+      "company": "Redrock Retail Systems",
+      "from": "2026-03",
+      "to": null
+    }
+  ],
+  "education": "B.S. Computer Science, University of Colorado Denver",
+  "certifications": "None",
+  "summary": "Junior QA tester with 1 year of experience in manual testing and beginning automation work with Selenium and Playwright, focused on learning Python-based testing and API validation.",
+  "strengths": [
+    "Solid manual testing fundamentals, including test case writing and defect reporting in Jira",
+    "Growing familiarity with Selenium and Playwright for recording and scripting simple browser checks",
+    "Detail-oriented with a strong interest in test automation as a career path"
+  ],
+  "gaps": [
+    "No production experience writing automation in Python; most scripting is still recorded playbacks",
+    "No experience with CI/CD pipelines or integrating test suites into builds",
+    "API testing experience is limited to manual ad-hoc checks"
+  ],
+  "resumeText": "I am a Junior QA Tester at Redrock Retail Systems, where I started as an intern and joined full-time. I write and execute manual test cases for our retail point-of-sale web app and log defects in Jira. I am learning test automation with Selenium and Playwright, recording and light-scripting browser flows, and I am currently teaching myself Python and API testing with Postman. I have not yet integrated automated tests into CI/CD, and my automation is still early-stage, but I am eager to grow into a professional SDET role.",
+  "primaryDomain": "qa"
+}

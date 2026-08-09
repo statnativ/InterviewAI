@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "job.schema.json",
+  "title": "Job",
+  "description": "A synthetic IT job posting. Raw signals only — rubric criteria and weights are DERIVED from requiredSkills by converters, never authored here.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "domain",
+    "department",
+    "location",
+    "type",
+    "status",
+    "description",
+    "seniority",
+    "yearsRequired",
+    "requiredSkills",
+    "createdAt"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^job-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "title": { "type": "string", "minLength": 3 },
+    "domain": {
+      "type": "string",
+      "enum": ["backend", "frontend", "mobile", "data", "infra", "security", "qa", "architecture", "ai"]
+    },
+    "department": { "type": "string" },
+    "location": { "type": "string" },
+    "type": { "type": "string", "enum": ["Full-time", "Contract", "Hybrid"] },
+    "status": { "type": "string", "enum": ["Open", "Draft", "Paused", "Closed"] },
+    "description": { "type": "string", "minLength": 40 },
+    "seniority": { "type": "string", "enum": ["Junior", "Mid", "Senior", "Staff"] },
+    "yearsRequired": { "type": "integer", "minimum": 0, "maximum": 20 },
+    "requiredSkills": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 10,
+      "items": {
+        "type": "object",
+        "required": ["name", "level", "weight"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "minLength": 2 },
+          "level": { "type": "string", "enum": ["must-have", "nice-to-have", "disqualifying"] },
+          "weight": { "type": "integer", "minimum": 1, "maximum": 100 }
+        }
+      }
+    },
+    "createdAt": { "type": "string", "format": "date" }
+  }
+}

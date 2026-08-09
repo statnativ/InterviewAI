@@ -1,0 +1,56 @@
+{
+  "id": "person-029-freya-nielsen",
+  "name": "Freya Nielsen",
+  "email": "freya.nielsen@example.com",
+  "phone": "(555) 029-0029",
+  "location": "San Francisco, CA",
+  "yearsExp": 7,
+  "currentTitle": "Frontend Platform Engineer",
+  "currentCompany": "Harborworks",
+  "skills": [
+    "TypeScript",
+    "React",
+    "Build Tooling (Vite / Webpack)",
+    "CI/CD",
+    "Frontend Performance",
+    "Monorepos (Turborepo)",
+    "Design Systems",
+    "Testing (Jest / React Testing Library)",
+    "Python"
+  ],
+  "experience": [
+    {
+      "title": "Frontend Developer",
+      "company": "Luma Commerce",
+      "from": "2019-09",
+      "to": "2022-02"
+    },
+    {
+      "title": "Frontend Engineer",
+      "company": "Gridstone",
+      "from": "2022-03",
+      "to": "2024-05"
+    },
+    {
+      "title": "Frontend Platform Engineer",
+      "company": "Harborworks",
+      "from": "2024-06",
+      "to": null
+    }
+  ],
+  "education": "B.S. in Computer Science, University of Washington",
+  "certifications": "AWS Certified Developer - Associate",
+  "summary": "Frontend Platform Engineer with 7 years of experience building and operating the shared infrastructure behind large web applications. I own build tooling, CI/CD pipelines, and monorepo setup, and I drive frontend performance work across multiple product teams. I also keep a working knowledge of Python and have started exploring AI application development.",
+  "strengths": [
+    "Deep experience with Vite and Webpack build tooling",
+    "Owns CI/CD pipelines that serve dozens of frontend engineers",
+    "Leads org-wide frontend performance initiatives",
+    "Strong TypeScript and React fundamentals plus monorepo tooling with Turborepo"
+  ],
+  "gaps": [
+    "Python exposure is beginner level, mostly scripting and tooling",
+    "LLM and RAG application patterns are new territory for me"
+  ],
+  "resumeText": "Frontend Platform Engineer at Harborworks, running the build tooling, CI/CD, and monorepo infrastructure that hundreds of engineers rely on. I led the migration from Webpack to Vite, cut CI wall time by 40%, and enforce performance budgets across our React and TypeScript applications. Earlier at Gridstone and Luma Commerce I shipped React features and set up design systems and testing standards. I have dabbled in Python for tooling and am actively learning AI application development.",
+  "primaryDomain": "frontend"
+}

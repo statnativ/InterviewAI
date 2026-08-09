@@ -1,0 +1,49 @@
+{
+  "id": "person-037-isaac-cohen",
+  "name": "Isaac Cohen",
+  "email": "isaac.cohen@example.com",
+  "phone": "(555) 037-0037",
+  "location": "Tel Aviv, IL",
+  "yearsExp": 4,
+  "currentTitle": "iOS Engineer",
+  "currentCompany": "BrightLoop Mobile",
+  "skills": [
+    "Swift",
+    "SwiftUI",
+    "UIKit",
+    "Xcode & iOS Tooling",
+    "App Architecture (MVVM)",
+    "Combine",
+    "Core Data",
+    "CI/CD (Fastlane)"
+  ],
+  "experience": [
+    {
+      "title": "iOS Developer",
+      "company": "Waveform Labs",
+      "from": "2022-09",
+      "to": "2024-07"
+    },
+    {
+      "title": "iOS Engineer",
+      "company": "BrightLoop Mobile",
+      "from": "2024-08",
+      "to": null
+    }
+  ],
+  "education": "B.Sc. in Computer Science, Technion – Israel Institute of Technology",
+  "certifications": "Apple Certified Associate – iOS Developer",
+  "summary": "iOS engineer with 4 years of experience building Swift-based apps with SwiftUI and UIKit. Solid command of the MVVM architecture pattern, Combine for async data flows, and Core Data for persistence, with hands-on Xcode tooling and Fastlane to ship reliably to the App Store.",
+  "strengths": [
+    "Deep Swift expertise with production SwiftUI and UIKit apps",
+    "Comfortable with MVVM architecture and Combine-based async flows",
+    "Hands-on Core Data persistence and Xcode build tooling",
+    "Automates releases with Fastlane and CI/CD pipelines"
+  ],
+  "gaps": [
+    "Strong on iOS but no exposure to Android or cross-platform development",
+    "Limited Kotlin and Android SDK experience"
+  ],
+  "resumeText": "iOS Engineer at BrightLoop Mobile, where I own feature work written in Swift with SwiftUI and UIKit following MVVM. At Waveform Labs I built the initial app screens and release pipeline, introducing Fastlane and Combine-based networking. I care about clean architecture, reliable releases, and readable code that reaches thousands of users every week.",
+  "primaryDomain": "mobile"
+}

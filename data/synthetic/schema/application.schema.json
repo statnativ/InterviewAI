@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "application.schema.json",
+  "title": "Application",
+  "description": "A join record linking one person to one job. Maps directly onto the backend's `applications` table. Generated deterministically by scripts/synthetic/generate_applications.py, not by an agent.",
+  "type": "object",
+  "required": ["id", "personId", "jobId", "appliedAt", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^app-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "personId": {
+      "type": "string",
+      "pattern": "^person-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "jobId": {
+      "type": "string",
+      "pattern": "^job-[0-9]{3}-[a-z0-9-]+$"
+    },
+    "appliedAt": { "type": "string", "format": "date" },
+    "status": {
+      "type": "string",
+      "enum": ["Applied", "Screening", "Interview", "Offer", "Rejected"]
+    }
+  }
+}
