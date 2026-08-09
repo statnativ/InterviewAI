@@ -262,9 +262,14 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
   shipped-but-uncommitted work; no code-review trail)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: None implemented yet.
-- **Contingency**: A regression today would require manually reverting specific file edits
-  rather than a git revert.
-- **Trigger**: Already triggered — open as of this review.
-- **Status**: Open
+- **Mitigation**: IA-013's checkpoint commit landed and pushed to `origin/main` on 2026-08-10
+  (commit `ef827e3`, 87 files) — real rollback granularity now exists from this point forward.
+  The historical gap (M6 Phase 1/2, the admin module, and M3 all landed as one undifferentiated
+  commit rather than one per feature) is not retroactively fixable without a history rewrite,
+  which is not worth the disruption for a solo POC repo — accepted as-is. What matters is the
+  discipline going forward: one commit per feature, not accumulated indefinitely.
+- **Contingency**: A regression in anything from before 2026-08-10 still requires manually
+  reverting specific file edits. Anything after this commit has real `git revert` available.
+- **Trigger**: Already triggered — resolved for future work as of this review's mitigation.
+- **Status**: Mitigated (going forward) — historical gap accepted, not retroactively fixed
 - **Related ADR or product decision**: none — a process gap, not a technical one.
