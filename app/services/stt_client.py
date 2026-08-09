@@ -7,7 +7,7 @@ own endpoint and JSON shape (base64 audio in, plain text out).
 import base64
 
 from app.config import settings
-from app.services.llm_client import LLMError, get_http_client
+from app.services.llm_client import LLMError, post_with_retry
 
 
 async def transcribe(audio_bytes: bytes, audio_format: str = "wav") -> str:
@@ -22,14 +22,12 @@ async def transcribe(audio_bytes: bytes, audio_format: str = "wav") -> str:
         },
     }
 
-    response = await get_http_client().post(
-        f"{settings.openrouter_base_url}/audio/transcriptions",
-        headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
-        json=payload,
+    # One same-model retry after a short backoff (IA-009) — there's no
+    # documented alternate STT model to fall back to, unlike the interview
+    # LLM (R-004), so resilience here means "try again," not "switch model."
+    response = await post_with_retry(
+        f"{settings.openrouter_base_url}/audio/transcriptions", payload, retries=1
     )
-
-    if response.status_code != 200:
-        raise LLMError(f"OpenRouter transcription failed ({response.status_code}): {response.text}")
 
     data = response.json()
     # Field name isn't independently confirmed from OpenRouter's docs at time of

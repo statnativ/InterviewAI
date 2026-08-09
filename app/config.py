@@ -12,6 +12,11 @@ class Settings(BaseSettings):
 
     # Interview cascade (STT -> LLM -> TTS), all via OpenRouter.
     interview_llm_model: str = "nvidia/nemotron-3-ultra-550b-a55b:free"
+    # Paid fallback for interview_llm_model specifically — it's the one genuinely
+    # free-tier leg of the cascade (R-004); IA-002 observed it return a malformed
+    # response live. deepseek/deepseek-v4-pro was already the documented
+    # contingency in R-003/R-004 before this fallback was actually built (IA-009).
+    interview_llm_fallback_model: str = "deepseek/deepseek-v4-pro"
     stt_model: str = "qwen/qwen3-asr-flash-2026-02-10"
     tts_model: str = "hexgrad/kokoro-82m"
     tts_voice: str = "af_heart"

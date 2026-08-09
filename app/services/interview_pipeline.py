@@ -39,7 +39,12 @@ async def start_interview(job_title: str, jd_text: str) -> InterviewTurnResult:
     """Seed a new interview: build the system prompt and get the opening question."""
     history = [{"role": "system", "content": SYSTEM_PROMPT_TEMPLATE.format(job_title=job_title, jd_text=jd_text)}]
 
-    ai_text = await chat_completion(history, model=settings.interview_llm_model, exclude_reasoning=True)
+    ai_text = await chat_completion(
+        history,
+        model=settings.interview_llm_model,
+        exclude_reasoning=True,
+        fallback_model=settings.interview_llm_fallback_model,
+    )
     history.append({"role": "assistant", "content": ai_text})
 
     ai_audio = await synthesize(ai_text)
@@ -51,7 +56,12 @@ async def run_turn(history: list[dict], candidate_audio: bytes, audio_format: st
     transcript = await transcribe(candidate_audio, audio_format=audio_format)
 
     history = [*history, {"role": "user", "content": transcript}]
-    ai_text = await chat_completion(history, model=settings.interview_llm_model, exclude_reasoning=True)
+    ai_text = await chat_completion(
+        history,
+        model=settings.interview_llm_model,
+        exclude_reasoning=True,
+        fallback_model=settings.interview_llm_fallback_model,
+    )
     history = [*history, {"role": "assistant", "content": ai_text}]
 
     ai_audio = await synthesize(ai_text)

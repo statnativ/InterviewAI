@@ -61,8 +61,10 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 - **Impact**: High (an OpenRouter outage takes down every AI feature simultaneously)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: None implemented. Paid fallback LLM models (DeepSeek V4 Pro, GLM-5.2) were
-  identified but no automatic failover exists.
+- **Mitigation**: None for this risk specifically. IA-009 (2026-08-10) built a model-level
+  fallback for the interview LLM (`deepseek/deepseek-v4-pro` on primary failure) — that's real,
+  but it's still routed through OpenRouter, so it does nothing for an OpenRouter-wide outage.
+  This risk (the gateway itself, not one model behind it) remains genuinely unaddressed.
 - **Contingency**: Manual model-slug swap via `.env` if OpenRouter itself is down (does not
   help — OpenRouter is the single point of failure, not a specific model).
 - **Trigger**: An observed OpenRouter outage or sustained degraded service.
@@ -76,30 +78,40 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 - **Description**: The default interview LLM (`nvidia/nemotron-3-ultra-550b-a55b:free`) is a
   free tier with undocumented rate limits — **now observed under real, if light, load** (IA-002,
   2026-08-10), not just theorized from public listings.
-- **Evidence**: Model choice in `app/config.py`. During IA-002's latency measurement (3 real runs
-  of `scripts/test_interview_pipeline.py`): one run's TTS call (`hexgrad/kokoro-82m`, also
-  free-tier) hit the full 60s timeout with no response; another run's LLM call returned a 200
-  with no usable `choices` field. Neither reproduced on the third, clean run (full turns: 8.24s,
-  12.51s) — this reads as intermittent free-tier instability, not a consistent failure, but it
-  is now a directly observed data point, not a guess.
-- **Likelihood**: Medium (upgraded from Unknown — 2 anomalies observed in 3 short runs; too small
-  a sample to quantify a real rate, but no longer purely theoretical)
+- **Evidence**: Model choice in `app/config.py`. During IA-002's latency measurement (4 real runs
+  of `scripts/test_interview_pipeline.py` across two sessions): one run's TTS call
+  (`hexgrad/kokoro-82m` — corrected: this is a **paid**, cheap model per `AI Architecture.md`
+  ($0.62/M chars), not free-tier; its timeout reads as transient service trouble, not
+  rate-limiting) hit the full 60s timeout with no response; another run's LLM call returned a
+  200 with no usable `choices` field; a fourth run's LLM call succeeded but took 24.63s for a
+  single leg — well above the 2.4–5.5s range the first clean run showed. None of these
+  reproduced consistently — this reads as real variance, not a consistent failure, but it is now
+  directly observed, not a guess.
+- **Likelihood**: Medium (upgraded from Unknown — multiple anomalies observed across a handful of
+  short runs; too small a sample to quantify a real rate, but no longer purely theoretical)
 - **Impact**: Medium (would require an on-the-fly swap to a paid model mid-interview; for a live
   candidate, either failure mode — a 60s hang or a crash — is a genuinely bad experience, not
   just an inconvenience)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: Partial. The malformed-response failure mode is now handled cleanly —
+- **Mitigation**: Both observed hard-failure modes are now handled. The malformed-response case:
   `llm_client.py`'s `chat_completion` validates the response shape before indexing and raises a
   clean `LLMError` instead of an unhandled `KeyError` (fixed 2026-08-10, directly triggered by
-  reproducing this during IA-002). The 60s-timeout failure mode has no mitigation yet — no
-  retry, no shorter timeout, no fallback model. IA-009 (LLM fallback) covers the fallback half
-  and is currently only "Low" priority — worth reconsidering given this is now an observed
-  failure, not a hypothetical one.
-- **Contingency**: Manual swap to `deepseek/deepseek-v4-pro` or `z-ai/glm-5.2` via config.
-- **Trigger**: Observed 429s/throttling from OpenRouter on the free-tier model — now also:
-  observed timeouts/malformed responses, as above.
-- **Status**: Open — one failure mode mitigated, one not
+  reproducing this during IA-002). The timeout/network-failure case: IA-009 (2026-08-10, priority
+  bumped from Low to High given this is now observed, not hypothetical) added
+  `interview_llm_model`'s automatic fallback to `interview_llm_fallback_model`
+  (`deepseek/deepseek-v4-pro`) on any hard failure, plus a same-model retry-with-backoff for
+  STT/TTS (no second model on record for either, so a swap isn't the honest option there). **Not
+  mitigated**: the 24.63s-successful-but-slow case — the fallback only triggers on failure, not
+  on a slow-but-technically-fine response; a performance guarantee would need racing against a
+  shorter timeout, a bigger design not built here.
+- **Contingency**: Manual swap to `z-ai/glm-5.2` via config if `deepseek/deepseek-v4-pro` (the
+  new automatic fallback) is also degraded.
+- **Trigger**: Already triggered — both hard-failure modes observed and now mitigated;
+  slow-but-successful responses remain unmitigated and would need a future trigger of their own
+  (e.g., a candidate complaint about a long wait) before that's worth building.
+- **Status**: Open — both observed hard-failure modes mitigated (IA-009); the "successful but
+  slow" case is a known, stated gap, not a hidden one
 - **Related ADR or product decision**: ADR-002, ADR-007
 
 ---

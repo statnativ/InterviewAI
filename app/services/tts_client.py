@@ -5,7 +5,7 @@ bytes directly (not JSON) — Content-Type tells you mp3 vs pcm.
 """
 
 from app.config import settings
-from app.services.llm_client import LLMError, get_http_client
+from app.services.llm_client import LLMError, post_with_retry
 
 
 async def synthesize(text: str, voice: str | None = None) -> bytes:
@@ -19,13 +19,13 @@ async def synthesize(text: str, voice: str | None = None) -> bytes:
         "response_format": "mp3",
     }
 
-    response = await get_http_client().post(
-        f"{settings.openrouter_base_url}/audio/speech",
-        headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
-        json=payload,
+    # One same-model retry after a short backoff (IA-009) — kokoro-82m is a
+    # paid model (~$0.62/M chars per AI Architecture.md), not free-tier, so a
+    # timeout here (observed live during IA-002) reads as transient service
+    # trouble, not rate-limiting; there's no second TTS model on record to
+    # fall back to, so retrying is the honest fix, not a model swap.
+    response = await post_with_retry(
+        f"{settings.openrouter_base_url}/audio/speech", payload, retries=1
     )
-
-    if response.status_code != 200:
-        raise LLMError(f"OpenRouter TTS failed ({response.status_code}): {response.text}")
 
     return response.content
