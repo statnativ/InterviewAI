@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import String, Integer, Boolean, DateTime, ForeignKey, Index
+from sqlalchemy import CheckConstraint, String, Integer, Boolean, DateTime, ForeignKey, Index
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -39,4 +39,8 @@ class Interview(Base):
         Index("idx_interviews_tenant", "tenant_id"),
         Index("idx_interviews_job", "job_id"),
         Index("idx_interviews_candidate", "candidate_id"),
+        CheckConstraint(
+            "NOT (shared AND candidate_id IS NOT NULL)",
+            name="ck_interviews_no_shared_personalized",
+        ),
     )

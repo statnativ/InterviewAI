@@ -4,10 +4,8 @@ Unlike chat completions and transcription, this endpoint returns raw audio
 bytes directly (not JSON) — Content-Type tells you mp3 vs pcm.
 """
 
-import httpx
-
 from app.config import settings
-from app.services.llm_client import LLMError
+from app.services.llm_client import LLMError, get_http_client
 
 
 async def synthesize(text: str, voice: str | None = None) -> bytes:
@@ -21,12 +19,11 @@ async def synthesize(text: str, voice: str | None = None) -> bytes:
         "response_format": "mp3",
     }
 
-    async with httpx.AsyncClient(timeout=60) as client:
-        response = await client.post(
-            f"{settings.openrouter_base_url}/audio/speech",
-            headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
-            json=payload,
-        )
+    response = await get_http_client().post(
+        f"{settings.openrouter_base_url}/audio/speech",
+        headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
+        json=payload,
+    )
 
     if response.status_code != 200:
         raise LLMError(f"OpenRouter TTS failed ({response.status_code}): {response.text}")

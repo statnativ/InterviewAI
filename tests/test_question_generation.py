@@ -268,3 +268,31 @@ async def test_candidate_personalization_includes_candidate_profile_in_prompt(cl
     assert len(captured_prompts) == 1
     assert "Jordan Rivera" not in captured_prompts[0]  # profile is built from structured fields, not the raw name
     assert "Acme" in captured_prompts[0] or "Kafka" in captured_prompts[0] or "Go" in captured_prompts[0]
+
+
+async def test_sharing_a_personalized_interview_is_rejected(client, tenant, captured_prompts):
+    """R-011: a candidate-personalized interview can't also be shared — the DB
+    CHECK constraint (ck_interviews_no_shared_personalized) is the real
+    enforcement; this confirms the API surfaces it as a clean 409, not a raw
+    IntegrityError 500."""
+    job_id = await _make_job(client, tenant)
+    application_id = await _make_candidate(client, tenant, job_id)
+    created = await client.post(
+        "/interviews",
+        json={
+            "title": "Personalized Screen",
+            "jobTitle": "Senior Go Engineer",
+            "jobId": job_id,
+            "candidateId": application_id,
+            "mode": "Chat",
+        },
+        headers=_headers(tenant),
+    )
+    iv_id = created.json()["id"]
+
+    res = await client.patch(f"/interviews/{iv_id}", json={"shared": True}, headers=_headers(tenant))
+    assert res.status_code == 409
+
+    # The interview is untouched — not left in a half-applied state.
+    unchanged = await client.get(f"/interviews/{iv_id}", headers=_headers(tenant))
+    assert unchanged.json()["shared"] is False

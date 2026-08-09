@@ -6,10 +6,8 @@ own endpoint and JSON shape (base64 audio in, plain text out).
 
 import base64
 
-import httpx
-
 from app.config import settings
-from app.services.llm_client import LLMError
+from app.services.llm_client import LLMError, get_http_client
 
 
 async def transcribe(audio_bytes: bytes, audio_format: str = "wav") -> str:
@@ -24,12 +22,11 @@ async def transcribe(audio_bytes: bytes, audio_format: str = "wav") -> str:
         },
     }
 
-    async with httpx.AsyncClient(timeout=60) as client:
-        response = await client.post(
-            f"{settings.openrouter_base_url}/audio/transcriptions",
-            headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
-            json=payload,
-        )
+    response = await get_http_client().post(
+        f"{settings.openrouter_base_url}/audio/transcriptions",
+        headers={"Authorization": f"Bearer {settings.openrouter_api_key}"},
+        json=payload,
+    )
 
     if response.status_code != 200:
         raise LLMError(f"OpenRouter transcription failed ({response.status_code}): {response.text}")

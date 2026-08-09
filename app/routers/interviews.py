@@ -2,6 +2,7 @@ import uuid
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
@@ -144,7 +145,16 @@ async def patch_interview(
         iv.job_title = data.pop("jobTitle")
     for key, value in data.items():
         setattr(iv, key, value)
-    await db.commit()
+    try:
+        await db.commit()
+    except IntegrityError as e:
+        await db.rollback()
+        if "ck_interviews_no_shared_personalized" in str(e.orig):
+            raise HTTPException(
+                status_code=409,
+                detail="Can't share an interview that's personalized for one candidate.",
+            )
+        raise
     await db.refresh(iv)
     candidate = await _get_candidate(iv.candidate_id, db)
     return interview_to_view(iv, candidate.name if candidate else None)
