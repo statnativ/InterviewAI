@@ -56,4 +56,13 @@ async def chat_completion(messages: list[dict], model: str | None = None, exclud
         raise LLMError(f"OpenRouter request failed ({response.status_code}): {response.text}")
 
     data = response.json()
-    return data["choices"][0]["message"]["content"]
+    # A 200 response isn't a guarantee of the expected shape — free-tier
+    # models can return an error/empty body with a 200 status. Validate
+    # before indexing so a shape mismatch raises a clean LLMError instead of
+    # an unhandled KeyError/IndexError (reproduced live during IA-002's
+    # latency run against interview_llm_model). Mirrors stt_client.py's
+    # existing "surface the raw payload, don't index blindly" convention.
+    choices = data.get("choices")
+    if not choices or "message" not in choices[0] or "content" not in choices[0]["message"]:
+        raise LLMError(f"Unexpected chat completion response shape, no usable 'choices': {data}")
+    return choices[0]["message"]["content"]

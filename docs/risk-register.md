@@ -74,18 +74,33 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 ### R-004
 - **Category**: Availability / Cost
 - **Description**: The default interview LLM (`nvidia/nemotron-3-ultra-550b-a55b:free`) is a
-  free tier with undocumented rate limits observed from public listings, not confirmed via load
-  testing.
-- **Evidence**: Model choice in `app/config.py`; rate-limit behavior not tested under load.
-- **Likelihood**: Unknown (not tested)
-- **Impact**: Medium (would require an on-the-fly swap to a paid model mid-interview)
+  free tier with undocumented rate limits — **now observed under real, if light, load** (IA-002,
+  2026-08-10), not just theorized from public listings.
+- **Evidence**: Model choice in `app/config.py`. During IA-002's latency measurement (3 real runs
+  of `scripts/test_interview_pipeline.py`): one run's TTS call (`hexgrad/kokoro-82m`, also
+  free-tier) hit the full 60s timeout with no response; another run's LLM call returned a 200
+  with no usable `choices` field. Neither reproduced on the third, clean run (full turns: 8.24s,
+  12.51s) — this reads as intermittent free-tier instability, not a consistent failure, but it
+  is now a directly observed data point, not a guess.
+- **Likelihood**: Medium (upgraded from Unknown — 2 anomalies observed in 3 short runs; too small
+  a sample to quantify a real rate, but no longer purely theoretical)
+- **Impact**: Medium (would require an on-the-fly swap to a paid model mid-interview; for a live
+  candidate, either failure mode — a 60s hang or a crash — is a genuinely bad experience, not
+  just an inconvenience)
 - **Severity**: Medium
 - **Owner**: Amit Tiwari
-- **Mitigation**: None implemented yet.
+- **Mitigation**: Partial. The malformed-response failure mode is now handled cleanly —
+  `llm_client.py`'s `chat_completion` validates the response shape before indexing and raises a
+  clean `LLMError` instead of an unhandled `KeyError` (fixed 2026-08-10, directly triggered by
+  reproducing this during IA-002). The 60s-timeout failure mode has no mitigation yet — no
+  retry, no shorter timeout, no fallback model. IA-009 (LLM fallback) covers the fallback half
+  and is currently only "Low" priority — worth reconsidering given this is now an observed
+  failure, not a hypothetical one.
 - **Contingency**: Manual swap to `deepseek/deepseek-v4-pro` or `z-ai/glm-5.2` via config.
-- **Trigger**: Observed 429s/throttling from OpenRouter on the free-tier model.
-- **Status**: Open
-- **Related ADR or product decision**: ADR-002
+- **Trigger**: Observed 429s/throttling from OpenRouter on the free-tier model — now also:
+  observed timeouts/malformed responses, as above.
+- **Status**: Open — one failure mode mitigated, one not
+- **Related ADR or product decision**: ADR-002, ADR-007
 
 ---
 

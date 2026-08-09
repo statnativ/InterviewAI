@@ -194,11 +194,19 @@ retryable, not latency-sensitive to a live person) exists.
 
 ## Validation plan
 
-1. **Before implementing anything**: instrument `scripts/test_interview_pipeline.py` with timing
-   and record p50/p95 for a single turn against the configured `interview_llm_model`. This is
-   IA-002, already identified in `docs/implementation-actions.md` and still not started — it is
-   now a hard prerequisite for confidently choosing between Option 3 and Option 4 for the live
-   mode, not just a nice-to-have.
+1. ~~**Before implementing anything**: instrument `scripts/test_interview_pipeline.py` with
+   timing and record p50/p95 for a single turn against the configured `interview_llm_model`.~~
+   **Done, 2026-08-10 (IA-002).** Three real runs, n=2 full turns each. Clean run: 8.24s and
+   12.51s full-turn (STT+LLM+TTS) totals — comfortably under the ~25–30s threshold below. Per-leg
+   breakdown: STT ~1s, LLM 2.4–5.5s, **TTS 4.9–5.9s (the dominant leg, not the LLM — worth
+   knowing if future optimization work targets the wrong service)**. n=2 is not a real p50/p95;
+   this is a first grounded number, sufficient to unblock the decision below, not a final
+   statistical claim. **Also surfaced, not just latency**: one of the three runs hit a full 60s
+   timeout on a TTS call with zero response; another hit a malformed LLM response (`KeyError` on
+   a missing `choices` field) that was a live reproduction of a long-flagged `llm_client.py`
+   gap, fixed in the same session as a direct blocker to finishing this measurement. Logged as
+   R-004 (upgraded from "not tested" to observed). This is a reliability finding distinct from
+   the latency question this step was aimed at — see the note after step 4.
 2. Ship Option 4 (synchronous endpoint + Postgres persistence) for the asynchronous-recording
    mode first — it's the mode actually scoped for near-term delivery per PD-001.
 3. Only build Option 3 (WebSocket streaming) once the "Live AI-moderated" stretch mode is
@@ -210,7 +218,17 @@ retryable, not latency-sensitive to a live person) exists.
    as "wait for the one full response" is not viable even for the asynchronous mode. That
    outcome doesn't necessarily mean building Option 3 early; it may mean tightening per-call
    timeouts and adding client-side retry/backoff first, which is cheaper. Either way, this
-   number is what actually decides it, not a hunch.
+   number is what actually decides it, not a hunch. **Result: under threshold on the clean run —
+   Option 4 confirmed viable on the latency axis.**
+
+   **Separately — the timeout/malformed-response events from step 1 are a reliability
+   question, not a latency one, and this ADR's decision doesn't resolve them.** They're exactly
+   why the persist-before-calling idempotency pattern (Decision, above) matters in practice, not
+   just in theory: a candidate whose request hits a 60s TTS timeout needs a safe retry path, and
+   `(session_id, turn_index)` is what makes that retry safe rather than duplicating the turn.
+   IA-009 (LLM/TTS fallback on failure) remains unbuilt and is worth reconsidering as
+   higher-priority now that this failure mode is observed rather than hypothetical — tracked via
+   R-004, not this ADR.
 
 ## Migration and rollout
 

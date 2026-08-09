@@ -259,7 +259,21 @@ pre-implementation review of M4's execution model — its finding: the roadmap's
 "BackgroundTasks stops being enough → Celery+Redis" framing doesn't fit M4's actual shape (a
 live, stateful, per-turn conversation, not decoupled batch work); recommends a
 synchronous-then-WebSocket path instead and defers Celery/Redis to M5's report generation,
-which is a genuine fit for it.
+which is a genuine fit for it. IA-012/014/015 were then actually implemented (CHECK constraint,
+shared HTTP client, table naming) the same day.
+
+**IA-002 run, 2026-08-10 — and D1's `llm_client.py` finding is now fully closed, not by
+inspection but by reproducing it live.** Three real cascade runs: the clean one measured
+full-turn (STT+LLM+TTS) latency at 8.24s and 12.51s — comfortably under ADR-007's ~25–30s
+viability threshold, with TTS (not the LLM) the dominant leg at 4.9–5.9s per call. But an
+earlier run hit the exact D1 gap from the very first architecture review, live: a 200 response
+with no usable `choices` field crashed with an unhandled `KeyError`. Fixed in `chat_completion`
+the same session (validate the shape, raise a clean `LLMError`, mirroring `stt_client.py`'s
+existing convention) — a direct blocker to finishing the measurement, not a detour from it. A
+different run also hit a full 60s timeout on a TTS call with zero response — a second,
+still-open reliability finding, logged as an upgrade to R-004 rather than folded into D1, since
+it's a distinct failure mode (hang, not malformed shape) with no fix yet. The
+orphaned-resume-file half of D1 remains untouched.
 
 ## Product research (2026-08-09)
 
