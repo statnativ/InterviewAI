@@ -72,6 +72,7 @@ export interface Candidate {
   gaps: string[];
   aiNote: string;
   compareVerdict: "Advance" | "Maybe" | "Pass";
+  scoreMethod: "deterministic" | "llm_judge";
   appliedAt: string;
 }
 

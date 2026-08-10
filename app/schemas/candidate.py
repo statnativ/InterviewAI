@@ -100,6 +100,7 @@ class CandidateView(BaseModel):
     gaps: list[str] = Field(default_factory=list)
     aiNote: str = ""
     compareVerdict: str = "Pass"
+    scoreMethod: str = "deterministic"  # deterministic, llm_judge
     appliedAt: datetime
 
 

@@ -1,7 +1,7 @@
 ---
 tags: [project, system-design, ai, openrouter]
-status: current — gateway + deterministic screening + question generation live; retry/fallback
-  built (IA-009); LLM-as-judge and the voice cascade's app wiring (M4) not started
+status: current — gateway + deterministic screening + question generation + LLM-as-judge
+  scoring live; retry/fallback built (IA-009); the voice cascade's app wiring (M4) not started
 last-updated: 2026-08-10
 ---
 
@@ -42,7 +42,7 @@ call. Consequences:
 |---|---|---|---|
 | LLM — interview brain | Nemotron 3 Ultra | `nvidia/nemotron-3-ultra-550b-a55b:free` | free tier |
 | LLM — interview brain fallback | DeepSeek V4 Pro | `deepseek/deepseek-v4-pro` | $0.435 / $0.87 per M tok — **wired and used automatically** on primary failure (IA-009), not just a documented manual option anymore |
-| LLM — resume/question structuring | GPT-4o mini | `openai/gpt-4o-mini` | cheap default — no fallback wired (not free-tier, hasn't shown the reliability issues Nemotron has) |
+| LLM — resume/question structuring/candidate judging | GPT-4o mini | `openai/gpt-4o-mini` | cheap default — no fallback wired (not free-tier, hasn't shown the reliability issues Nemotron has). Three call sites now: `resume_parser.py` (dormant, off the ATS path), `question_generator.py` (M3), `candidate_judge.py` (M2, LLM-as-judge — new) |
 | STT | Qwen3 ASR Flash | `qwen/qwen3-asr-flash-2026-02-10` | $0.000035/sec (~$0.13/hr audio) — one same-model retry, no fallback model |
 | TTS | Kokoro 82M | `hexgrad/kokoro-82m` | $0.62/M characters — **paid, not free-tier** (corrected 2026-08-10; an earlier note here mistakenly called it free-tier); one same-model retry, no fallback model |
 | LLM — manual-only contingency | GLM-5.2 | `z-ai/glm-5.2` | $0.406 / $1.276 per M tok — documented fallback-of-the-fallback, not wired into any automatic path |
@@ -51,7 +51,6 @@ Rationale for the free-tier brain + cheap STT/TTS pair: see
 `docs/product-decisions/PD-002-cost-sensitive-poc-scope.md`.
 
 ## The AI services, one by one
-
 ### `llm_client.py` — the text gateway
 OpenRouter `/chat/completions`. Every text-in/text-out call (resume structuring, interview
 questions) goes through this. Supports `exclude_reasoning=True` — reasoning models
@@ -132,12 +131,12 @@ future optimization effort targets the wrong service.
 
 ## Where AI is still fake or missing (gaps)
 
-| Area | Status |
-|---|---|
-| Screening | ✅ deterministic & live; ❌ LLM-as-judge not started (M2) |
-| Rubric generation from JD | ✅ live (deterministic, `generate_rubric`) |
-| Question generation | ✅ live (M3) — LLM-drafted from the JD, optional per-candidate personalization, edit/reorder/regenerate |
+| Area                                   | Status                                                                                                 |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Screening                              | ✅ deterministic & live (free default); ✅ LLM-as-judge also live (M2, 2026-08-10) — explicit, additive, reasons over full candidate profile not just keyword presence; ❌ execution still inline, not moved off the request path (IA-003) |
+| Rubric generation from JD              | ✅ live (deterministic, `generate_rubric`)                                                              |
+| Question generation                    | ✅ live (M3) — LLM-drafted from the JD, optional per-candidate personalization, edit/reorder/regenerate |
 | AI-call resilience (interview cascade) | ✅ live (IA-009) — retry + fallback on hard failures; ❌ no protection against slow-but-successful calls |
-| Voice cascade in the app | ❌ standalone script only, though real, live-verified, and timed (IA-002) — M4 wires it in; see ADR-007 |
-| Answer evaluation + report | ❌ (M5) |
-| Frontend voice/video sessions | ❌ recording is simulated; avatar is a static icon (see [[Frontend Overview]]) |
+| Voice cascade in the app               | ❌ standalone script only, though real, live-verified, and timed (IA-002) — M4 wires it in; see ADR-007 |
+| Answer evaluation + report             | ❌ (M5)                                                                                                 |
+| Frontend voice/video sessions          | ❌ recording is simulated; avatar is a static icon (see [[Frontend Overview]])                          |

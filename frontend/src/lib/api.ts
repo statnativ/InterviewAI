@@ -47,6 +47,8 @@ export const api = {
     request<Candidate>(`/candidates/${candidateId}`, { method: "PATCH", body: JSON.stringify(patch) }),
   screenCandidate: (candidateId: string) =>
     request<Candidate>(`/candidates/${candidateId}/screen`, { method: "POST" }),
+  judgeCandidate: (candidateId: string) =>
+    request<Candidate>(`/candidates/${candidateId}/judge`, { method: "POST" }),
   bulk: (candidateIds: string[], action: string, value?: string | boolean) =>
     request<Candidate[]>("/candidates/bulk", {
       method: "POST",

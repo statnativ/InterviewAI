@@ -23,6 +23,7 @@ interface AppState {
   getCandidate: (candidateId: string) => Candidate | undefined;
 
   screenCandidate: (candidateId: string) => Promise<void>;
+  judgeCandidate: (candidateId: string) => Promise<void>;
   rescreenJob: (jobId: string) => Promise<void>;
   generateRubric: (jobId: string) => Promise<void>;
 
@@ -111,6 +112,11 @@ export const useAppStore = create<AppState>()((set, get) => ({
 
   screenCandidate: async (candidateId) => {
     const updated = await api.screenCandidate(candidateId);
+    set((s) => ({ candidates: upsertCandidates(s.candidates, updated) }));
+  },
+
+  judgeCandidate: async (candidateId) => {
+    const updated = await api.judgeCandidate(candidateId);
     set((s) => ({ candidates: upsertCandidates(s.candidates, updated) }));
   },
 

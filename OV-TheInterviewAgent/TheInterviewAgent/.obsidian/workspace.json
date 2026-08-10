@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Synthetic Data — Design.md",
+                "file": "AI Architecture.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Synthetic Data — Design"
+              "title": "AI Architecture"
             }
           }
         ]
@@ -190,6 +190,7 @@
   },
   "active": "c5d518232c2dadad",
   "lastOpenFiles": [
+    "Synthetic Data — Design.md",
     "Runbook.md",
     "Project Overview.md",
     "Identity & Access Overview.md",
@@ -200,7 +201,6 @@
     "ProductResearch/Cost Savings & ROI Model.md",
     "ProductResearch/Enterprise Buyer Research.md",
     "ProductResearch/Enterprise Must-Haves Checklist.md",
-    "Synthetic Data — Design.md",
     "ProductResearch/UX Review.md",
     "_Home.md",
     "ProductResearch",

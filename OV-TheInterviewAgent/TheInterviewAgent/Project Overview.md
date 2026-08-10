@@ -39,7 +39,7 @@ ATS vertical slice are built so far):
 | M1 | Create job (JD) + upload/parse resume → structured JSON via LLM | API design, file handling, relational+JSONB schema | ✅ done |
 | — | **Cascaded voice pipeline (STT→LLM→TTS)** — pulled forward, standalone script only | multimodal API integration, conversation-as-state | ✅ prototype done |
 | — | **Full ATS vertical slice** — deterministic JD-rubric screening (server-side), jobs/candidates/interviews CRUD, React frontend fully wired to the API (no localStorage) | sync vs async, schema alignment, client↔API contract design | ✅ done (2026-08-09) |
-| M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | 🔶 scoring done deterministically; LLM-as-judge + async polling not started |
+| M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | 🔶 deterministic scoring **and** LLM-as-judge scoring both live (2026-08-10) — additive, explicit `POST /candidates/{id}/judge` action, not a replacement of the free default; moving execution off the request path (BackgroundTasks + polling, IA-003) still not started |
 | M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
 | M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ⬜ not started |
 | M4b | Async → video capture | media-type-as-data, object storage | ⬜ not started |
@@ -371,9 +371,15 @@ actually on a live request path). Full detail in [[Backend Overview]] /
 
 ## Next up
 
-- **M2 (partial)** — scoring is now deterministic and server-side; the "LLM-as-judge" upgrade
-  (screening with an LLM instead of keyword matching) and moving screening off the request
-  path (`BackgroundTasks` + a polling endpoint) are the remaining pieces.
+- **M2 (partial)** — LLM-as-judge scoring shipped 2026-08-10: `app/services/candidate_judge.py`
+  reasons over a candidate's full structured profile (experience depth, summary, education —
+  not just keyword presence like the deterministic path) via `POST /candidates/{id}/judge`,
+  additive and explicit, not a replacement of the free deterministic default. A real run against
+  a seeded candidate scored 95 (vs. the deterministic 99) with genuinely reasoned per-criterion
+  notes instead of boilerplate. Moving execution off the request path (`BackgroundTasks` + a
+  polling endpoint, IA-003) is the one remaining M2 piece, deliberately deferred — every AI call
+  in this codebase still runs synchronously inline, consistent with ADR-007's "don't background
+  before there's a measured need" precedent.
 - **M4** — wire the voice cascade into the app with DB persistence; next natural milestone now
   that M3 (question authoring) is done.
 - **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested

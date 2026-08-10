@@ -3270,6 +3270,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-01"
   },
   {
@@ -3391,6 +3392,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 97/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-02"
   },
   {
@@ -3513,6 +3515,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 75/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-05"
   },
   {
@@ -3628,6 +3631,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 60/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-04"
   },
   {
@@ -3750,6 +3754,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 53/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-03"
   },
   {
@@ -3875,6 +3880,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-06"
   },
   {
@@ -3996,6 +4002,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 89/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-07"
   },
   {
@@ -4117,6 +4124,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 88/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-10"
   },
   {
@@ -4238,6 +4246,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 78/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-08"
   },
   {
@@ -4348,6 +4357,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 73/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-09"
   },
   {
@@ -4481,6 +4491,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-12"
   },
   {
@@ -4607,6 +4618,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 98/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-13"
   },
   {
@@ -4733,6 +4745,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 83/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-17"
   },
   {
@@ -4854,6 +4867,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 65/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-14"
   },
   {
@@ -4974,6 +4988,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 65/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-16"
   },
   {
@@ -5095,6 +5110,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 64/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-15"
   },
   {
@@ -5223,6 +5239,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 62/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-11"
   },
   {
@@ -5347,6 +5364,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-23"
   },
   {
@@ -5476,6 +5494,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-18"
   },
   {
@@ -5597,6 +5616,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 85/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-19"
   },
   {
@@ -5707,6 +5727,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 39/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-20"
   },
   {
@@ -5817,6 +5838,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 39/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-21"
   },
   {
@@ -5928,6 +5950,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-22"
   },
   {
@@ -6048,6 +6071,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 98/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-25"
   },
   {
@@ -6165,6 +6189,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 95/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-30"
   },
   {
@@ -6277,6 +6302,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-26"
   },
   {
@@ -6394,6 +6420,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 61/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-28"
   },
   {
@@ -6509,6 +6536,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 52/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-24"
   },
   {
@@ -6619,6 +6647,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 52/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-27"
   },
   {
@@ -6730,6 +6759,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-06-29"
   },
   {
@@ -6844,6 +6874,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-02"
   },
   {
@@ -6948,6 +6979,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 84/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-03"
   },
   {
@@ -7071,6 +7103,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 62/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-01"
   },
   {
@@ -7175,6 +7208,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-04"
   },
   {
@@ -7285,6 +7319,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 41/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-05"
   },
   {
@@ -7390,6 +7425,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-06"
   },
   {
@@ -7501,6 +7537,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-10"
   },
   {
@@ -7605,6 +7642,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 88/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-11"
   },
   {
@@ -7719,6 +7757,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 55/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-09"
   },
   {
@@ -7834,6 +7873,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-07"
   },
   {
@@ -7950,6 +7990,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-08"
   },
   {
@@ -8068,6 +8109,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 43/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-12"
   },
   {
@@ -8178,6 +8220,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-18"
   },
   {
@@ -8289,6 +8332,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 39/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-17"
   },
   {
@@ -8405,6 +8449,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 34/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-14"
   },
   {
@@ -8519,6 +8564,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 34/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-16"
   },
   {
@@ -8628,6 +8674,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 31/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-13"
   },
   {
@@ -8734,6 +8781,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-15"
   },
   {
@@ -8846,6 +8894,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-20"
   },
   {
@@ -8950,6 +8999,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-21"
   },
   {
@@ -9065,6 +9115,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 81/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-19"
   },
   {
@@ -9177,6 +9228,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 56/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-22"
   },
   {
@@ -9281,6 +9333,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-23"
   },
   {
@@ -9397,6 +9450,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 48/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-24"
   },
   {
@@ -9509,6 +9563,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-29"
   },
   {
@@ -9613,6 +9668,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-30"
   },
   {
@@ -9725,6 +9781,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 56/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-27"
   },
   {
@@ -9829,6 +9886,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-28"
   },
   {
@@ -9948,6 +10006,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-25"
   },
   {
@@ -10063,6 +10122,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-26"
   },
   {
@@ -10185,6 +10245,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-05"
   },
   {
@@ -10310,6 +10371,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 71/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-07-31"
   },
   {
@@ -10431,6 +10493,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 69/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-03"
   },
   {
@@ -10552,6 +10615,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 62/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-01"
   },
   {
@@ -10662,6 +10726,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 61/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-02"
   },
   {
@@ -10772,6 +10837,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 47/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-04"
   },
   {
@@ -10882,6 +10948,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-06"
   },
   {
@@ -10990,6 +11057,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 78/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-07"
   },
   {
@@ -11093,6 +11161,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 70/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-11"
   },
   {
@@ -11209,6 +11278,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 50/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-10"
   },
   {
@@ -11317,6 +11387,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-08"
   },
   {
@@ -11426,6 +11497,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-09"
   },
   {
@@ -11536,6 +11608,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-14"
   },
   {
@@ -11644,6 +11717,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 74/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-15"
   },
   {
@@ -11760,6 +11834,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 50/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-16"
   },
   {
@@ -11870,6 +11945,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-12"
   },
   {
@@ -11978,6 +12054,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-13"
   },
   {
@@ -12081,6 +12158,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-17"
   },
   {
@@ -12191,6 +12269,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-20"
   },
   {
@@ -12300,6 +12379,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 91/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-21"
   },
   {
@@ -12416,6 +12496,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 82/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-22"
   },
   {
@@ -12526,6 +12607,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-18"
   },
   {
@@ -12636,6 +12718,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-19"
   },
   {
@@ -12739,6 +12822,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-23"
   },
   {
@@ -12848,6 +12932,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 96/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-26"
   },
   {
@@ -12954,6 +13039,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 95/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-25"
   },
   {
@@ -13063,6 +13149,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 73/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-24"
   },
   {
@@ -13164,6 +13251,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 72/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-27"
   },
   {
@@ -13278,6 +13366,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 67/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-28"
   },
   {
@@ -13386,6 +13475,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 38/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-29"
   },
   {
@@ -13495,6 +13585,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 38/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-30"
   },
   {
@@ -13609,6 +13700,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-03"
   },
   {
@@ -13717,6 +13809,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 78/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-04"
   },
   {
@@ -13826,6 +13919,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 71/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-02"
   },
   {
@@ -13947,6 +14041,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 58/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-08-31"
   },
   {
@@ -14061,6 +14156,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 58/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-01"
   },
   {
@@ -14170,6 +14266,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 53/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-05"
   },
   {
@@ -14279,6 +14376,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-10"
   },
   {
@@ -14389,6 +14487,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 75/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-12"
   },
   {
@@ -14503,6 +14602,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 68/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-11"
   },
   {
@@ -14612,6 +14712,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 58/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-06"
   },
   {
@@ -14720,6 +14821,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 50/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-07"
   },
   {
@@ -14821,6 +14923,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 50/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-08"
   },
   {
@@ -14929,6 +15032,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 50/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-09"
   },
   {
@@ -15043,6 +15147,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-17"
   },
   {
@@ -15160,6 +15265,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 98/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-19"
   },
   {
@@ -15269,6 +15375,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 72/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-16"
   },
   {
@@ -15390,6 +15497,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 66/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-13"
   },
   {
@@ -15499,6 +15607,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-14"
   },
   {
@@ -15608,6 +15717,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 54/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-18"
   },
   {
@@ -15722,6 +15832,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-15"
   },
   {
@@ -15826,6 +15937,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-20"
   },
   {
@@ -15939,6 +16051,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 89/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-25"
   },
   {
@@ -16038,6 +16151,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 84/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-22"
   },
   {
@@ -16136,6 +16250,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 81/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-21"
   },
   {
@@ -16236,6 +16351,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 78/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-23"
   },
   {
@@ -16335,6 +16451,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 38/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-24"
   },
   {
@@ -16451,6 +16568,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-26"
   },
   {
@@ -16556,6 +16674,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 85/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-27"
   },
   {
@@ -16668,6 +16787,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 73/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-28"
   },
   {
@@ -16785,6 +16905,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 71/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-30"
   },
   {
@@ -16890,6 +17011,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 57/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-09-29"
   },
   {
@@ -17000,6 +17122,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 41/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-01"
   },
   {
@@ -17117,6 +17240,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-04"
   },
   {
@@ -17223,6 +17347,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-05"
   },
   {
@@ -17339,6 +17464,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 79/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-03"
   },
   {
@@ -17449,6 +17575,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 68/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-02"
   },
   {
@@ -17568,6 +17695,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 68/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-07"
   },
   {
@@ -17673,6 +17801,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-06"
   },
   {
@@ -17785,6 +17914,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 4 of 4 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-11"
   },
   {
@@ -17890,6 +18020,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 88/100 \u2014 3 of 4 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-12"
   },
   {
@@ -18000,6 +18131,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 3 of 4 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-09"
   },
   {
@@ -18110,6 +18242,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 72/100 \u2014 2 of 4 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-14"
   },
   {
@@ -18226,6 +18359,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 70/100 \u2014 2 of 4 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-08"
   },
   {
@@ -18330,6 +18464,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 55/100 \u2014 1 of 4 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-10"
   },
   {
@@ -18435,6 +18570,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 48/100 \u2014 1 of 4 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-13"
   },
   {
@@ -18552,6 +18688,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-19"
   },
   {
@@ -18668,6 +18805,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 42/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-15"
   },
   {
@@ -18773,6 +18911,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 42/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-16"
   },
   {
@@ -18885,6 +19024,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 42/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-17"
   },
   {
@@ -18990,6 +19130,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 39/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-18"
   },
   {
@@ -19100,6 +19241,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 31/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-20"
   },
   {
@@ -19213,6 +19355,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-21"
   },
   {
@@ -19323,6 +19466,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 85/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-22"
   },
   {
@@ -19428,6 +19572,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 43/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-26"
   },
   {
@@ -19539,6 +19684,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 41/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-24"
   },
   {
@@ -19650,6 +19796,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 39/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-23"
   },
   {
@@ -19756,6 +19903,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 32/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-25"
   },
   {
@@ -19868,6 +20016,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-29"
   },
   {
@@ -19979,6 +20128,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 91/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-30"
   },
   {
@@ -20092,6 +20242,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 34/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-31"
   },
   {
@@ -20205,6 +20356,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 32/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-27"
   },
   {
@@ -20315,6 +20467,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 32/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-10-28"
   },
   {
@@ -20420,6 +20573,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-01"
   },
   {
@@ -20533,6 +20687,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-03"
   },
   {
@@ -20644,6 +20799,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 92/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-04"
   },
   {
@@ -20756,6 +20912,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 34/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-02"
   },
   {
@@ -20867,6 +21024,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 31/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-05"
   },
   {
@@ -20973,6 +21131,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 31/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-06"
   },
   {
@@ -21078,6 +21237,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-07"
   },
   {
@@ -21183,6 +21343,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-12"
   },
   {
@@ -21283,6 +21444,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 92/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-13"
   },
   {
@@ -21387,6 +21549,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 57/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-09"
   },
   {
@@ -21494,6 +21657,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-08"
   },
   {
@@ -21601,6 +21765,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-11"
   },
   {
@@ -21706,6 +21871,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-10"
   },
   {
@@ -21812,6 +21978,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-15"
   },
   {
@@ -21920,6 +22087,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 83/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-14"
   },
   {
@@ -22022,6 +22190,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 80/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-16"
   },
   {
@@ -22128,6 +22297,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 64/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-17"
   },
   {
@@ -22230,6 +22400,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 64/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-20"
   },
   {
@@ -22332,6 +22503,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-18"
   },
   {
@@ -22435,6 +22607,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 38/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-19"
   },
   {
@@ -22541,6 +22714,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-23"
   },
   {
@@ -22643,6 +22817,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 85/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-24"
   },
   {
@@ -22745,6 +22920,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 80/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-22"
   },
   {
@@ -22851,6 +23027,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 61/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-21"
   },
   {
@@ -22954,6 +23131,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 58/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-25"
   },
   {
@@ -23056,6 +23234,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 45/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-26"
   },
   {
@@ -23179,6 +23358,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-27"
   },
   {
@@ -23294,6 +23474,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 87/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-02"
   },
   {
@@ -23408,6 +23589,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 79/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-28"
   },
   {
@@ -23521,6 +23703,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-29"
   },
   {
@@ -23635,6 +23818,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-11-30"
   },
   {
@@ -23748,6 +23932,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-01"
   },
   {
@@ -23864,6 +24049,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-03"
   },
   {
@@ -23971,6 +24157,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 79/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-04"
   },
   {
@@ -24087,6 +24274,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 76/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-05"
   },
   {
@@ -24195,6 +24383,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 76/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-06"
   },
   {
@@ -24298,6 +24487,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 45/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-08"
   },
   {
@@ -24405,6 +24595,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-07"
   },
   {
@@ -24523,6 +24714,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-09"
   },
   {
@@ -24645,6 +24837,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-13"
   },
   {
@@ -24767,6 +24960,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 78/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-12"
   },
   {
@@ -24876,6 +25070,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 58/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-15"
   },
   {
@@ -24999,6 +25194,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-10"
   },
   {
@@ -25113,6 +25309,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 46/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-11"
   },
   {
@@ -25226,6 +25423,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-14"
   },
   {
@@ -25348,6 +25546,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-19"
   },
   {
@@ -25471,6 +25670,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-16"
   },
   {
@@ -25585,6 +25785,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-17"
   },
   {
@@ -25707,6 +25908,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-18"
   },
   {
@@ -25822,6 +26024,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-20"
   },
   {
@@ -25931,6 +26134,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 30/100 \u2014 0 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-21"
   },
   {
@@ -26035,6 +26239,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 98/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-22"
   },
   {
@@ -26144,6 +26349,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 92/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-27"
   },
   {
@@ -26245,6 +26451,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 91/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-23"
   },
   {
@@ -26347,6 +26554,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 76/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-24"
   },
   {
@@ -26449,6 +26657,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 72/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-26"
   },
   {
@@ -26552,6 +26761,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-25"
   },
   {
@@ -26663,6 +26873,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-30"
   },
   {
@@ -26771,6 +26982,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 91/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-31"
   },
   {
@@ -26878,6 +27090,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 77/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-29"
   },
   {
@@ -26993,6 +27206,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 77/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-03"
   },
   {
@@ -27109,6 +27323,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 62/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2026-12-28"
   },
   {
@@ -27218,6 +27433,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 60/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-02"
   },
   {
@@ -27327,6 +27543,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 53/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-01"
   },
   {
@@ -27430,6 +27647,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-06"
   },
   {
@@ -27533,6 +27751,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 89/100 \u2014 4 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-07"
   },
   {
@@ -27637,6 +27856,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 66/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-04"
   },
   {
@@ -27746,6 +27966,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 64/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-09"
   },
   {
@@ -27847,6 +28068,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-05"
   },
   {
@@ -27949,6 +28171,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-08"
   },
   {
@@ -28052,6 +28275,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 99/100 \u2014 5 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-13"
   },
   {
@@ -28154,6 +28378,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 81/100 \u2014 3 of 5 must-have skills covered.",
     "compareVerdict": "Advance",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-14"
   },
   {
@@ -28259,6 +28484,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 64/100 \u2014 2 of 5 must-have skills covered.",
     "compareVerdict": "Maybe",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-10"
   },
   {
@@ -28361,6 +28587,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-11"
   },
   {
@@ -28464,6 +28691,7 @@ export const candidates: Candidate[] = [
     ],
     "aiNote": "Screening score 49/100 \u2014 1 of 5 must-have skills covered.",
     "compareVerdict": "Pass",
+    "scoreMethod": "deterministic",
     "appliedAt": "2027-01-12"
   }
 ];

@@ -22,10 +22,13 @@ export function CandidateDetail() {
   const toggleShortlist = useAppStore((s) => s.toggleShortlist);
   const setDecision = useAppStore((s) => s.setDecision);
   const updateCandidate = useAppStore((s) => s.updateCandidate);
+  const judgeCandidate = useAppStore((s) => s.judgeCandidate);
 
   const [notes, setNotes] = useState(candidate?.notes ?? "");
   const [tagInput, setTagInput] = useState("");
   const [copied, setCopied] = useState(false);
+  const [judging, setJudging] = useState(false);
+  const [judgeError, setJudgeError] = useState<string | null>(null);
 
   useEffect(() => {
     setNotes(candidate?.notes ?? "");
@@ -80,6 +83,18 @@ export function CandidateDetail() {
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleJudge = async () => {
+    setJudging(true);
+    setJudgeError(null);
+    try {
+      await judgeCandidate(candidate.id);
+    } catch (e) {
+      setJudgeError(e instanceof Error ? e.message : "AI screening failed");
+    } finally {
+      setJudging(false);
+    }
   };
 
   return (
@@ -186,12 +201,26 @@ export function CandidateDetail() {
             >
               <ThumbsDown className="h-3.5 w-3.5" /> Reject
             </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              disabled={!editable || judging}
+              title={editable ? undefined : "Only recruiters and admins can run AI screening"}
+              onClick={handleJudge}
+            >
+              <Sparkles className="h-3.5 w-3.5" /> {judging ? "Judging…" : "AI Judge"}
+            </Button>
             <Button variant="ghost" size="sm" onClick={copyLink}>
               {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
               {copied ? "Copied" : "Copy link"}
             </Button>
           </div>
         </div>
+        {judgeError && (
+          <p className="border-b border-status-weak-border bg-status-weak-bg px-8 py-2 text-sm text-status-weak-text">
+            {judgeError}
+          </p>
+        )}
 
         <div className="grid grid-cols-2 gap-6">
           <Card>
@@ -305,7 +334,10 @@ export function CandidateDetail() {
                 <h3 className="text-sm font-semibold text-neutral-900">
                   Screening Scorecard
                 </h3>
-                <ScorePill score={candidate.score} size="sm" />
+                <div className="flex items-center gap-2">
+                  {candidate.scoreMethod === "llm_judge" && <Badge tone="brand">AI Judged</Badge>}
+                  <ScorePill score={candidate.score} size="sm" />
+                </div>
               </div>
               <p className="mb-3 text-xs text-neutral-400">Weighted against rubric v2</p>
 

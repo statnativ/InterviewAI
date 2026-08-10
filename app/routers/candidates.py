@@ -24,6 +24,8 @@ from app.schemas.candidate import (
 )
 from app.schemas.candidate import ResumeOut
 from app.services.authz import ALL_ROLES, WRITE_ROLES
+from app.services.candidate_judge import build_scoring_profile, judge_candidate
+from app.services.llm_client import LLMError
 from app.services.screening import (
     build_gaps,
     build_strengths,
@@ -180,6 +182,43 @@ async def screen_candidate(
     return candidate_to_view(app, cand)
 
 
+@router.post("/{app_id}/judge", response_model=CandidateView)
+async def judge_candidate_endpoint(
+    app_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+    tenant: Tenant = Depends(get_current_tenant),
+    _user: User = Depends(require_roles(*WRITE_ROLES)),
+):
+    """LLM-as-judge scoring (M2) — an explicit, recruiter-triggered action,
+    not run automatically on candidate creation (that stays on the free
+    deterministic path, _apply_screening below)."""
+    app, cand = await _get_app_or_404(app_id, tenant.id, db)
+    job = await db.get(Job, app.job_id)
+    if job is None:
+        raise HTTPException(status_code=404, detail="Job not found")
+    if not (job.rubric or []):
+        raise HTTPException(status_code=400, detail="Job has no rubric yet — generate one before AI screening.")
+
+    profile = build_scoring_profile(cand)
+    try:
+        result = await judge_candidate(job.title, job.description, job.rubric, profile)
+    except LLMError as e:
+        raise HTTPException(status_code=502, detail=f"AI screening failed — try again. ({e})")
+
+    app.match_score = result["score"]
+    app.scorecard = result["scorecard"]
+    app.ai_note = result["ai_note"]
+    app.compare_verdict = result["compare_verdict"]
+    app.shortlisted = result["shortlisted"]
+    app.strengths = result["strengths"]
+    app.gaps = result["gaps"]
+    app.score_method = "llm_judge"
+    app.status = "screening"
+    await db.commit()
+    await db.refresh(app)
+    return candidate_to_view(app, cand)
+
+
 @router.post("/bulk", response_model=list[CandidateView])
 async def bulk_patch(
     payload: BulkPatch,
@@ -257,4 +296,5 @@ def _apply_screening(app: Application, job: Job, cand: Candidate) -> None:
     app.shortlisted = result["shortlisted"]
     app.strengths = build_strengths(result["scorecard"])
     app.gaps = build_gaps(result["scorecard"])
+    app.score_method = "deterministic"
     app.status = "screening"

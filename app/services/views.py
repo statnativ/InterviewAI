@@ -64,6 +64,7 @@ def candidate_to_view(app: Application, candidate: Candidate) -> CandidateView:
         gaps=app.gaps or [],
         aiNote=app.ai_note or "",
         compareVerdict=app.compare_verdict or "Pass",
+        scoreMethod=app.score_method or "deterministic",
         appliedAt=_iso(app.applied_at),
     )
 

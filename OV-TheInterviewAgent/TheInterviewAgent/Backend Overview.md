@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback)
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback) + M2 (LLM-as-judge scoring)
 last-updated: 2026-08-10
 ---
 
@@ -44,7 +44,8 @@ app/
 ├── storage/           # local.py — uploaded file storage
 migrations/            # Alembic (env.py imports app.models wholesale)
 tests/                 # pytest: test_health, test_screening, test_tenant_isolation, test_rbac,
-                        # test_admin_auth, test_question_generation, test_ai_client_resilience
+                        # test_admin_auth, test_question_generation, test_ai_client_resilience,
+                        # test_candidate_judge
 scripts/               # standalone tools (synthetic corpus, voice-cascade demo)
 ```
 
@@ -68,7 +69,7 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
 | `resumes` | `resume.py` | `tenant_id` + `file_path`, `raw_text`, `parsed_data` (JSONB), `embedding` (`Vector(1536)`), `ai_summary`, `ai_strengths`/`ai_concerns`, `years_experience`, `seniority_level`, `is_primary`. Indexes: ivfflat (embedding), GIN (raw_text), partial `(candidate_id, is_primary)`, plus `tenant_id`. |
 | `skills` | `skill.py` | Taxonomy: `name`, `category`, `aliases` (array), `embedding`. ivfflat index. Not wired to endpoints yet. Deliberately **not** tenant-scoped — shared vocabulary, not customer data. |
 | `resume_skills`, `job_skills` | `resume_skill.py`, `job_skill.py` | Many-to-many joins (composite PKs, no surrogate id). Not wired to endpoints yet. Not tenant-scoped directly — isolation comes transitively through `resume_id`/`job_id`. |
-| `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**. Fully wired. |
+| `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB, still unused), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**, and **`score_method`** (new — `deterministic`/`llm_judge`, `CHECK ck_applications_score_method`, real column + constraint from day one, not inferred — see the LLM-as-judge section below). Fully wired. |
 | `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
 
@@ -99,6 +100,10 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
   `ck_interviews_no_shared_personalized` — `NOT (shared AND candidate_id IS NOT NULL)`. M3
   shipped candidate personalization without a guard against sharing a personalized interview
   with every other applicant; checked for existing violations (none) before applying.
+- `a7b8c9d0e1f2_application_score_method.py` — M2 (LLM-as-judge): adds
+  `applications.score_method` (`String(20)`, NOT NULL, default `'deterministic'`) + `CHECK
+  ck_applications_score_method` restricting it to `deterministic`/`llm_judge`. Same discipline
+  as the interview CHECK above — a real, inspectable column from day one, not inferred state.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -115,7 +120,7 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 |---|---|
 | `health.py` | `GET /health` |
 | `jobs.py` | `GET/POST /jobs`, `GET/PATCH /jobs/{job_id}`, `POST /jobs/{job_id}/regenerate-rubric`, `POST /jobs/{job_id}/save-version`, `GET /jobs/{job_id}/candidates` |
-| `candidates.py` | `GET/POST /candidates` (create = dedupe by email + screen instantly), `GET/PATCH /candidates/{app_id}`, `POST /candidates/{app_id}/screen`, `POST /candidates/bulk`, `POST /candidates/{app_id}/resume` |
+| `candidates.py` | `GET/POST /candidates` (create = dedupe by email + screen instantly), `GET/PATCH /candidates/{app_id}`, `POST /candidates/{app_id}/screen` (deterministic), `POST /candidates/{app_id}/judge` (**new** — LLM-as-judge, 400 if the job has no rubric, 502 on a bad LLM response), `POST /candidates/bulk`, `POST /candidates/{app_id}/resume` |
 | `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
@@ -148,7 +153,8 @@ addendum for why this doesn't count as Phase 3 being done.
 | Service | Responsibility |
 |---|---|
 | `authz.py` | **New (M6 Phase 2)**: the RBAC permission matrix as data — `ADMIN`/`RECRUITER`/`HIRING_MANAGER` role constants, `ALL_ROLES`/`WRITE_ROLES` tuples. `app/deps.py`'s `require_roles(*roles)` reads these; routers just declare which tuple a route needs. |
-| `screening.py` | **The ATS brain (deterministic)**: `generate_rubric` (draft rubric from a JD, each criterion's description now quoting the actual JD context it matched via `_context_snippet` — was one repeated boilerplate sentence per tag before the [[UX Review]] fix), `derive_score` (weighted coverage vs. rubric), `extract_skills` (against the 163-skill dictionary), `build_strengths`/`build_gaps`, `screen_candidate` (persists scorecard/strengths/gaps/verdict on the application row). |
+| `screening.py` | **The ATS brain (deterministic)**: `generate_rubric` (draft rubric from a JD, each criterion's description now quoting the actual JD context it matched via `_context_snippet` — was one repeated boilerplate sentence per tag before the [[UX Review]] fix), `derive_score` (weighted coverage vs. rubric), `extract_skills` (against the 163-skill dictionary), `build_strengths`/`build_gaps`, `screen_candidate` (persists scorecard/strengths/gaps/verdict on the application row). Still the free/instant default for candidate creation and résumé upload — untouched by `candidate_judge.py` below. |
+| `candidate_judge.py` | **New (M2, LLM-as-judge)**: `judge_candidate` (JD + rubric + a candidate's full structured profile — experience depth, summary, education, certifications, not just `skills` — via one `chat_completion` call, same JSON-mode pattern as `question_generator.py`) reasons per rubric criterion instead of keyword-matching. `_coerce_result` never trusts the raw response: score clamped to `[0,99]`, `weight` always taken from the rubric (never the LLM, guards a hallucinated weight), `shortlisted` computed from the (clamped) score rather than read from the model so it means the same threshold regardless of method, and a scorecard missing any rubric criterion raises `LLMError` rather than persisting an incomplete result. `build_scoring_profile` is a deliberately separate profile builder from `question_generator.build_candidate_profile` (different fields matter for scoring vs. question-writing) and — like that one — omits the candidate's name from the prompt. Explicit, recruiter-triggered, never auto-run on candidate creation. |
 | `skill_dictionary.py` | The 163-skill taxonomy, extracted from the frontend's `src/lib/skills.ts` — the source of truth for skill extraction (multi-word priority, case-insensitive). |
 | `views.py` | ORM-model → view-schema mappers (`job_to_view`, `candidate_to_view`, `interview_to_view`). |
 | `resume_parser.py` | `extract_text` (PDF/DOCX → plain text) — on the ATS upload path. `parse_resume` (LLM → structured JSON) still exists but is **no longer on the ATS path** — screening is deterministic now. |
@@ -178,7 +184,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 62 tests, all DB-backed
+pytest                          # from repo root (venv active) — 69 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -212,6 +218,15 @@ pytest                          # from repo root (venv active) — 62 tests, all
   both fail; a call with no `fallback_model` configured (every non-cascade caller) fails
   immediately with one attempt, unchanged from before; STT/TTS retry-once-then-succeed and
   retry-then-exhaust.
+- `tests/test_candidate_judge.py` — **new (M2, LLM-as-judge)**, 7 tests: a full judge call
+  persists a scorecard with one row per rubric criterion (rubric's own weight, never the LLM's),
+  `scoreMethod == "llm_judge"`, strengths/gaps/aiNote/compareVerdict populated; malformed LLM
+  output → clean 502 with the `Application` row provably untouched; a scorecard missing any
+  rubric criterion → 502, not a partial write; candidate creation never calls the judge at all
+  (monkeypatched to raise if invoked, not just "happens not to be called"); judging a job with
+  no rubric → 400, not 502; cross-tenant application id → 404; judging then deterministic
+  re-screening the same application flips `scoreMethod` back to `"deterministic"` — a documented,
+  tested contract (the AI score is silently overwritten on re-screen by design, not a bug).
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
   sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
   module-level async engine in `app/db.py` binds to whichever event loop is running on first

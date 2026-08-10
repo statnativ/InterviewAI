@@ -1,7 +1,7 @@
 import uuid
 from datetime import datetime, timezone
 
-from sqlalchemy import String, Numeric, DateTime, Text, ForeignKey, UniqueConstraint, Index, Boolean, ARRAY
+from sqlalchemy import String, Numeric, DateTime, Text, ForeignKey, UniqueConstraint, Index, Boolean, ARRAY, CheckConstraint
 from sqlalchemy.dialects.postgresql import UUID, JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -37,6 +37,7 @@ class Application(Base):
     gaps: Mapped[list[str]] = mapped_column(ARRAY(String), default=list)
     compare_verdict: Mapped[str] = mapped_column(String(20), default="Pass")  # Advance, Maybe, Pass
     ai_note: Mapped[str] = mapped_column(Text, default="")
+    score_method: Mapped[str] = mapped_column(String(20), default="deterministic")  # deterministic, llm_judge
     applied_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
@@ -49,4 +50,8 @@ class Application(Base):
         Index("idx_applications_candidate_status", "candidate_id", "status"),
         Index("idx_applications_job_status", "job_id", "status"),
         Index("idx_applications_tenant", "tenant_id"),
+        CheckConstraint(
+            "score_method IN ('deterministic', 'llm_judge')",
+            name="ck_applications_score_method",
+        ),
     )
