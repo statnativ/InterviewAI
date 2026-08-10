@@ -38,6 +38,8 @@ class Application(Base):
     compare_verdict: Mapped[str] = mapped_column(String(20), default="Pass")  # Advance, Maybe, Pass
     ai_note: Mapped[str] = mapped_column(Text, default="")
     score_method: Mapped[str] = mapped_column(String(20), default="deterministic")  # deterministic, llm_judge
+    judge_status: Mapped[str] = mapped_column(String(20), default="idle")  # idle, pending, failed
+    judge_error: Mapped[str | None] = mapped_column(Text)
     applied_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), default=lambda: datetime.now(timezone.utc)
     )
@@ -53,5 +55,9 @@ class Application(Base):
         CheckConstraint(
             "score_method IN ('deterministic', 'llm_judge')",
             name="ck_applications_score_method",
+        ),
+        CheckConstraint(
+            "judge_status IN ('idle', 'pending', 'failed')",
+            name="ck_applications_judge_status",
         ),
     )

@@ -38,6 +38,7 @@ export const api = {
   // Candidates
   listCandidates: () => request<Candidate[]>("/candidates"),
   listJobCandidates: (jobId: string) => request<Candidate[]>(`/jobs/${jobId}/candidates`),
+  getCandidate: (candidateId: string) => request<Candidate>(`/candidates/${candidateId}`),
   addCandidate: (input: { jobId: string; name: string; email: string; phone?: string; source?: string; resumeText: string }) =>
     request<{ candidate: Candidate; duplicate: boolean }>("/candidates", {
       method: "POST",

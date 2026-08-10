@@ -24,6 +24,7 @@ interface AppState {
 
   screenCandidate: (candidateId: string) => Promise<void>;
   judgeCandidate: (candidateId: string) => Promise<void>;
+  pollCandidate: (candidateId: string) => Promise<void>;
   rescreenJob: (jobId: string) => Promise<void>;
   generateRubric: (jobId: string) => Promise<void>;
 
@@ -116,7 +117,15 @@ export const useAppStore = create<AppState>()((set, get) => ({
   },
 
   judgeCandidate: async (candidateId) => {
+    // Fires the background job (IA-003) — the response is a "pending"
+    // snapshot, not a finished result. pollCandidate is what picks up the
+    // real outcome.
     const updated = await api.judgeCandidate(candidateId);
+    set((s) => ({ candidates: upsertCandidates(s.candidates, updated) }));
+  },
+
+  pollCandidate: async (candidateId) => {
+    const updated = await api.getCandidate(candidateId);
     set((s) => ({ candidates: upsertCandidates(s.candidates, updated) }));
   },
 

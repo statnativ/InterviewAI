@@ -73,6 +73,8 @@ export interface Candidate {
   aiNote: string;
   compareVerdict: "Advance" | "Maybe" | "Pass";
   scoreMethod: "deterministic" | "llm_judge";
+  judgeStatus: "idle" | "pending" | "failed";
+  judgeError: string | null;
   appliedAt: string;
 }
 

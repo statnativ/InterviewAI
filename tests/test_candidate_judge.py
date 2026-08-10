@@ -1,10 +1,16 @@
-"""M2 (second half): LLM-as-judge candidate scoring tests.
+"""M2 (LLM-as-judge candidate scoring) + IA-003 (off the request path) tests.
 
 Same conventions as test_question_generation.py: chat_completion is
 monkeypatched at candidate_judge's import site so the real OpenRouter call
 never happens; a real dev-DB tenant/job/candidate is created and cleaned up
 per test.
+
+IA-003: POST /candidates/{id}/judge now returns 202 and runs the LLM call via
+FastAPI BackgroundTasks — success/failure surfaces via polling
+GET /candidates/{id}, not the POST response. _poll_until_not_pending is the
+test-side equivalent of the frontend's polling loop.
 """
+import asyncio
 import json
 import uuid
 
@@ -13,6 +19,7 @@ import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import delete
 
+import app.routers.candidates as candidates_router
 import app.services.candidate_judge as candidate_judge
 from app.db import async_session
 from app.deps import SEED_USER_EMAIL
@@ -117,15 +124,35 @@ async def _make_candidate(client, tenant, job_id: str) -> dict:
     return res.json()["candidate"]
 
 
-async def test_judge_persists_full_scorecard_and_score_method(client, tenant, judge_response):
+async def _poll_until_not_pending(client, tenant, candidate_id: str, timeout: float = 5.0) -> dict:
+    """Test-side equivalent of the frontend's polling loop. chat_completion is
+    mocked, so the background task resolves almost immediately regardless of
+    whether ASGITransport happens to run BackgroundTasks inline or truly
+    deferred — this doesn't assume either way, it just polls."""
+    elapsed = 0.0
+    interval = 0.02
+    while elapsed < timeout:
+        res = await client.get(f"/candidates/{candidate_id}", headers=_headers(tenant))
+        body = res.json()
+        if body["judgeStatus"] != "pending":
+            return body
+        await asyncio.sleep(interval)
+        elapsed += interval
+    raise AssertionError(f"judgeStatus still 'pending' after {timeout}s — background task never completed")
+
+
+async def test_judge_returns_202_and_completes_via_polling(client, tenant, judge_response):
     job_id = await _make_job(client, tenant)
     candidate = await _make_candidate(client, tenant, job_id)
     judge_response(_canned_judge_response())
 
     res = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
-    assert res.status_code == 200
-    body = res.json()
+    assert res.status_code == 202
+    assert res.json()["judgeStatus"] == "pending"
 
+    body = await _poll_until_not_pending(client, tenant, candidate["id"])
+
+    assert body["judgeStatus"] == "idle"
     assert body["scoreMethod"] == "llm_judge"
     assert body["score"] == 82
     assert body["compareVerdict"] == "Advance"
@@ -143,33 +170,52 @@ async def test_judge_persists_full_scorecard_and_score_method(client, tenant, ju
     assert scorecard["Go"]["weight"] == rubric_weights["Go"]
 
 
-async def test_malformed_llm_output_is_a_clean_502_and_leaves_row_untouched(client, tenant, judge_response):
+async def test_malformed_llm_output_sets_failed_status_and_leaves_row_untouched(client, tenant, judge_response):
     job_id = await _make_job(client, tenant)
     candidate = await _make_candidate(client, tenant, job_id)
     before = candidate.copy()
 
     judge_response("not json at all")
     res = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
-    assert res.status_code == 502
+    assert res.status_code == 202
 
-    unchanged = await client.get(f"/candidates/{candidate['id']}", headers=_headers(tenant))
-    body = unchanged.json()
+    body = await _poll_until_not_pending(client, tenant, candidate["id"])
+    assert body["judgeStatus"] == "failed"
+    assert body["judgeError"]
     assert body["scoreMethod"] == "deterministic"
     assert body["score"] == before["score"]
     assert body["scorecard"] == before["scorecard"]
 
 
-async def test_llm_output_missing_a_rubric_criterion_is_502(client, tenant, judge_response):
+async def test_llm_output_missing_a_rubric_criterion_sets_failed_status(client, tenant, judge_response):
     job_id = await _make_job(client, tenant)
     candidate = await _make_candidate(client, tenant, job_id)
     # Only one of the three rubric criteria covered.
     judge_response(_canned_judge_response(scorecard=[CANNED_SCORECARD[0]]))
 
     res = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
-    assert res.status_code == 502
+    assert res.status_code == 202
 
-    unchanged = await client.get(f"/candidates/{candidate['id']}", headers=_headers(tenant))
-    assert unchanged.json()["scoreMethod"] == "deterministic"
+    body = await _poll_until_not_pending(client, tenant, candidate["id"])
+    assert body["judgeStatus"] == "failed"
+    assert body["scoreMethod"] == "deterministic"
+
+
+async def test_judge_while_already_pending_is_409(client, tenant, monkeypatch):
+    async def hang(*args, **kwargs):
+        return None  # deliberately never resolves judge_status off "pending"
+
+    monkeypatch.setattr(candidates_router, "_run_judge_in_background", hang)
+
+    job_id = await _make_job(client, tenant)
+    candidate = await _make_candidate(client, tenant, job_id)
+
+    first = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
+    assert first.status_code == 202
+    assert first.json()["judgeStatus"] == "pending"
+
+    second = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
+    assert second.status_code == 409
 
 
 async def test_candidate_creation_never_calls_the_judge(client, tenant, monkeypatch):
@@ -181,6 +227,7 @@ async def test_candidate_creation_never_calls_the_judge(client, tenant, monkeypa
     job_id = await _make_job(client, tenant)
     candidate = await _make_candidate(client, tenant, job_id)
     assert candidate["scoreMethod"] == "deterministic"
+    assert candidate["judgeStatus"] == "idle"
 
 
 async def test_judge_requires_a_rubric(client, tenant, judge_response):
@@ -222,8 +269,9 @@ async def test_screen_after_judge_reverts_to_deterministic(client, tenant, judge
     candidate = await _make_candidate(client, tenant, job_id)
 
     judge_response(_canned_judge_response())
-    judged = await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
-    assert judged.json()["scoreMethod"] == "llm_judge"
+    await client.post(f"/candidates/{candidate['id']}/judge", headers=_headers(tenant))
+    judged = await _poll_until_not_pending(client, tenant, candidate["id"])
+    assert judged["scoreMethod"] == "llm_judge"
 
     rescreened = await client.post(f"/candidates/{candidate['id']}/screen", headers=_headers(tenant))
     assert rescreened.status_code == 200

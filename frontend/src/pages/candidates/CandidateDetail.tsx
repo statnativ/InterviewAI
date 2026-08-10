@@ -23,17 +23,39 @@ export function CandidateDetail() {
   const setDecision = useAppStore((s) => s.setDecision);
   const updateCandidate = useAppStore((s) => s.updateCandidate);
   const judgeCandidate = useAppStore((s) => s.judgeCandidate);
+  const pollCandidate = useAppStore((s) => s.pollCandidate);
 
   const [notes, setNotes] = useState(candidate?.notes ?? "");
   const [tagInput, setTagInput] = useState("");
   const [copied, setCopied] = useState(false);
-  const [judging, setJudging] = useState(false);
-  const [judgeError, setJudgeError] = useState<string | null>(null);
+  // Only for synchronous failures on the POST itself (400/404/409) — the
+  // background job's own success/failure is real server state, read
+  // directly off `candidate.judgeStatus`/`judgeError` below, not local state
+  // (which would be lost on navigation, unlike the server-persisted version).
+  const [requestError, setRequestError] = useState<string | null>(null);
 
   useEffect(() => {
     setNotes(candidate?.notes ?? "");
     setTagInput("");
   }, [candidateId, candidate?.notes]);
+
+  // IA-003: poll while a background AI-judge job is in flight. Declared
+  // unconditionally (before the early returns below) per the rules of
+  // hooks; guards internally for candidate being undefined/not pending.
+  useEffect(() => {
+    if (!candidate || candidate.judgeStatus !== "pending") return;
+    let attempts = 0;
+    const maxAttempts = 30; // ~60s at a 2s interval, then give up polling
+    const id = setInterval(() => {
+      attempts += 1;
+      if (attempts > maxAttempts) {
+        clearInterval(id);
+        return;
+      }
+      pollCandidate(candidate.id);
+    }, 2000);
+    return () => clearInterval(id);
+  }, [candidate?.id, candidate?.judgeStatus, pollCandidate]);
 
   if (!ready) {
     return (
@@ -86,14 +108,13 @@ export function CandidateDetail() {
   };
 
   const handleJudge = async () => {
-    setJudging(true);
-    setJudgeError(null);
+    setRequestError(null);
     try {
+      // Fires the background job (IA-003) and returns almost immediately —
+      // the polling effect above picks up completion/failure from there.
       await judgeCandidate(candidate.id);
     } catch (e) {
-      setJudgeError(e instanceof Error ? e.message : "AI screening failed");
-    } finally {
-      setJudging(false);
+      setRequestError(e instanceof Error ? e.message : "Failed to start AI screening");
     }
   };
 
@@ -204,11 +225,11 @@ export function CandidateDetail() {
             <Button
               variant="secondary"
               size="sm"
-              disabled={!editable || judging}
+              disabled={!editable || candidate.judgeStatus === "pending"}
               title={editable ? undefined : "Only recruiters and admins can run AI screening"}
               onClick={handleJudge}
             >
-              <Sparkles className="h-3.5 w-3.5" /> {judging ? "Judging…" : "AI Judge"}
+              <Sparkles className="h-3.5 w-3.5" /> {candidate.judgeStatus === "pending" ? "Judging…" : "AI Judge"}
             </Button>
             <Button variant="ghost" size="sm" onClick={copyLink}>
               {copied ? <Check className="h-3.5 w-3.5" /> : <Link2 className="h-3.5 w-3.5" />}
@@ -216,9 +237,9 @@ export function CandidateDetail() {
             </Button>
           </div>
         </div>
-        {judgeError && (
+        {(requestError || (candidate.judgeStatus === "failed" && candidate.judgeError)) && (
           <p className="border-b border-status-weak-border bg-status-weak-bg px-8 py-2 text-sm text-status-weak-text">
-            {judgeError}
+            {requestError ?? candidate.judgeError}
           </p>
         )}
 
@@ -335,7 +356,10 @@ export function CandidateDetail() {
                   Screening Scorecard
                 </h3>
                 <div className="flex items-center gap-2">
-                  {candidate.scoreMethod === "llm_judge" && <Badge tone="brand">AI Judged</Badge>}
+                  {candidate.judgeStatus === "pending" && <Badge tone="pending">AI Judging…</Badge>}
+                  {candidate.judgeStatus !== "pending" && candidate.scoreMethod === "llm_judge" && (
+                    <Badge tone="brand">AI Judged</Badge>
+                  )}
                   <ScorePill score={candidate.score} size="sm" />
                 </div>
               </div>

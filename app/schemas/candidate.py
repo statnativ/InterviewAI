@@ -101,6 +101,8 @@ class CandidateView(BaseModel):
     aiNote: str = ""
     compareVerdict: str = "Pass"
     scoreMethod: str = "deterministic"  # deterministic, llm_judge
+    judgeStatus: str = "idle"  # idle, pending, failed
+    judgeError: str | None = None
     appliedAt: datetime
 
 

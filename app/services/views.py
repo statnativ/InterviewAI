@@ -65,6 +65,8 @@ def candidate_to_view(app: Application, candidate: Candidate) -> CandidateView:
         aiNote=app.ai_note or "",
         compareVerdict=app.compare_verdict or "Pass",
         scoreMethod=app.score_method or "deterministic",
+        judgeStatus=app.judge_status or "idle",
+        judgeError=app.judge_error,
         appliedAt=_iso(app.applied_at),
     )
 

@@ -2,12 +2,12 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, UploadFile, File
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.db import get_db
+from app.db import async_session, get_db
 from app.deps import get_current_tenant, require_roles
 from app.models.application import Application
 from app.models.candidate import Candidate
@@ -25,7 +25,6 @@ from app.schemas.candidate import (
 from app.schemas.candidate import ResumeOut
 from app.services.authz import ALL_ROLES, WRITE_ROLES
 from app.services.candidate_judge import build_scoring_profile, judge_candidate
-from app.services.llm_client import LLMError
 from app.services.screening import (
     build_gaps,
     build_strengths,
@@ -182,41 +181,75 @@ async def screen_candidate(
     return candidate_to_view(app, cand)
 
 
-@router.post("/{app_id}/judge", response_model=CandidateView)
+@router.post("/{app_id}/judge", response_model=CandidateView, status_code=202)
 async def judge_candidate_endpoint(
     app_id: uuid.UUID,
+    background_tasks: BackgroundTasks,
     db: AsyncSession = Depends(get_db),
     tenant: Tenant = Depends(get_current_tenant),
     _user: User = Depends(require_roles(*WRITE_ROLES)),
 ):
-    """LLM-as-judge scoring (M2) — an explicit, recruiter-triggered action,
-    not run automatically on candidate creation (that stays on the free
-    deterministic path, _apply_screening below)."""
+    """LLM-as-judge scoring (M2/IA-003) — an explicit, recruiter-triggered
+    action, not run automatically on candidate creation (that stays on the
+    free deterministic path, _apply_screening below). Runs off the request
+    path: this returns 202 immediately with judgeStatus="pending"; the
+    actual LLM call happens in _run_judge_in_background, and the frontend
+    polls GET /candidates/{app_id} until it completes or fails."""
     app, cand = await _get_app_or_404(app_id, tenant.id, db)
     job = await db.get(Job, app.job_id)
     if job is None:
         raise HTTPException(status_code=404, detail="Job not found")
     if not (job.rubric or []):
         raise HTTPException(status_code=400, detail="Job has no rubric yet — generate one before AI screening.")
+    if app.judge_status == "pending":
+        raise HTTPException(status_code=409, detail="AI screening is already in progress for this candidate.")
 
     profile = build_scoring_profile(cand)
-    try:
-        result = await judge_candidate(job.title, job.description, job.rubric, profile)
-    except LLMError as e:
-        raise HTTPException(status_code=502, detail=f"AI screening failed — try again. ({e})")
-
-    app.match_score = result["score"]
-    app.scorecard = result["scorecard"]
-    app.ai_note = result["ai_note"]
-    app.compare_verdict = result["compare_verdict"]
-    app.shortlisted = result["shortlisted"]
-    app.strengths = result["strengths"]
-    app.gaps = result["gaps"]
-    app.score_method = "llm_judge"
-    app.status = "screening"
+    app.judge_status = "pending"
+    app.judge_error = None
     await db.commit()
     await db.refresh(app)
+
+    background_tasks.add_task(
+        _run_judge_in_background, app.id, job.title, job.description, job.rubric, profile
+    )
     return candidate_to_view(app, cand)
+
+
+async def _run_judge_in_background(
+    app_id: uuid.UUID, job_title: str, job_description: str, rubric: list[dict], profile: str
+) -> None:
+    """Runs after the HTTP response for judge_candidate_endpoint has already
+    been sent — the request-scoped `db` session above may already be torn
+    down by then, so this opens its own session rather than reusing it (a
+    well-known FastAPI footgun otherwise). Catches broadly, not just
+    LLMError: an uncaught exception here has no HTTP response to surface to
+    — it would just vanish into a server log and leave the row stuck at
+    judge_status="pending" forever, so marking it "failed" is required, not
+    optional."""
+    async with async_session() as db:
+        app = await db.get(Application, app_id)
+        if app is None:
+            return
+        try:
+            result = await judge_candidate(job_title, job_description, rubric, profile)
+        except Exception as e:
+            app.judge_status = "failed"
+            app.judge_error = str(e)
+            await db.commit()
+            return
+
+        app.match_score = result["score"]
+        app.scorecard = result["scorecard"]
+        app.ai_note = result["ai_note"]
+        app.compare_verdict = result["compare_verdict"]
+        app.shortlisted = result["shortlisted"]
+        app.strengths = result["strengths"]
+        app.gaps = result["gaps"]
+        app.score_method = "llm_judge"
+        app.judge_status = "idle"
+        app.status = "screening"
+        await db.commit()
 
 
 @router.post("/bulk", response_model=list[CandidateView])

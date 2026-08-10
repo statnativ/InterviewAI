@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi]
-status: in-progress — ATS vertical slice + M3 (AI question generation) complete
+status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) complete
 last-updated: 2026-08-10
 ---
 
@@ -39,7 +39,7 @@ ATS vertical slice are built so far):
 | M1 | Create job (JD) + upload/parse resume → structured JSON via LLM | API design, file handling, relational+JSONB schema | ✅ done |
 | — | **Cascaded voice pipeline (STT→LLM→TTS)** — pulled forward, standalone script only | multimodal API integration, conversation-as-state | ✅ prototype done |
 | — | **Full ATS vertical slice** — deterministic JD-rubric screening (server-side), jobs/candidates/interviews CRUD, React frontend fully wired to the API (no localStorage) | sync vs async, schema alignment, client↔API contract design | ✅ done (2026-08-09) |
-| M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | 🔶 deterministic scoring **and** LLM-as-judge scoring both live (2026-08-10) — additive, explicit `POST /candidates/{id}/judge` action, not a replacement of the free default; moving execution off the request path (BackgroundTasks + polling, IA-003) still not started |
+| M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | ✅ done (2026-08-10) — deterministic scoring **and** LLM-as-judge scoring both live, additive, explicit `POST /candidates/{id}/judge` action; execution moved off the request path (IA-003: `BackgroundTasks` + polling `GET /candidates/{id}`) |
 | M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
 | M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ⬜ not started |
 | M4b | Async → video capture | media-type-as-data, object storage | ⬜ not started |
@@ -369,19 +369,53 @@ actually on a live request path). Full detail in [[Backend Overview]] /
   once generation started requiring a real `jobId`. Fixed with a `useEffect` that seeds `jobId`
   once `jobs` actually arrives.
 
+## M2 — LLM-as-judge scoring, then moved off the request path (2026-08-10)
+
+Shipped in two passes the same day:
+
+1. **LLM-as-judge scoring** — `app/services/candidate_judge.py` reasons over a candidate's
+   full structured profile (experience depth, summary, education — not just keyword presence
+   like the deterministic path) via `POST /candidates/{id}/judge`, additive and explicit, not a
+   replacement of the free deterministic default. A real run against a seeded candidate scored
+   95 (vs. the deterministic 99) with genuinely reasoned per-criterion notes instead of
+   boilerplate.
+2. **IA-003: execution moved off the request path** — this codebase's **first-ever use of
+   FastAPI `BackgroundTasks`**. Judging that same candidate live measured ~8s for a single
+   `judge_candidate` call — the "measured need" ADR-007 said to wait for before backgrounding
+   anything. Deliberately distinguished from ADR-007's M4 finding, not a contradiction of it:
+   M4's cascade is a *live, turn-by-turn conversation*, where queueing would make the UX worse
+   (a poll loop instead of just waiting on the one request already in flight); LLM-as-judge is a
+   *one-shot, explicit, non-interactive* action — exactly the shape `BackgroundTasks` is for.
+
+   `POST /candidates/{id}/judge` now returns `202` almost instantly with `judgeStatus: "pending"`;
+   the LLM call runs in a new `_run_judge_in_background` function
+   (`app/routers/candidates.py`), and the frontend polls the existing `GET /candidates/{id}` (no
+   new endpoint needed) until `judgeStatus` leaves `"pending"`. New `applications.judge_status`
+   (`idle`/`pending`/`failed`, `CHECK`-constrained same as `score_method`) and `judge_error`
+   columns (migration `b8c9d0e1f2a3`) give failure a place to live now that there's no open HTTP
+   response to carry a synchronous error back.
+
+   **The one correctness detail that mattered**: `BackgroundTasks` callables run *after* the
+   response is sent, so the request-scoped `Depends(get_db)` session can already be torn down by
+   then. `_run_judge_in_background` opens its own `async with async_session() as db:` rather
+   than reusing the injected session — the same standalone-session pattern `app/seed.py` already
+   used, now applied inside a background task for the first time. Caught broadly (not just
+   `LLMError`): an uncaught exception in a background task has no response to surface through —
+   it would silently strand the row at `judge_status="pending"` forever.
+
+   Honest framing: total wall-clock time to a completed score didn't drop (~8s either way). What
+   changed is the `POST` returns almost immediately, the UI stays responsive/navigable while
+   judging, and `judgeStatus` is real persisted state — live-verified by navigating away from a
+   pending judge and back, where "AI Judging…" correctly survived the round trip instead of
+   resetting like the old local-`useState` version would have.
+
+   Full detail: [[Backend Overview]] (migration, endpoint, background-task pattern),
+   [[Frontend Overview]] (polling `useEffect`, store's `pollCandidate` action).
+
 ## Next up
 
-- **M2 (partial)** — LLM-as-judge scoring shipped 2026-08-10: `app/services/candidate_judge.py`
-  reasons over a candidate's full structured profile (experience depth, summary, education —
-  not just keyword presence like the deterministic path) via `POST /candidates/{id}/judge`,
-  additive and explicit, not a replacement of the free deterministic default. A real run against
-  a seeded candidate scored 95 (vs. the deterministic 99) with genuinely reasoned per-criterion
-  notes instead of boilerplate. Moving execution off the request path (`BackgroundTasks` + a
-  polling endpoint, IA-003) is the one remaining M2 piece, deliberately deferred — every AI call
-  in this codebase still runs synchronously inline, consistent with ADR-007's "don't background
-  before there's a measured need" precedent.
 - **M4** — wire the voice cascade into the app with DB persistence; next natural milestone now
-  that M3 (question authoring) is done.
+  that M2 and M3 are both done.
 - **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested
   ([[Identity & Access Overview]]); a master admin auth module (real email/password login +
   session cookie, one cross-tenant operator account — creates tenants, creates/approves users,

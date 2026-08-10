@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback) + M2 (LLM-as-judge scoring)
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
 last-updated: 2026-08-10
 ---
 
@@ -69,7 +69,7 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
 | `resumes` | `resume.py` | `tenant_id` + `file_path`, `raw_text`, `parsed_data` (JSONB), `embedding` (`Vector(1536)`), `ai_summary`, `ai_strengths`/`ai_concerns`, `years_experience`, `seniority_level`, `is_primary`. Indexes: ivfflat (embedding), GIN (raw_text), partial `(candidate_id, is_primary)`, plus `tenant_id`. |
 | `skills` | `skill.py` | Taxonomy: `name`, `category`, `aliases` (array), `embedding`. ivfflat index. Not wired to endpoints yet. Deliberately **not** tenant-scoped — shared vocabulary, not customer data. |
 | `resume_skills`, `job_skills` | `resume_skill.py`, `job_skill.py` | Many-to-many joins (composite PKs, no surrogate id). Not wired to endpoints yet. Not tenant-scoped directly — isolation comes transitively through `resume_id`/`job_id`. |
-| `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB, still unused), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**, and **`score_method`** (new — `deterministic`/`llm_judge`, `CHECK ck_applications_score_method`, real column + constraint from day one, not inferred — see the LLM-as-judge section below). Fully wired. |
+| `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB, still unused), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**, and **`score_method`** (`deterministic`/`llm_judge`, `CHECK ck_applications_score_method`, real column + constraint from day one, not inferred — see the LLM-as-judge section below). **`judge_status`/`judge_error`** (new — IA-003: `idle`/`pending`/`failed`, `CHECK ck_applications_judge_status`, `judge_error` nullable `Text`) — real, pollable state for the backgrounded judge call, since failure can no longer surface as a synchronous HTTP error. Fully wired. |
 | `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
 
@@ -104,6 +104,11 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
   `applications.score_method` (`String(20)`, NOT NULL, default `'deterministic'`) + `CHECK
   ck_applications_score_method` restricting it to `deterministic`/`llm_judge`. Same discipline
   as the interview CHECK above — a real, inspectable column from day one, not inferred state.
+- `b8c9d0e1f2a3_application_judge_status.py` — IA-003 (LLM-as-judge off the request path):
+  adds `applications.judge_status` (`String(20)`, NOT NULL, default `'idle'`) + `CHECK
+  ck_applications_judge_status` (`idle`/`pending`/`failed`) and `applications.judge_error`
+  (`Text`, nullable). Same discipline again — a third real, inspectable state-discriminator
+  column this session, not an inferred flag.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -120,7 +125,7 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 |---|---|
 | `health.py` | `GET /health` |
 | `jobs.py` | `GET/POST /jobs`, `GET/PATCH /jobs/{job_id}`, `POST /jobs/{job_id}/regenerate-rubric`, `POST /jobs/{job_id}/save-version`, `GET /jobs/{job_id}/candidates` |
-| `candidates.py` | `GET/POST /candidates` (create = dedupe by email + screen instantly), `GET/PATCH /candidates/{app_id}`, `POST /candidates/{app_id}/screen` (deterministic), `POST /candidates/{app_id}/judge` (**new** — LLM-as-judge, 400 if the job has no rubric, 502 on a bad LLM response), `POST /candidates/bulk`, `POST /candidates/{app_id}/resume` |
+| `candidates.py` | `GET/POST /candidates` (create = dedupe by email + screen instantly), `GET/PATCH /candidates/{app_id}` (polling target for the judge job, below), `POST /candidates/{app_id}/screen` (deterministic), `POST /candidates/{app_id}/judge` (LLM-as-judge — **`202`, not `200`/`502`, as of IA-003**: 400 if the job has no rubric, 409 if already `judge_status="pending"`, otherwise flips the row to `pending` and returns immediately; the actual LLM call and any failure now happen off-request, see below), `POST /candidates/bulk`, `POST /candidates/{app_id}/resume` |
 | `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
@@ -147,6 +152,30 @@ Phase 3's real session-based auth, not real security — nothing stops a client 
 tenant/email today. **`auth`/`admin` routes are a separate, real-auth surface** (session cookie
 via `require_platform_admin`, not the dev headers) — see [[Identity & Access Overview]]
 addendum for why this doesn't count as Phase 3 being done.
+
+**`POST /candidates/{app_id}/judge` is this codebase's first-ever use of FastAPI
+`BackgroundTasks` (IA-003, 2026-08-10 — confirmed via grep before writing it: zero prior usage).**
+The pre-checks (404 candidate/job, 400 no-rubric, 409 already-pending) run synchronously and
+fail the request immediately, same as before; once those pass, the row flips to
+`judge_status="pending"`, `background_tasks.add_task(_run_judge_in_background, ...)` is
+scheduled, and the endpoint returns `202` with that pending snapshot — the LLM call itself runs
+*after* the response is already sent. The one detail that had to be gotten right: a
+`BackgroundTasks` callable can run after the request-scoped `Depends(get_db)` session has been
+torn down, so `_run_judge_in_background` opens its **own** `async with async_session() as db:`
+rather than reusing the injected one — the same standalone-session pattern `app/seed.py` already
+used outside a request's DI lifecycle, applied inside a background task for the first time. Only
+plain IDs/primitives are passed into `add_task(...)`, never ORM objects bound to the closing
+session. The background function catches broadly (not just `LLMError`): an uncaught exception
+there has no HTTP response to surface through, so it must mark `judge_status="failed"` +
+`judge_error` itself or the row is stranded at `"pending"` forever. The frontend polls the
+existing `GET /candidates/{app_id}` — no new endpoint was needed, `CandidateView` just gained the
+two fields. Scope was deliberately narrow: deterministic scoring (`_apply_screening`, sub-
+millisecond, no I/O beyond one DB write) and résumé text extraction (`extract_text`, local
+PDF/DOCX parsing) both stay synchronous — backgrounding either would be pure overhead. This is
+also explicitly *not* a contradiction of ADR-007's "don't background before there's a measured
+need" call on M4: M4's cascade is a live, turn-by-turn conversation where queueing would make the
+UX worse; LLM-as-judge is a one-shot, explicit, non-interactive action, and a live measurement
+(~8s for one `judge_candidate` call) is exactly the "measured need" ADR-007 said to wait for.
 
 ## Services — where the logic lives
 
@@ -184,7 +213,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 69 tests, all DB-backed
+pytest                          # from repo root (venv active) — 70 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -218,15 +247,24 @@ pytest                          # from repo root (venv active) — 69 tests, all
   both fail; a call with no `fallback_model` configured (every non-cascade caller) fails
   immediately with one attempt, unchanged from before; STT/TTS retry-once-then-succeed and
   retry-then-exhaust.
-- `tests/test_candidate_judge.py` — **new (M2, LLM-as-judge)**, 7 tests: a full judge call
-  persists a scorecard with one row per rubric criterion (rubric's own weight, never the LLM's),
-  `scoreMethod == "llm_judge"`, strengths/gaps/aiNote/compareVerdict populated; malformed LLM
-  output → clean 502 with the `Application` row provably untouched; a scorecard missing any
-  rubric criterion → 502, not a partial write; candidate creation never calls the judge at all
-  (monkeypatched to raise if invoked, not just "happens not to be called"); judging a job with
-  no rubric → 400, not 502; cross-tenant application id → 404; judging then deterministic
-  re-screening the same application flips `scoreMethod` back to `"deterministic"` — a documented,
-  tested contract (the AI score is silently overwritten on re-screen by design, not a bug).
+- `tests/test_candidate_judge.py` — **rewritten (IA-003)**, 8 tests, for the async
+  `202`-then-poll flow (was 7 tests / a synchronous `200`/`502` flow before IA-003 backgrounded
+  the endpoint). `_poll_until_not_pending` is the test-side equivalent of the frontend's polling
+  loop — polls `GET /candidates/{id}` on a short interval until `judgeStatus` leaves `"pending"`,
+  deliberately not assuming whether `httpx.ASGITransport` runs `BackgroundTasks` inline or truly
+  deferred (empirically it resolves near-instantly: all 8 tests run in 0.64s). Covers: `202` +
+  `judgeStatus="pending"` immediately, then polling shows the completed scorecard (rubric's own
+  weight, never the LLM's), `scoreMethod == "llm_judge"`, strengths/gaps/aiNote/compareVerdict
+  populated; malformed LLM output → `202` then polling shows `judgeStatus="failed"` +
+  `judgeError` populated, with the `Application` row's score/scorecard provably untouched (the
+  502-on-the-POST version of this test no longer applies — there's no response left to carry a
+  synchronous error); a scorecard missing any rubric criterion → same failed-via-polling path;
+  **new** — calling `/judge` again while already `judge_status="pending"` → `409` (monkeypatches
+  `_run_judge_in_background` to a no-op that never leaves `"pending"`, so the second call has
+  something real to collide with); candidate creation never calls the judge at all; judging a job
+  with no rubric → `400` synchronously, still pre-background; cross-tenant application id → 404;
+  judging then deterministic re-screening the same application flips `scoreMethod` back to
+  `"deterministic"` — a documented, tested contract, now polled for completion first.
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
   sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
   module-level async engine in `app/db.py` binds to whichever event loop is running on first
