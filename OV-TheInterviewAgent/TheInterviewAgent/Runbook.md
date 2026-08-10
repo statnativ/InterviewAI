@@ -1,7 +1,7 @@
 ---
 tags: [project, runbook, how-to]
 status: current
-last-updated: 2026-08-10
+last-updated: 2026-08-11
 ---
 
 # The Interview Agent — Runbook
@@ -14,6 +14,8 @@ are) and [[Backend Overview]] (how the code works).
 | Piece | Runs as | How to start |
 |---|---|---|
 | Postgres + pgvector | Docker container (`statnativinterviewapp-postgres-1`) | `docker compose up -d` |
+| Redis | Docker container (`statnativinterviewapp-redis-1`, **new M5**, Celery's broker only) | `docker compose up -d` |
+| Celery worker | manual process via venv (**new M5** — interview evaluation) | `celery -A app.celery_app worker --loglevel=info --pool=solo` |
 | FastAPI backend | manual process via venv | `uvicorn app.main:app --port 8000 --host 127.0.0.1 --reload` |
 | React frontend | manual process (Vite) | `npm run dev` (in `frontend/`) |
 
@@ -24,8 +26,15 @@ admin-auth-module verification pass: the backend had been started in an earlier 
 `app/routers/auth.py`/`admin.py` existed, and `POST /auth/login` 404'd until the process was
 restarted. `--reload` avoids this class of stale-process confusion going forward.
 
-**Nothing runs as a permanent background service except Postgres.** The frontend and API
-need to be running together for the app to be useful — the frontend has no offline mode.
+**Postgres and Redis are the only permanent background services — everything else is a manual
+process.** (Before M5 this line read "nothing runs as a permanent background service except
+Postgres"; that's no longer true now that a Celery worker + Redis broker exist — see `ADR-009`.)
+The frontend and API need to be running together for the app to be useful — the frontend has no
+offline mode. The Celery worker is needed specifically for interview evaluation (M5) to
+complete — without it, a completed interview session sits at `evaluationStatus: "pending"`
+indefinitely (queued in Redis, never picked up), not a hard failure, but silent until the
+worker's started. `--pool=solo` is the deliberate local/demo choice (single process, no
+fork-safety concerns) — see `ADR-009` for why a prefork pool isn't used here.
 
 ## First-time setup (once per machine)
 
@@ -46,10 +55,12 @@ cd frontend && npm install    # then come back to repo root
 cd "/Users/amittiwari/Project/StatnativInterviewApp"
 source venv/bin/activate
 
-docker compose up -d                                            # 1. DB (if not running)
+docker compose up -d                                            # 1. DB + Redis (if not running)
 uvicorn app.main:app --port 8000 --host 127.0.0.1 --reload      # 2. API → http://localhost:8000/docs
 # in a second terminal:
-cd frontend && npm run dev                                      # 3. UI → http://localhost:5173
+celery -A app.celery_app worker --loglevel=info --pool=solo     # 3. worker — needed for interview evaluation (M5)
+# in a third terminal:
+cd frontend && npm run dev                                      # 4. UI → http://localhost:5173
 ```
 
 The Vite dev server proxies `/api` → `127.0.0.1:8000` (config: `frontend/vite.config.ts`).
@@ -100,8 +111,9 @@ python -m app.seed
 ## Checks
 
 ```bash
-pytest                       # backend tests — 62 total: screening, health, tenant isolation, RBAC, admin
-                              # auth, question generation, AI-client resilience (retry/fallback)
+pytest                       # backend tests — 95 total: screening, health, tenant isolation, RBAC, admin
+                              # auth, question generation, AI-client resilience (retry/fallback),
+                              # candidate judge, interview sessions (M4/M4b), interview evaluation (M5)
                               # (from repo root, venv active; the DB-backed suites hit the real dev DB
                               # and clean up after themselves — see [[Backend Overview]] → Tests)
 cd frontend && npm run build # tsc -b && vite build — the working type gate
@@ -158,3 +170,4 @@ it was to stop it from recurring.
 | Adding a candidate gets 409 | Duplicate email (dedupe is case-insensitive) — expected behavior. |
 | New DB-backed pytest file fails with `asyncpg... another operation is in progress` / `attached to a different loop` | The module-level async engine (`app/db.py`) binds to whichever event loop is running on first use; pytest-asyncio's default per-test loop breaks that. Add `pytestmark = pytest.mark.asyncio(loop_scope="session")` at the top of **every** async test file in the suite, including ones that don't touch the DB — `pytest.ini` sets the fixture-loop-scope half, but the test-loop-scope half is per-file, and one file missing it (even a DB-free one like `test_health.py`) can poison the shared loop for whatever pytest runs after it alphabetically. See [[Backend Overview]] bug #12 for the exact recurrence of this. |
 | `POST /auth/login` (or any `/admin/*` route) returns `404` even though the router exists in the code | The backend process is stale — it was started before that router was added and isn't running with `--reload`. Kill it and restart with `uvicorn app.main:app --port 8000 --host 127.0.0.1 --reload`. |
+| A completed interview's `evaluationStatus` stays `"pending"` forever | The Celery worker isn't running (or Redis isn't) — the task is queued but nobody's picking it up. Check `docker compose ps` for the `redis` container, then start the worker (`celery -A app.celery_app worker --loglevel=info --pool=solo`). Once it's up, use `POST /interview-sessions/{id}/evaluate` to manually re-trigger a stuck one (M5). |

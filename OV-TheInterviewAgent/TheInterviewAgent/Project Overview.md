@@ -1,7 +1,7 @@
 ---
 tags: [project, system-design, python, fastapi]
-status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) + M4/M4b (voice + video cascade wired in) complete
-last-updated: 2026-08-10
+status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) + M4/M4b (voice + video cascade wired in) + M5 (evaluation + report + human override) complete
+last-updated: 2026-08-11
 ---
 
 # The Interview Agent — Project Overview
@@ -43,7 +43,7 @@ ATS vertical slice are built so far):
 | M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
 | M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ✅ done (2026-08-10) — Voice mode only; live-verified against the real API, including a real TTS timeout hitting the designed failure path |
 | M4b | Async → video capture | media-type-as-data, object storage | ✅ done (2026-08-10) — new "Video" mode, sibling to Voice; `interview_pipeline.py` needed zero changes, validating PD-001's "same architecture" claim |
-| M5 | Answer evaluation + aggregated report, human override | pipeline orchestration, explainability | ⬜ not started |
+| M5 | Answer evaluation + aggregated report, human override | pipeline orchestration, explainability | ✅ done (2026-08-11) — real Celery+Redis pipeline scores a completed transcript against the job's rubric; new per-candidate report page with playback; human override is a session-level decision, separate from the AI's own scorecard |
 | M6 | Identity & Access — tenant isolation, RBAC, OIDC SSO, MFA, SCIM (enterprise reqs) | authn vs authz, multi-tenant isolation, protocols (OIDC/SAML), provisioning | 🔶 Phase 1 (tenants) + Phase 2 (RBAC) shipped & tested (2026-08-09); master admin auth module (email/password, separate from tenant SSO) shipped & tested (2026-08-09); Phase 3 (tenant OIDC SSO) not started |
 | M6b | Deploy to cloud (Cloud Run + Neon + GCS) | dev/prod config parity, pay-per-use cost tradeoffs | ⬜ not started |
 | M7 (stretch) | Live, real-time speech/video over WebRTC | real-time systems, latency budgets | ⬜ not started |
@@ -99,8 +99,14 @@ Three things run on the machine:
    over `localhost:8000` (proxied as `/api` in dev). The **frontend is now fully wired to the
    API**: jobs, candidates, and interviews all live in Postgres, not localStorage.
 
-Nothing runs as a permanent background service except Postgres. The FastAPI server, Vite, and
-any scripts are started/stopped manually.
+Postgres and Redis are the only permanent background services (**M5** added Redis, as Celery's
+broker for interview evaluation — see `ADR-009`); the FastAPI server, the Celery worker, Vite,
+and any scripts are all started/stopped manually.
+
+*(The diagram below predates M4–M6 and doesn't yet show `interview_sessions`/`interview_turns`,
+Redis/Celery, or the tenant-scoped routers — kept as a historical snapshot of the original ATS
+slice rather than redrawn each milestone; [[Backend Overview]]'s data-model table is the
+current source of truth.)*
 
 ```mermaid
 flowchart LR
@@ -519,8 +525,80 @@ to `"audio"` — full suite 85/85 passing. `npm run build` clean.
 Full detail: [[Backend Overview]] (schema, router gate, the STT-video empirical finding),
 [[Frontend Overview]] (generalized session component, new route, mode picker).
 
+## M5 — answer evaluation, aggregated report, human override (2026-08-11)
+
+Nothing evaluated a completed interview before this — `SessionCompleted.tsx` told the candidate
+"the hiring team will review your responses," which was pure fiction: no scoring, no
+recruiter-facing review UI, no playback existed for interview answers specifically. M5 closes
+that gap, and four architectural forks were resolved with Amit before implementation (via
+`AskUserQuestion`), each landing on the option that reuses this codebase's own established
+patterns rather than inventing new ones:
+
+1. **Evaluate the whole interview against the job's existing rubric** — not per-turn scoring,
+   not a new per-question rubric. `Interview.questions` carries no rubric of its own; `Job.rubric`
+   already exists, already weighted Must-have/Nice-to-have. This is
+   `app/services/candidate_judge.py`'s exact shape, fed a transcript instead of a résumé profile.
+2. **"Human override" = a session-level decision field** (`Approved`/`Hold`/`Rejected`), reusing
+   `Application.decision`'s exact pattern — not per-criterion score editing, which has zero
+   precedent anywhere in this codebase. The AI's own scorecard stays read-only either way.
+3. **The "aggregated report" is a new per-candidate interview report page** — transcript, Q&A,
+   scorecard, audio/video playback — not an extension of the per-job `ComparativeReport.tsx`
+   (a different shape of report, currently backed by hardcoded boilerplate prose).
+4. **Execution model: Celery + Redis**, new infra, explicitly chosen over reusing
+   `BackgroundTasks` a third time. `ADR-007` (written during M4 planning) had pre-committed to
+   exactly this: *"reserve Celery/Redis as the answer for M5's aggregated-report generation,
+   which genuinely is delay-tolerant batch work"* — and this milestone's own named teaching
+   concept is "pipeline orchestration," this project's whole premise being to learn concepts by
+   building the thing that needs them, not by proxying them with a cheaper pattern that already
+   worked twice.
+
+**The interesting implementation finding wasn't the evaluation logic itself** (a close port of
+`candidate_judge.py`, extracted afterward into a shared `app/services/llm_scoring.py` so the
+clamp/coercion logic isn't duplicated) — **it was making Celery and this codebase's async
+SQLAlchemy stack coexist safely.** A naive "fresh engine + `asyncio.run()` per task" only fixes
+half a bug this project already hit once (`Backend Overview`'s bug #12): `app/db.py`'s engine
+and `app/services/llm_client.py`'s shared `httpx.AsyncClient` (added for `ADR-007`/`IA-014`) are
+*both* lazy singletons that bind to whichever event loop first touches them, and a Celery worker
+persists across many tasks in one process. The fix that ships: one persistent event loop per
+worker *process* (`worker_process_init`), so both singletons stay bound to one stable loop for
+the worker's whole life, completely unmodified. See `ADR-009` for the full writeup — this is the
+kind of gotcha that's easy to ship broken and only discover under real, repeated load, not on
+the first request.
+
+**What shipped**: `interview_sessions` gained AI-evaluation columns (`score`, `scorecard`,
+`strengths`, `gaps`, `ai_verdict`, `ai_note`, `evaluation_status`, `evaluation_error`,
+`evaluated_at`) and a human-override `decision` column (migration `e1f2a3b4c5d6`). All 3 places
+a session can transition to `"complete"` in `app/routers/interview_sessions.py` now enqueue
+`evaluate_interview_task`. A new, deliberately separate recruiter-facing router
+(`app/routers/interview_reports.py` — `interview_sessions.py` itself is documented as the
+candidate-only, no-tenant-auth surface, and stays that way) exposes the session list, the full
+report, the decision PATCH, a manual retry endpoint, and **this app's first file-serving
+endpoint** — recruiter playback of a candidate's stored audio/video, authenticated via a
+fetch-to-`Blob`-to-`createObjectURL` pattern (a native `<audio src>` can't attach the
+`X-Tenant-Id`/`X-User-Email` headers this app's auth model uses). A new `InterviewReport.tsx`
+page renders it all, linked from a new "Sessions" section on `InterviewEditor.tsx`.
+
+**Live-verified against the real API and a real worker process, not just the mocked test
+suite**: a real Voice-mode interview was run end-to-end through `docker compose up -d`
+(Postgres + Redis) and `celery -A app.celery_app worker --pool=solo` — session creation, a real
+STT→LLM→TTS turn, explicit completion, and the resulting evaluation task was picked up by the
+worker and completed in ~2.8s with a real OpenRouter call, producing a genuinely reasoned
+per-criterion scorecard ("No mention of Python-related work in the responses," scored 0/100 on
+the Python criterion, correctly distinct from a strong Distributed-Systems score) — not a
+canned or trivially-passing result. The report page rendered it live, decision override
+persisted independently of the AI's fields, and real audio playback worked through the new
+blob-URL pattern.
+
+10 new tests (`tests/test_interview_evaluation.py`) — full suite 95/95 passing. `npm run build`
+clean.
+
+Full detail: [[Backend Overview]] (schema, the persistent-loop finding, router split),
+[[Frontend Overview]] (new report page, blob-URL playback, Sessions section).
+
 ## Next up
 
+- **Recruiter-facing video review was M5's own explicit scope** (per IA-016's forward
+  reference) — now delivered as part of the report page above, not still owed.
 - **Extend IA-003's `BackgroundTasks` pattern and IA-004's bounding discipline** where relevant
   as later milestones add AI calls — M4 proved both patterns work, not just in theory.
 - **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested

@@ -1,7 +1,7 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4/M4b (voice + video cascade wired into the app) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
-last-updated: 2026-08-10
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4/M4b (voice + video cascade wired into the app) + M5 (evaluation + report + human override, Celery+Redis) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
+last-updated: 2026-08-11
 ---
 
 # The Interview Agent — Backend Overview
@@ -20,8 +20,9 @@ Run commands live in [[Runbook]].
 - **Migrations**: Alembic.
 - **AI**: all AI calls go through OpenRouter (see [[AI Architecture]]). The ATS screening
   path itself is **deterministic** — no AI on the request path for scoring.
-- **Nothing runs as a permanent background service except Postgres** — the API server and
-  scripts are started manually ([[Runbook]]).
+- **Postgres and Redis are the only permanent background services** (**M5** added Redis, as
+  Celery's broker for interview evaluation — see ADR-009) — the API server, the Celery worker,
+  and scripts are all started manually ([[Runbook]]).
 
 ## Directory map
 
@@ -30,6 +31,7 @@ app/
 ├── main.py            # FastAPI app: CORS, routers, import app.models
 ├── config.py          # .env → typed settings object (single import point)
 ├── db.py              # async engine + get_db() dependency
+├── celery_app.py      # M5 — Celery app + the persistent-event-loop-per-worker pattern (ADR-009)
 ├── deps.py            # get_current_tenant / get_current_user / require_roles (M6 P1/P2)
 │                      # + require_platform_admin (master admin session cookie, additive)
 │                      # + get_current_interview_session (M4 — candidate-facing, session-id-as-
@@ -38,20 +40,23 @@ app/
 │                      # platform admin (statnativ)
 ├── models/            # SQLAlchemy models (all registered in models/__init__.py)
 │                      # + session.py, practice_test.py (master admin module)
-│                      # + interview_session.py, interview_turn.py (M4)
+│                      # + interview_session.py, interview_turn.py (M4, evaluation/decision cols M5)
 ├── routers/           # health, jobs, candidates, interviews + auth.py, admin.py
 │                      # + interview_sessions.py (M4 — candidate-facing, no tenant/role auth)
+│                      # + interview_reports.py (M5 — recruiter-facing, tenant/role-scoped)
 ├── schemas/           # Pydantic view schemas — match frontend TS types 1:1
 │                      # + auth.py, admin.py schemas
-│                      # + interview_session.py (M4)
+│                      # + interview_session.py (M4), interview_report.py (M5)
 ├── services/          # business logic (kept out of the HTTP layer) + authz.py (RBAC matrix)
 │                      # + question_generator.py (M3 — LLM question generation)
+│                      # + llm_scoring.py (M5 — shared JSON-coercion logic)
+│                      # + interview_evaluator.py (M5 — scores a completed transcript)
 ├── storage/           # local.py — uploaded file storage (+ save_interview_audio, M4)
 migrations/            # Alembic (env.py imports app.models wholesale)
 tests/                 # pytest: test_health, test_screening, test_tenant_isolation, test_rbac,
                         # test_admin_auth, test_question_generation, test_ai_client_resilience,
-                        # test_candidate_judge, test_interview_sessions
-scripts/               # standalone tools (synthetic corpus, voice-cascade demo)
+                        # test_candidate_judge, test_interview_sessions, test_interview_evaluation
+scripts/                # standalone tools (synthetic corpus, voice-cascade demo)
 ```
 
 ## Data model — 15 tables
@@ -78,7 +83,7 @@ master admin auth module — see the addendum in [[Identity & Access Overview]].
 | `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB, still unused), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**, and **`score_method`** (`deterministic`/`llm_judge`, `CHECK ck_applications_score_method`, real column + constraint from day one, not inferred — see the LLM-as-judge section below). **`judge_status`/`judge_error`** (new — IA-003: `idle`/`pending`/`failed`, `CHECK ck_applications_judge_status`, `judge_error` nullable `Text`) — real, pollable state for the backgrounded judge call, since failure can no longer surface as a synchronous HTTP error. Fully wired. |
 | `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
-| `interview_sessions` | `interview_session.py` | **New (M4)**: `tenant_id`, `interview_id`, `candidate_id` (nullable — a `shared` interview link has no candidate to attribute the session to), `status` (`active`/`complete`/`abandoned`, `CHECK ck_interview_sessions_status`). `id` doubles as the bearer credential for every turn request (ADR-008) — no candidate login exists anywhere in this codebase. |
+| `interview_sessions` | `interview_session.py` | **New (M4), extended (M5)**: `tenant_id`, `interview_id`, `candidate_id` (nullable — a `shared` interview link has no candidate to attribute the session to), `status` (`active`/`complete`/`abandoned`, `CHECK ck_interview_sessions_status`). `id` doubles as the bearer credential for every turn request (ADR-008) — no candidate login exists anywhere in this codebase. **M5** added the AI-evaluation output — `evaluation_status` (`idle`/`pending`/`complete`/`failed`, `CHECK ck_interview_sessions_evaluation_status` — a deliberate 4-state design, richer than `judge_status`'s 3-state precedent), `score`, `scorecard` (JSONB), `strengths`/`gaps` (arrays), `ai_verdict`, `ai_note`, `evaluation_error`, `evaluated_at` — plus the human-override `decision` (`None`/`Approved`/`Hold`/`Rejected`, no CHECK, mirrors `applications.decision`'s exact precedent, and never touched by the AI-evaluation fields above it). |
 | `interview_turns` | `interview_turn.py` | **New (M4)**: `session_id` + `turn_index` (client-supplied, `UNIQUE(session_id, turn_index)` — the idempotency key ADR-007's persist-before-calling pattern depends on), `status` (`pending`/`complete`/`failed`, `CHECK ck_interview_turns_status`), `candidate_audio_path`/`candidate_audio_format`, `transcript`, `ai_text`, `ai_audio_path`, `error`. Audio paths point at unencrypted local disk (`data/interview_audio/`) — a deliberate, risk-accepted extension of R-006, recorded in ADR-008. **`media_type`** (new, M4b — `String(20)`, `'audio'`/`'video'`, `CHECK ck_interview_turns_media_type`): the *columns* weren't renamed when video capture shipped — `candidate_audio_path`/`candidate_audio_format` hold whichever media the candidate uploaded, `media_type` is what records which one, a deliberately additive-not-renamed migration. |
 
 ### Schema evolution (the migration story)
@@ -127,6 +132,11 @@ master admin auth module — see the addendum in [[Identity & Access Overview]].
   `candidate_audio_path`/`candidate_audio_format` columns were deliberately **not** renamed
   despite now potentially holding a video file; a rename would have touched every M4 call site
   for a cosmetic reason, against this project's additive-migration discipline.
+- `e1f2a3b4c5d6_interview_session_evaluation.py` — M5: adds `interview_sessions`'
+  AI-evaluation columns (`evaluation_status` + `CHECK`, `score`, `scorecard`, `strengths`,
+  `gaps`, `ai_verdict`, `ai_note`, `evaluation_error`, `evaluated_at`) and the human-override
+  `decision` column (no `CHECK`, mirroring `applications.decision`'s precedent). Purely
+  additive — no existing `interview_sessions` column touched.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -147,7 +157,8 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 | `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
-| `interview_sessions.py` | **New (M4), extended (M4b)**: `POST /interviews/{interview_id}/sessions` (open access, keyed on the interview's own unguessable id — creates a session, seeds the opening AI question from the interview's curated questions; accepts `mode IN ("Voice", "Video")` as of M4b, `400` for anything else), `POST /interview-sessions/{session_id}/turns` (the core exchange — persist-before-calling, idempotent on `turn_index`; the uploaded blob's `media_type` is derived from `interview.mode` and stamped on the turn row), `GET /interview-sessions/{session_id}` (reload/resume), `POST /interview-sessions/{session_id}/complete`. **No `get_current_tenant`/`require_roles` on any of these** — see the dedicated callout below. |
+| `interview_sessions.py` | **New (M4), extended (M4b, M5)**: `POST /interviews/{interview_id}/sessions` (open access, keyed on the interview's own unguessable id — creates a session, seeds the opening AI question from the interview's curated questions; accepts `mode IN ("Voice", "Video")` as of M4b, `400` for anything else), `POST /interview-sessions/{session_id}/turns` (the core exchange — persist-before-calling, idempotent on `turn_index`; the uploaded blob's `media_type` is derived from `interview.mode` and stamped on the turn row), `GET /interview-sessions/{session_id}` (reload/resume), `POST /interview-sessions/{session_id}/complete`. **No `get_current_tenant`/`require_roles` on any of these** — see the dedicated callout below. **M5**: all 3 places a session can flip to `status="complete"` now also set `evaluation_status="pending"` and enqueue `evaluate_interview_task` in the same request — see the M5 callout below. |
+| `interview_reports.py` | **New (M5)** — recruiter-facing, tenant/role-scoped (unlike `interview_sessions.py` above): `GET /interviews/{interview_id}/sessions` (list, any role), `GET /interview-sessions/{session_id}/report` (full report — score, scorecard, transcript, decision), `PATCH /interview-sessions/{session_id}` (sets `decision`, write-roles only), `POST /interview-sessions/{session_id}/evaluate` (manual retry, `409` if already `pending`), `GET /interview-sessions/{session_id}/turns/{turn_index}/media?speaker=candidate\|ai` — **this app's first file-serving endpoint**. |
 
 Design rules: view schemas are flat and match `frontend/src/data/types.ts` field-for-field
 (`app/services/views.py` maps ORM → view); business logic never lives in routers — it's in
@@ -267,7 +278,52 @@ the STT leg needed exactly as much code change as the rest of the cascade: none.
 already `(bytes, filename, session_id) → Path` with zero content-type awareness — reusing it for
 video bytes required no new code, just an updated doc comment noting it now handles either media
 type. `InterviewTurn.media_type` is what distinguishes audio from video for anything that reads
-the data back later (a future M5 review UI), not the storage layer itself.
+the data back later.
+
+**M5's trigger wiring is three small hooks, not a rewrite.** All 3 places
+`interview_sessions.py` already flips `InterviewSession.status` to `"complete"` (session
+creation's rare 1-question-complete branch, `submit_turn`'s normal completion, the explicit
+`/complete` early-bail) now also set `evaluation_status="pending"` in that same commit, then call
+a small `_trigger_evaluation()` helper that enqueues `evaluate_interview_task.delay(...)`. That
+call is wrapped in a broad `try/except`: if enqueueing itself fails (Redis unreachable), the
+session is marked `evaluation_status="failed"` with a clear error instead of letting a queueing
+problem break the candidate-facing response that had already succeeded — finishing an interview
+must never fail because of this side effect.
+
+**The evaluation pipeline's real engineering problem wasn't the LLM call — it was making Celery
+and this app's async SQLAlchemy stack coexist safely.** `app/services/interview_evaluator.py`
+mirrors `candidate_judge.py`'s exact shape (one `chat_completion` call, strict JSON prompt,
+never-trust-the-response coercion — the shared clamp/scorecard logic was extracted into
+`app/services/llm_scoring.py` so it isn't duplicated between the two). The genuinely new part is
+`app/celery_app.py`: a Celery worker persists across many tasks in one process, and this
+codebase already has *two* lazy module-level singletons that bind to whichever asyncio event
+loop first touches them — `app.db`'s engine, and `llm_client.get_http_client()`'s shared
+`httpx.AsyncClient` (added for `ADR-007`/`IA-014`). A naive fresh-`asyncio.run()`-per-task
+design only breaks the second singleton (not the first, if you also give each task a fresh
+engine) — an easy way to ship something that looks correct on the first task and fails on the
+second. The fix: **one persistent event loop per worker *process***, created once in a
+`worker_process_init` signal handler and reused, unclosed, for every task that process ever
+runs — both singletons then stay bound to one stable loop for the worker's whole life,
+completely unmodified. Full reasoning in **ADR-009**; local/demo runs use
+`celery -A app.celery_app worker --pool=solo` (single process, no fork-safety concerns) per that
+ADR's recommendation.
+
+**`interview_reports.py` is a deliberately separate router, not an extension of
+`interview_sessions.py`** — the latter's whole file-level docstring is about being the
+candidate-only, no-tenant-auth surface (ADR-008); mixing a `get_current_tenant`-gated route in
+would contradict that documented contract. The new router uses **direct
+`InterviewSession.tenant_id` filtering** for its ownership checks (the row already carries it,
+set transitively at session-creation time — no join through `Interview` needed), the same
+pattern `Application.tenant_id` already uses elsewhere.
+
+**The media endpoint is this app's first file-serving endpoint — and the frontend's answer to
+it is a new pattern too.** `GET .../turns/{turn_index}/media?speaker=candidate|ai` returns a
+`FileResponse`, `404` (not 500) whenever the requested path is `None` — turn 0 has no candidate
+audio at all, and every audio/video path column is nullable. The one thing that had to be solved
+on the frontend side: `X-Tenant-Id`/`X-User-Email` are plain custom headers this app's whole
+auth model runs on, and a native `<audio src>`/`<video src>` genuinely cannot attach them. The
+fix is a `fetch()` call that returns a `Blob`, turned into a `createObjectURL()` the media
+element's `src` points at (revoked on unmount/turn-switch) — see [[Frontend Overview]].
 
 ## Services — where the logic lives
 
@@ -275,9 +331,11 @@ the data back later (a future M5 review UI), not the storage layer itself.
 |---|---|
 | `authz.py` | **New (M6 Phase 2)**: the RBAC permission matrix as data — `ADMIN`/`RECRUITER`/`HIRING_MANAGER` role constants, `ALL_ROLES`/`WRITE_ROLES` tuples. `app/deps.py`'s `require_roles(*roles)` reads these; routers just declare which tuple a route needs. |
 | `screening.py` | **The ATS brain (deterministic)**: `generate_rubric` (draft rubric from a JD, each criterion's description now quoting the actual JD context it matched via `_context_snippet` — was one repeated boilerplate sentence per tag before the [[UX Review]] fix), `derive_score` (weighted coverage vs. rubric), `extract_skills` (against the 163-skill dictionary), `build_strengths`/`build_gaps`, `screen_candidate` (persists scorecard/strengths/gaps/verdict on the application row). Still the free/instant default for candidate creation and résumé upload — untouched by `candidate_judge.py` below. |
-| `candidate_judge.py` | **New (M2, LLM-as-judge)**: `judge_candidate` (JD + rubric + a candidate's full structured profile — experience depth, summary, education, certifications, not just `skills` — via one `chat_completion` call, same JSON-mode pattern as `question_generator.py`) reasons per rubric criterion instead of keyword-matching. `_coerce_result` never trusts the raw response: score clamped to `[0,99]`, `weight` always taken from the rubric (never the LLM, guards a hallucinated weight), `shortlisted` computed from the (clamped) score rather than read from the model so it means the same threshold regardless of method, and a scorecard missing any rubric criterion raises `LLMError` rather than persisting an incomplete result. `build_scoring_profile` is a deliberately separate profile builder from `question_generator.build_candidate_profile` (different fields matter for scoring vs. question-writing) and — like that one — omits the candidate's name from the prompt. Explicit, recruiter-triggered, never auto-run on candidate creation. |
+| `candidate_judge.py` | **New (M2, LLM-as-judge)**: `judge_candidate` (JD + rubric + a candidate's full structured profile — experience depth, summary, education, certifications, not just `skills` — via one `chat_completion` call, same JSON-mode pattern as `question_generator.py`) reasons per rubric criterion instead of keyword-matching. `_coerce_result` never trusts the raw response: score clamped to `[0,99]` (via `llm_scoring.clamp_int`, **M5**), `shortlisted` computed from the (clamped) score rather than read from the model so it means the same threshold regardless of method. `build_scoring_profile` is a deliberately separate profile builder from `question_generator.build_candidate_profile` (different fields matter for scoring vs. question-writing) and — like that one — omits the candidate's name from the prompt. Explicit, recruiter-triggered, never auto-run on candidate creation. |
+| `llm_scoring.py` | **New (M5)**: `strip_fences`, `clamp_int`, and `coerce_scorecard` — extracted out of `candidate_judge.py` once `interview_evaluator.py` needed the identical never-trust-the-LLM clamp/validation logic (weight always from the rubric, a missing criterion raises `LLMError` rather than persisting an incomplete scorecard). Built as a dedicated refactor step *after* both callers worked and were tested, not a speculative shared module written up front. |
+| `interview_evaluator.py` | **New (M5)**: `evaluate_interview(session_id)` — scores a *completed* interview's full transcript against the linked job's rubric, the same LLM-as-judge shape as `candidate_judge.py` fed a transcript instead of a résumé profile. Meant to run inside a Celery task (`app/celery_app.py`), not called directly from a router — see the M5 callout above for why. No `job_id`/`Job.rubric` → `evaluation_status="failed"` with a clear message, never raised uncaught (there's no HTTP response left to catch it once this runs in a background task). |
 | `skill_dictionary.py` | The 163-skill taxonomy, extracted from the frontend's `src/lib/skills.ts` — the source of truth for skill extraction (multi-word priority, case-insensitive). |
-| `views.py` | ORM-model → view-schema mappers (`job_to_view`, `candidate_to_view`, `interview_to_view`). |
+| `views.py` | ORM-model → view-schema mappers (`job_to_view`, `candidate_to_view`, `interview_to_view`, plus **M5**'s `interview_session_to_summary_view`/`interview_session_to_report_view`). |
 | `resume_parser.py` | `extract_text` (PDF/DOCX → plain text) — on the ATS upload path. `parse_resume` (LLM → structured JSON) still exists but is **no longer on the ATS path** — screening is deterministic now. |
 | `question_generator.py` | **New (M3)**: `generate_questions` (JD + optional candidate profile → 8–12 questions via one `chat_completion` call, same prompt→strip-fences→`json.loads` pattern as `resume_parser.parse_resume`, but raises `LLMError` on bad output instead of falling back), `regenerate_question` (one replacement question, same type/difficulty, avoids duplicating the others), `build_candidate_profile` (compact prompt block from `Candidate`'s already-structured fields — no re-parsing a résumé file). |
 | `llm_client.py` | OpenRouter `/chat/completions` via a shared, connection-pooled client (`get_http_client()`, IA-014). Supports `exclude_reasoning=True` to strip a reasoning model's "thinking" from visible output. Response shape validated + a hard-failure retry/fallback (`post_with_retry`, opt-in `fallback_model`) added 2026-08-10 (IA-009) after IA-002 reproduced both failure modes live — depth in [[AI Architecture]]. |
@@ -306,7 +364,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 85 tests, all DB-backed
+pytest                          # from repo root (venv active) — 95 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -379,6 +437,18 @@ pytest                          # from repo root (venv active) — 85 tests, all
   **Also live-verified against the real OpenRouter API** (not just this mocked suite) — see the
   `interview_sessions.py` callout above for the real TTS-timeout-then-retry finding, and the
   M4b callout below for the real STT-video finding.
+- `tests/test_interview_evaluation.py` — **new (M5)**, 10 tests: `chat_completion` monkeypatched
+  at `interview_evaluator`'s import site, `evaluate_interview_task.delay` monkeypatched at both
+  `interview_sessions.py`'s and `interview_reports.py`'s import sites (never hits a real Redis
+  broker in tests). Covers: `evaluate_interview()` directly — successful coercion writes
+  score/scorecard/verdict/note + `evaluation_status="complete"`; no `job_id`/rubric →
+  `"failed"` with a clear message, not raised; malformed LLM JSON → `"failed"`, not raised.
+  Router-level: the `/complete` endpoint sets `evaluation_status="pending"` and calls `.delay()`
+  with the right session id; `GET /interviews/{id}/sessions` + `GET .../report` return real data;
+  wrong-tenant report access → `404`; `PATCH .../decision` never touches the AI-owned
+  score/scorecard fields; `POST .../evaluate`'s `409` guard when already `pending` and `400`
+  when the session isn't `complete` yet; the media endpoint's `404` on a null path (turn 0 has
+  no candidate audio) and an out-of-range `turn_index`.
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
   sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
   module-level async engine in `app/db.py` binds to whichever event loop is running on first

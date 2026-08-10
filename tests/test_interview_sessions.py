@@ -18,6 +18,7 @@ import pytest_asyncio
 from httpx import ASGITransport, AsyncClient
 from sqlalchemy import delete, select
 
+import app.routers.interview_sessions as interview_sessions_router
 import app.services.interview_pipeline as interview_pipeline
 from app.config import settings
 from app.db import async_session
@@ -51,6 +52,18 @@ async def _fake_transcribe(audio_bytes: bytes, audio_format: str = "wav") -> str
 
 async def _fake_synthesize(text: str, voice: str | None = None) -> bytes:
     return b"fake-mp3-bytes"
+
+
+@pytest.fixture(autouse=True)
+def no_real_celery(monkeypatch):
+    """M5: several tests here complete a session, which now enqueues an evaluation task
+    (app/routers/interview_sessions.py's _trigger_evaluation) — never hit a real broker in
+    this file's tests, that's test_interview_evaluation.py's job."""
+
+    class FakeTask:
+        delay = staticmethod(lambda session_id: None)
+
+    monkeypatch.setattr(interview_sessions_router, "evaluate_interview_task", FakeTask())
 
 
 @pytest.fixture

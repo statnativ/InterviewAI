@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { OrgAppShell, PageTopbar } from "@/components/layout/OrgAppShell";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Textarea } from "@/components/ui/Input";
+import { ScorePill } from "@/components/ui/ScorePill";
 import { LoadingState, NotFoundState } from "@/components/ui/RecordState";
 import { useAppStore } from "@/store/useAppStore";
+import { api } from "@/lib/api";
 import { ShareInterviewModal } from "./ShareInterviewModal";
 import { Share2, Trash2, Plus, GripVertical, Pencil, RefreshCw, Sparkles, User } from "lucide-react";
-import type { InterviewQuestion } from "@/data/types";
+import type { InterviewQuestion, InterviewSessionSummary } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 const difficultyTone: Record<InterviewQuestion["difficulty"], "strong" | "possible" | "weak"> = {
@@ -50,6 +52,18 @@ export function InterviewEditor() {
   const [regeneratingAll, setRegeneratingAll] = useState(false);
   const [dragId, setDragId] = useState<string | null>(null);
   const [overId, setOverId] = useState<string | null>(null);
+
+  // M5: sessions aren't part of the global store (no other page reads them, unlike
+  // jobs/candidates/interviews) — fetched locally, same precedent the admin module's
+  // pages use for page-scoped data. Only Voice/Video interviews ever have sessions.
+  const [sessions, setSessions] = useState<InterviewSessionSummary[] | null>(null);
+  useEffect(() => {
+    if (!interview || (interview.mode !== "Voice" && interview.mode !== "Video")) return;
+    api
+      .listInterviewSessions(interview.id)
+      .then(setSessions)
+      .catch(() => setSessions([]));
+  }, [interview?.id, interview?.mode]);
 
   if (!ready) {
     return (
@@ -311,6 +325,38 @@ export function InterviewEditor() {
               </div>
             </CardContent>
           </Card>
+
+          {(interview.mode === "Voice" || interview.mode === "Video") && (
+            <Card>
+              <CardContent>
+                <h3 className="mb-3 text-sm font-semibold text-neutral-900">Sessions</h3>
+                {sessions === null && <p className="text-sm text-neutral-400">Loading sessions…</p>}
+                {sessions !== null && sessions.length === 0 && (
+                  <p className="text-sm text-neutral-400">No candidate has taken this interview yet.</p>
+                )}
+                <div className="space-y-2">
+                  {sessions?.map((s) => (
+                    <button
+                      key={s.id}
+                      onClick={() => navigate(`/interviews/${interview.id}/report/${s.id}`)}
+                      className="flex w-full items-center justify-between rounded-md border border-neutral-200 px-3 py-2 text-left hover:border-brand-primary/40 hover:bg-brand-primary-subtle/20"
+                    >
+                      <span className="text-sm font-medium text-neutral-800">
+                        {s.candidateName ?? "Unnamed candidate"}
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <Badge tone={s.status === "complete" ? "strong" : "pending"}>{s.status}</Badge>
+                        {s.evaluationStatus === "pending" && <Badge tone="pending">Evaluating…</Badge>}
+                        {s.evaluationStatus === "failed" && <Badge tone="weak">Failed</Badge>}
+                        {s.decision !== "None" && <Badge tone="brand">{s.decision}</Badge>}
+                        {s.score !== null && <ScorePill score={s.score} size="sm" />}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
 

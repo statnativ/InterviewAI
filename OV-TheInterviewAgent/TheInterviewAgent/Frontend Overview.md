@@ -1,7 +1,7 @@
 ---
 tags: [project, system-design, frontend, react, typescript]
-status: prototype — fully wired to the FastAPI backend; sends M6 Phase 1/2 tenant + role headers; new /admin/* module has the app's first real session-based route guard; M3 question generation/edit/reorder/regenerate shipped; M4/M4b Voice + Video mode real recording/playback shipped, sends NO identity headers (candidate-facing, see ADR-008)
-last-updated: 2026-08-10
+status: prototype — fully wired to the FastAPI backend; sends M6 Phase 1/2 tenant + role headers; new /admin/* module has the app's first real session-based route guard; M3 question generation/edit/reorder/regenerate shipped; M4/M4b Voice + Video mode real recording/playback shipped, sends NO identity headers (candidate-facing, see ADR-008); M5 recruiter-facing interview report (score, transcript, playback, human override) shipped
+last-updated: 2026-08-11
 ---
 
 # The Interview Agent — Frontend Overview
@@ -105,7 +105,7 @@ route guards, no lazy loading). 27 paths, ~23 real pages + 4 placeholders + 2 re
 | Jobs | `/jobs`, `/jobs/:jobId` | `JobsList`, `JobDetail` |
 | Candidates (cross-job) | `/candidates` | `CandidatesList` — every candidate across every job, with filters/sort/bulk actions/CSV export |
 | Candidates (per job) | `/jobs/:jobId/candidates`, `/candidates/:candidateId`, `/pipeline`, `/compare` | `RankedShortlist`, `CandidateDetail`, `PipelineBoard`, `ComparativeReport` |
-| Interviews | `/interviews`, `/interviews/new`, `/interviews/:interviewId/edit`, `/persona-builder` | `InterviewsList`, `NewInterview`, `InterviewEditor`, `PersonaBuilder` |
+| Interviews | `/interviews`, `/interviews/new`, `/interviews/:interviewId/edit`, `/interviews/:interviewId/report/:sessionId` (**new M5**), `/persona-builder` | `InterviewsList`, `NewInterview`, `InterviewEditor`, `InterviewReport` (**new M5** — score, transcript, playback, human override), `PersonaBuilder` |
 | Session (candidate-facing) | `/session/:interviewId/consent`, `/device`, `/chat`, `/voice`, `/video`, `/completed` | `OnboardingConsent`, `OnboardingDeviceCheck`, `ChatInterviewSession`, `VoiceInterviewSession` (also serves `/video`, **new M4b**), `SessionCompleted` |
 | Avatar (candidate-facing) | `/avatar/:interviewId/disclosure`, `/interview` | `AIDisclosure`, `AvatarVideoInterview` |
 | Placeholders | `/practices`, `/sessions`, `/questions`, `/answer-bank` | `PlaceholderPage` (reused 4× with different props) |
@@ -127,7 +127,7 @@ Patterns to learn from `App.tsx`:
 `src/lib/api.ts` is a thin typed wrapper over `fetch`:
 
 - **Base URL**: `import.meta.env.VITE_API_BASE ?? "/api"` — overridable via a `.env` file, defaults to the Vite proxy.
-- One function per endpoint, grouped per resource: jobs (`listJobs`, `createJob`, `patchJob`, `regenerateRubric`, `saveVersion`, `jobCandidates`), candidates (`listCandidates`, `createCandidate` (multipart with optional resume), `patchCandidate`, `screenCandidate`, `bulkUpdate`, `uploadResume`), interviews (`listInterviews`, `createInterview`, `patchInterview`).
+- One function per endpoint, grouped per resource: jobs (`listJobs`, `createJob`, `patchJob`, `regenerateRubric`, `saveVersion`, `jobCandidates`), candidates (`listCandidates`, `createCandidate` (multipart with optional resume), `patchCandidate`, `screenCandidate`, `bulkUpdate`, `uploadResume`), interviews (`listInterviews`, `createInterview`, `patchInterview`), interview reports (**new M5** — `listInterviewSessions`, `getInterviewReport`, `setSessionDecision`, `retryEvaluation`, `fetchInterviewMedia`).
 - All response types are the backend's flat **view schemas** (`JobView`, `CandidateView`, `InterviewView`) — which match `src/data/types.ts` field-for-field.
 - Errors bubble up as `Error` with the backend's `detail` message — pages that care show it (e.g. the duplicate-email error in `AddCandidateModal`).
 - **New (M6 Phase 1/2)**: every request now carries `X-Tenant-Id` and `X-User-Email`, read via
@@ -146,6 +146,12 @@ Patterns to learn from `App.tsx`:
   no change to `postTurn`'s signature — a Video-mode turn just sends a `video/webm` blob with
   `audio_format: "webm"` through the same call; the backend derives `media_type` from the
   interview's own `mode`, not from anything the client sends explicitly.
+- **New (M5) — `requestBlob()`, a third helper**, used only by `fetchInterviewMedia`. Sends the
+  normal `X-Tenant-Id`/`X-User-Email` headers (this is recruiter-facing, tenant-scoped, unlike
+  `sessionRequest`) but returns the raw `Blob` instead of parsing JSON. This exists because a
+  native `<audio src>`/`<video src>` cannot attach custom headers — the only way to authenticate
+  M5's media-playback GET is a real `fetch()` call; the calling component turns the `Blob` into
+  a `createObjectURL()` and revokes it when done (see `InterviewReport.tsx` below).
 
 ### Master admin module — a separate, real-auth surface
 
@@ -261,7 +267,8 @@ in `lib/candidates.ts`, bulk API calls live in the store.
 | `ComparativeReport` | Renders candidate cards with strengths/concerns/evidence | "Panel summary" prose and the verdicts come straight from seed data; "Print/PDF" and "Regenerate" buttons are decorative |
 | `InterviewsList` | Grid of interviews with mode icon, status, question count, shared flag — **loaded from the API** | — |
 | `NewInterview` | **Real AI generation (M3)**: mode picker (4 tiles as of **M4b** — Chat/Voice/Video/Avatar, `Camera` icon for Video, distinct from Avatar's `Video` icon), job select (now keyed by `job.id`, not title), an optional candidate picker sourced from that job's applicants (`api.listJobCandidates`) that personalizes the generated questions, `createInterview` triggers a real backend LLM call | — |
-| `InterviewEditor` | **Real edit/reorder/regenerate (M3)**: add/remove/edit questions (text + type + difficulty) wired to `patchInterview`, drag-to-reorder via the `GripVertical` handles (native HTML5 DnD, same pattern as `PipelineBoard`), per-question and regenerate-all buttons that call the backend, a "Personalized for {name}" badge when the interview has a `candidateId`, share modal via `?share=1` | Regenerate buttons are disabled (with a tooltip) when the interview has no linked job — an interview created before M3, or via the old flow |
+| `InterviewEditor` | **Real edit/reorder/regenerate (M3)**: add/remove/edit questions (text + type + difficulty) wired to `patchInterview`, drag-to-reorder via the `GripVertical` handles (native HTML5 DnD, same pattern as `PipelineBoard`), per-question and regenerate-all buttons that call the backend, a "Personalized for {name}" badge when the interview has a `candidateId`, share modal via `?share=1`. **New (M5)**: a "Sessions" section (Voice/Video interviews only) lists everyone who's taken it — status, evaluation status, score, decision — linking into `InterviewReport` | Regenerate buttons are disabled (with a tooltip) when the interview has no linked job — an interview created before M3, or via the old flow |
+| `InterviewReport` | **New (M5)** — one candidate's completed session: real transcript, real per-criterion scorecard/strengths/gaps/verdict, real audio/video playback (fetched as a `Blob`, played via `createObjectURL`, revoked on unmount/turn-switch), Approve/Hold/Reject decision buttons (the human-override, independent of the AI's own fields), a manual "Retry evaluation" action when `evaluationStatus === "failed"`. Polls on a 2s interval (capped ~30 attempts, same pattern as `CandidateDetail`'s AI-judge polling) while an evaluation is `"pending"`. Not part of the global Zustand store — fetched locally, same precedent the admin module's pages already use for page-scoped data nothing else reads | Recruiter-facing narrative synthesis is real here (the LLM's own `aiNote`), not hardcoded like `ComparativeReport`'s "panel summary" |
 | `ShareInterviewModal` | Toggle `shared` flag + clipboard copy; **link fixed (M4)** — now `/session/{interview.id}/consent`, a route that actually exists | Access control is just the unguessable interview/session id (ADR-008), not a real permission check |
 | `PersonaBuilder` | Full form for name/appearance/voice/tone/intro + live preview | **Nothing is saved** — "Save persona" just shows a 1.5s "Saved" state |
 
@@ -334,7 +341,7 @@ The classic end-to-end path, now crossing both halves:
 
 **What this trace produces that the Chat trace doesn't**: a real transcript (STT output), real
 AI responses persisted per turn, and real audio files on disk (`data/interview_audio/`) — M4's
-whole point. Evaluation/scoring of the transcript is still M5's job, not built here.
+whole point. Evaluation/scoring of the transcript is M5's job — see the trace below.
 
 ## Trace: candidate takes a Video interview (M4b, real)
 
@@ -344,8 +351,34 @@ serving both routes) reads `interview.mode === "Video"` to request `{audio: true
 from `getUserMedia`, record with a `video/webm` `MediaRecorder`, and render a self-view `<video>`
 element wired to the live stream. The submitted turn's blob is `video/webm`; the backend
 transcribes the embedded audio track via the same STT call, unaware anything about the input
-changed. Recruiter-facing playback of the recorded video is **not built** — deferred to M5,
-alongside answer evaluation.
+changed.
+
+## Trace: recruiter reviews a completed interview (M5, real)
+
+1. From `InterviewEditor`, the recruiter opens the "Sessions" section (fetched locally via
+   `api.listInterviewSessions(interview.id)` — not part of the global store, since no other page
+   reads it) and clicks a candidate row → navigates to
+   `/interviews/:interviewId/report/:sessionId`.
+2. `InterviewReport` fetches `api.getInterviewReport(sessionId)` on mount. If
+   `evaluationStatus === "pending"`, it polls every 2s (capped ~30 attempts, same pattern
+   `CandidateDetail` uses for `judgeStatus`) until the Celery worker finishes — the score,
+   scorecard, strengths/gaps, verdict, and note all come back from a genuinely reasoned LLM call
+   against the transcript, not a canned result.
+3. Clicking "Question"/"Play answer" next to any turn calls `api.fetchInterviewMedia(sessionId,
+   turnIndex, speaker)`, which `fetch()`s the file with the normal recruiter headers attached
+   (a plain `<audio src>` can't do this — no custom-header support) and returns a `Blob`; the
+   component turns that into a `createObjectURL()` for an inline `<audio>`/`<video>` element,
+   revoked on unmount or when a different turn is played.
+4. Approve/Hold/Reject calls `api.setSessionDecision(sessionId, decision)` — a `PATCH` that only
+   ever touches the `decision` field, never the AI's own score/scorecard, mirroring
+   `CandidateDetail`'s exact separation between `Application.decision` and its scorecard.
+5. If `evaluationStatus === "failed"`, a "Retry evaluation" button calls
+   `api.retryEvaluation(sessionId)` to re-enqueue the Celery task.
+
+**What this trace produces that nothing before M5 did**: a real per-criterion scorecard scored
+against the job's actual rubric, a real narrative note reasoned from the transcript (not
+hardcoded boilerplate the way `ComparativeReport`'s "panel summary" is), and the first
+recruiter-facing playback of a candidate's recorded answer this app has ever had.
 
 ## Feature truth table (what's real vs. smoke-and-mirrors)
 
@@ -360,6 +393,7 @@ alongside answer evaluation.
 | AI question generation, edit/reorder/regenerate | ✅ **real** (M3) — server-side LLM call, optional per-candidate personalization, drag reorder, per-question and regenerate-all | `NewInterview` / `InterviewEditor` → `app/services/question_generator.py` |
 | Voice recording | ✅ **real (M4)** — `MediaRecorder`, real backend cascade, real AI audio playback | `VoiceInterviewSession` → `app/routers/interview_sessions.py` |
 | Video recording | ✅ **real (M4b)** — same `MediaRecorder`/cascade path, `video/webm` capture + self-view element | `VoiceInterviewSession` (generalized) → `app/routers/interview_sessions.py` |
+| Interview evaluation, scorecard, playback, decision | ✅ **real (M5)** — Celery+Redis-run LLM scoring against the job's rubric, real audio/video playback via authenticated blob fetch, human-override decision independent of the AI's fields | `InterviewReport` → `app/routers/interview_reports.py` / `app/services/interview_evaluator.py` |
 | AI avatar video interviewer | ❌ static icon (self-view is real) | `AvatarVideoInterview` |
 | Anti-cheating detection | ✅ detection works, ❌ nothing logged | session pages |
 | Auth | ❌ forms just `navigate()` | `LoginOrg`/`LoginCandidate` |
@@ -466,18 +500,20 @@ Navigate the app:
 
 ## Next up
 
-The API layer is in, M4/M4b's Voice and Video modes are both real. Natural next steps, roughly
-in order of value:
+The API layer is in, M4/M4b's Voice and Video modes are both real, and M5 closes the loop with
+real evaluation, playback, and human override. Natural next steps, roughly in order of value:
 
 1. **Frontend tests** — Vitest for `lib/api.ts` (mock fetch) and the store actions (mock API
    module) to lock in the client–server contract. `sessionRequest`/the M4/M4b session functions
-   are now a second, unauth'd surface worth covering explicitly, not just the recruiter-side one.
+   and M5's `requestBlob()` are now two more unauth'd/blob-shaped surfaces worth covering
+   explicitly, not just the recruiter-side JSON one.
 2. **Guard rails** — a loading/error state at the route level (the pages currently assume
    `init()` finished), plus a 409-conflict UX for duplicate emails beyond the add-candidate
    modal.
 3. **Chat mode's own real wiring** — smaller than M4/M4b was (no STT/TTS, no audio storage — just
    real LLM turns over the existing `interview_sessions`/`interview_turns` schema), a natural
    next extension now that the persistence layer exists.
-4. **M5** — recruiter-facing playback/review of a candidate's Video-mode recording is the first
-   natural home for it, alongside answer evaluation and the aggregated report — deliberately
-   deferred out of M4b's scope, not dropped.
+4. **Folding interview scores into `ComparativeReport.tsx`** — M5 deliberately kept the two
+   report shapes separate (per-candidate interview report vs. per-job résumé comparison); wiring
+   interview evaluation results into the comparative view is real future work, not dropped, just
+   out of M5's scope.

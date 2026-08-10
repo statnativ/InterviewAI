@@ -17,7 +17,8 @@ from typing import TypedDict
 
 from app.models.candidate import Candidate
 from app.services.llm_client import LLMError, chat_completion
-from app.services.screening import RubricCriterion, ScorecardRow, ScreeningResult
+from app.services.llm_scoring import clamp_int, coerce_scorecard, strip_fences
+from app.services.screening import RubricCriterion, ScreeningResult
 
 
 class JudgeResult(ScreeningResult):
@@ -91,23 +92,10 @@ def build_scoring_profile(candidate: Candidate) -> str:
     return "\n".join(lines)
 
 
-def _strip_fences(raw: str) -> str:
-    cleaned = raw.strip()
-    if cleaned.startswith("```"):
-        cleaned = cleaned.strip("`")
-        if cleaned.startswith("json"):
-            cleaned = cleaned[4:]
-        cleaned = cleaned.strip()
-    return cleaned
-
-
 def _coerce_result(parsed: dict, rubric: list[RubricCriterion]) -> JudgeResult:
     # score: never trust the raw value even if present and well-typed —
     # clamp to the same [0, 99] ceiling derive_score already enforces.
-    try:
-        score = max(0, min(99, int(parsed.get("score", 0))))
-    except (TypeError, ValueError):
-        score = 0
+    score = clamp_int(parsed.get("score"), 0, 99)
 
     verdict = parsed.get("compare_verdict")
     if verdict not in ("Advance", "Maybe", "Pass"):
@@ -115,33 +103,7 @@ def _coerce_result(parsed: dict, rubric: list[RubricCriterion]) -> JudgeResult:
         # derive_score's own thresholds, rather than trusting free text.
         verdict = "Advance" if score >= 80 else "Maybe" if score >= 55 else "Pass"
 
-    llm_rows = {
-        str(row.get("criterion", "")).strip().lower(): row
-        for row in parsed.get("scorecard", [])
-        if isinstance(row, dict)
-    }
-    scorecard: list[ScorecardRow] = []
-    for criterion in rubric:
-        row = llm_rows.get(criterion["label"].strip().lower())
-        if row is None:
-            # An incomplete scorecard is not an honest partial result —
-            # same standard question_generator.py holds itself to.
-            raise LLMError(f"AI judge response is missing a scorecard entry for '{criterion['label']}'")
-        try:
-            row_score = max(0, min(100, int(row.get("score", 0))))
-        except (TypeError, ValueError):
-            row_score = 0
-        scorecard.append(
-            {
-                "criterion": criterion["label"],
-                # weight always comes from the rubric, never the LLM — guards
-                # against a hallucinated weight that doesn't sum right, same
-                # reason derive_score computes weight from the rubric.
-                "weight": criterion["weight"],
-                "score": row_score,
-                "note": str(row.get("note", "")).strip() or f"AI-judged: {criterion['label']}.",
-            }
-        )
+    scorecard = coerce_scorecard(rubric, parsed.get("scorecard"), source_label="AI judge")
 
     ai_note = str(parsed.get("ai_note", "")).strip() or f"AI judge score {score}/100."
     strengths = [str(s) for s in parsed.get("strengths", [])] if isinstance(parsed.get("strengths"), list) else []
@@ -176,7 +138,7 @@ async def judge_candidate(
     raw = await chat_completion([{"role": "user", "content": prompt}])
 
     try:
-        parsed = json.loads(_strip_fences(raw))
+        parsed = json.loads(strip_fences(raw))
     except json.JSONDecodeError as e:
         raise LLMError(f"AI judge returned invalid JSON: {e}") from e
 

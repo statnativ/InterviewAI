@@ -10,5 +10,13 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  # M5: Celery's broker only (app/celery_app.py) — no result backend, so no
+  # persistence/volume needed here; losing queued-but-not-yet-picked-up tasks
+  # on a restart is an acceptable POC tradeoff (see ADR-009, R-009).
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
 volumes:
   pgdata:

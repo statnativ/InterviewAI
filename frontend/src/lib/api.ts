@@ -1,4 +1,12 @@
-import type { Candidate, Interview, InterviewSessionInfo, Job, TurnResult } from "@/data/types";
+import type {
+  Candidate,
+  Interview,
+  InterviewReport,
+  InterviewSessionInfo,
+  InterviewSessionSummary,
+  Job,
+  TurnResult,
+} from "@/data/types";
 import { useAppStore } from "@/store/useAppStore";
 
 const BASE = import.meta.env.VITE_API_BASE ?? "/api";
@@ -21,6 +29,22 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     throw new Error(detail || `Request failed: ${res.status}`);
   }
   return res.json() as Promise<T>;
+}
+
+// M5: recruiter-facing media playback needs the raw response body, not JSON — a native
+// <audio src>/<video src> can't attach X-Tenant-Id/X-User-Email (custom headers, not
+// cookies), so this is the only way to authenticate the GET. Callers build an object URL
+// from the returned Blob and revoke it when done.
+async function requestBlob(path: string): Promise<Blob> {
+  const { currentTenant, currentUser } = useAppStore.getState();
+  const res = await fetch(`${BASE}${path}`, {
+    headers: { "X-Tenant-Id": currentTenant.id, "X-User-Email": currentUser.email },
+  });
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(detail || `Request failed: ${res.status}`);
+  }
+  return res.blob();
 }
 
 // M4: candidate-facing calls send NO tenant/user identity, deliberately — there is no
@@ -101,4 +125,18 @@ export const api = {
   getSession: (sessionId: string) => sessionRequest<InterviewSessionInfo>(`/interview-sessions/${sessionId}`),
   completeSession: (sessionId: string) =>
     sessionRequest<InterviewSessionInfo>(`/interview-sessions/${sessionId}/complete`, { method: "POST" }),
+
+  // Interview reports (M5 — recruiter-facing, tenant/role-scoped, see app/routers/interview_reports.py)
+  listInterviewSessions: (interviewId: string) =>
+    request<InterviewSessionSummary[]>(`/interviews/${interviewId}/sessions`),
+  getInterviewReport: (sessionId: string) => request<InterviewReport>(`/interview-sessions/${sessionId}/report`),
+  setSessionDecision: (sessionId: string, decision: InterviewReport["decision"]) =>
+    request<InterviewReport>(`/interview-sessions/${sessionId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ decision }),
+    }),
+  retryEvaluation: (sessionId: string) =>
+    request<InterviewReport>(`/interview-sessions/${sessionId}/evaluate`, { method: "POST" }),
+  fetchInterviewMedia: (sessionId: string, turnIndex: number, speaker: "candidate" | "ai") =>
+    requestBlob(`/interview-sessions/${sessionId}/turns/${turnIndex}/media?speaker=${speaker}`),
 };

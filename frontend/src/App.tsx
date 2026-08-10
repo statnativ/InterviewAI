@@ -20,6 +20,7 @@ import { ComparativeReport } from "@/pages/candidates/ComparativeReport";
 import { InterviewsList } from "@/pages/interviews/InterviewsList";
 import { NewInterview } from "@/pages/interviews/NewInterview";
 import { InterviewEditor } from "@/pages/interviews/InterviewEditor";
+import { InterviewReport } from "@/pages/interviews/InterviewReport";
 
 import { OnboardingConsent } from "@/pages/session/OnboardingConsent";
 import { OnboardingDeviceCheck } from "@/pages/session/OnboardingDeviceCheck";
@@ -74,6 +75,8 @@ export default function App() {
         <Route path="/interviews" element={<InterviewsList />} />
         <Route path="/interviews/new" element={<NewInterview />} />
         <Route path="/interviews/:interviewId/edit" element={<InterviewEditor />} />
+        {/* M5: one candidate's completed session — score, transcript, playback, human override */}
+        <Route path="/interviews/:interviewId/report/:sessionId" element={<InterviewReport />} />
         <Route path="/persona-builder" element={<PersonaBuilder />} />
 
         {/* Live Session Runtime (candidate-facing) */}

@@ -28,5 +28,8 @@ class Settings(BaseSettings):
     resume_storage_dir: str = "./data/resumes"
     interview_audio_storage_dir: str = "./data/interview_audio"
 
+    # M5: Celery's broker only — no result backend configured, see app/celery_app.py.
+    redis_url: str = "redis://localhost:6379/0"
+
 
 settings = Settings()

@@ -129,6 +129,47 @@ export interface InterviewSessionInfo {
   turns: TurnSummary[];
 }
 
+// M5: recruiter-facing evaluation/report types — app/routers/interview_reports.py.
+export type EvaluationStatus = "idle" | "pending" | "complete" | "failed";
+
+export interface InterviewSessionSummary {
+  id: string;
+  candidateId: string | null;
+  candidateName: string | null;
+  status: "active" | "complete" | "abandoned";
+  evaluationStatus: EvaluationStatus;
+  score: number | null;
+  decision: "None" | "Approved" | "Hold" | "Rejected";
+  completedAt: string | null;
+}
+
+export interface ReportTurn {
+  turnIndex: number;
+  status: "pending" | "complete" | "failed";
+  mediaType: "audio" | "video";
+  transcript: string | null;
+  aiText: string | null;
+}
+
+export interface InterviewReport {
+  id: string;
+  interviewId: string;
+  candidateId: string | null;
+  candidateName: string | null;
+  status: "active" | "complete" | "abandoned";
+  turns: ReportTurn[];
+  evaluationStatus: EvaluationStatus;
+  score: number | null;
+  scorecard: ScorecardRow[];
+  strengths: string[];
+  gaps: string[];
+  aiVerdict: "Advance" | "Maybe" | "Pass" | null;
+  aiNote: string | null;
+  evaluationError: string | null;
+  decision: "None" | "Approved" | "Hold" | "Rejected";
+  completedAt: string | null;
+}
+
 export interface ChatMessage {
   id: string;
   from: "ai" | "candidate";

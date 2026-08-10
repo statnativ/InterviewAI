@@ -229,18 +229,29 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 - **Category**: Operational readiness
 - **Description**: Everything is local-only — no CI, no deployed environment, no monitoring,
   no alerting. A machine restart, disk issue, or lost `.env` file currently has no recovery
-  plan beyond re-running setup from `CLAUDE.md`.
+  plan beyond re-running setup from `CLAUDE.md`. **M5 widened this, deliberately, not
+  accidentally**: Redis and a Celery worker are now a second and third permanent-ish process
+  this app depends on (previously only Postgres) — see ADR-009. If the worker isn't running (or
+  Redis isn't), a completed interview's evaluation just queues forever, silently visible only as
+  `evaluationStatus: "pending"` never resolving — not a crash, but an easy-to-miss stuck state
+  with no alerting to surface it.
 - **Evidence**: No `.github/workflows/` or equivalent exists; `docker-compose.yml` targets
-  `localhost` only.
+  `localhost` only. `app/celery_app.py`/`ADR-009` confirm no worker process supervision
+  (systemd, Docker restart policy) exists — a crashed worker just stops processing, silently.
 - **Likelihood**: High (certain, given current state — this is expected at this project stage)
 - **Impact**: Low currently (no production users), rising sharply once anything is deployed
 - **Severity**: Low (for now — explicitly deferred, not neglected; see M6b)
 - **Owner**: Amit Tiwari
 - **Mitigation**: Deployment explicitly sequenced as M6b (Cloud Run + Neon + GCS), not started.
-- **Contingency**: None needed while local-only.
-- **Trigger**: Start of M6b.
+  `POST /interview-sessions/{id}/evaluate` (M5) gives a recruiter a manual backstop to re-trigger
+  a stuck evaluation once the worker's confirmed running again — not a fix for the underlying
+  lack of supervision, but a real mitigation for the symptom.
+- **Contingency**: None needed while local-only; `docker compose ps` + checking for a running
+  `celery` process is the manual check today (see [[Runbook]] troubleshooting table).
+- **Trigger**: Start of M6b — the point real worker supervision and Redis persistence
+  (`appendonly`) would need to be added, per ADR-009's own revisit trigger.
 - **Status**: Open (accepted for current phase)
-- **Related ADR or product decision**: PD-002
+- **Related ADR or product decision**: PD-002, ADR-009
 
 ---
 

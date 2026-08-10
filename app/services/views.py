@@ -8,9 +8,12 @@ from datetime import datetime
 from app.models.application import Application
 from app.models.candidate import Candidate
 from app.models.interview import Interview
+from app.models.interview_session import InterviewSession
+from app.models.interview_turn import InterviewTurn
 from app.models.job import Job
 from app.schemas.candidate import CandidateView
 from app.schemas.interview import InterviewView
+from app.schemas.interview_report import InterviewReportView, InterviewSessionSummaryView, ReportTurnView
 from app.schemas.job import JobView
 
 
@@ -85,4 +88,48 @@ def interview_to_view(iv: Interview, candidate_name: str | None = None) -> Inter
         duration=iv.duration,
         createdAt=_iso(iv.created_at),
         shared=iv.shared,
+    )
+
+
+def interview_session_to_summary_view(
+    session: InterviewSession, candidate_name: str | None = None
+) -> InterviewSessionSummaryView:
+    return InterviewSessionSummaryView(
+        id=str(session.id),
+        candidateId=str(session.candidate_id) if session.candidate_id else None,
+        candidateName=candidate_name,
+        status=session.status,
+        evaluationStatus=session.evaluation_status,
+        score=session.score,
+        decision=session.decision,
+        completedAt=_iso(session.completed_at) if session.completed_at else None,
+    )
+
+
+def interview_session_to_report_view(
+    session: InterviewSession, turns: list[InterviewTurn], candidate_name: str | None = None
+) -> InterviewReportView:
+    return InterviewReportView(
+        id=str(session.id),
+        interviewId=str(session.interview_id),
+        candidateId=str(session.candidate_id) if session.candidate_id else None,
+        candidateName=candidate_name,
+        status=session.status,
+        turns=[
+            ReportTurnView(
+                turnIndex=t.turn_index, status=t.status, mediaType=t.media_type,
+                transcript=t.transcript, aiText=t.ai_text,
+            )
+            for t in turns
+        ],
+        evaluationStatus=session.evaluation_status,
+        score=session.score,
+        scorecard=session.scorecard or [],
+        strengths=session.strengths or [],
+        gaps=session.gaps or [],
+        aiVerdict=session.ai_verdict,
+        aiNote=session.ai_note,
+        evaluationError=session.evaluation_error,
+        decision=session.decision,
+        completedAt=_iso(session.completed_at) if session.completed_at else None,
     )

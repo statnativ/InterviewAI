@@ -22,6 +22,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.celery_app import evaluate_interview_task
 from app.config import settings
 from app.db import async_session, get_db
 from app.deps import get_current_interview_session
@@ -35,6 +36,24 @@ from app.services.llm_client import LLMError
 from app.storage.local import save_interview_audio
 
 router = APIRouter(tags=["interview-sessions"])
+
+
+async def _trigger_evaluation(session_id: uuid.UUID) -> None:
+    """M5: called right after a commit that flips a session to "complete" — that same commit
+    must already have set evaluation_status="pending" (a candidate should never see it sit at
+    "idle" even for a moment). Enqueueing itself is expected to be near-instant (just a Redis
+    push); if it fails outright (e.g. Redis unreachable), mark evaluation_status="failed"
+    instead of letting a queueing failure break the candidate-facing response that already
+    succeeded — finishing an interview must never fail because of this side effect."""
+    try:
+        evaluate_interview_task.delay(str(session_id))
+    except Exception as e:
+        async with async_session() as db:
+            session = await db.get(InterviewSession, session_id)
+            if session is not None:
+                session.evaluation_status = "failed"
+                session.evaluation_error = f"Could not enqueue evaluation: {e}"
+                await db.commit()
 
 
 def _turn_summaries(turns: list[InterviewTurn]) -> list[TurnSummaryView]:
@@ -111,6 +130,9 @@ async def create_interview_session(
         candidate_id=interview.candidate_id,
         status="complete" if result.is_complete else "active",
         completed_at=now if result.is_complete else None,
+        # M5: rare edge case (e.g. a 1-question interview finishing on the opening turn) —
+        # same evaluation trigger as the two other completion sites below.
+        evaluation_status="pending" if result.is_complete else "idle",
     )
     db.add(session)
     await db.flush()
@@ -128,6 +150,9 @@ async def create_interview_session(
         )
     )
     await db.commit()
+
+    if result.is_complete:
+        await _trigger_evaluation(session.id)
 
     return TurnResultView(
         sessionId=str(session.id),
@@ -230,9 +255,10 @@ async def submit_turn(
         if result.is_complete:
             session_row.status = "complete"
             session_row.completed_at = datetime.now(timezone.utc)
+            session_row.evaluation_status = "pending"
         await db.commit()
 
-        return TurnResultView(
+        response = TurnResultView(
             sessionId=str(session.id),
             turnIndex=turn_index,
             transcript=result.transcript,
@@ -241,6 +267,10 @@ async def submit_turn(
             aiAudioFormat="mp3",
             status=session_row.status,
         )
+
+    if result.is_complete:
+        await _trigger_evaluation(session.id)
+    return response
 
 
 @router.get("/interview-sessions/{session_id}", response_model=InterviewSessionView)
@@ -271,8 +301,10 @@ async def complete_interview_session(
     if session.status == "active":
         session.status = "complete"
         session.completed_at = datetime.now(timezone.utc)
+        session.evaluation_status = "pending"
         await db.commit()
         await db.refresh(session)
+        await _trigger_evaluation(session.id)
     turns = (
         await db.execute(
             select(InterviewTurn).where(InterviewTurn.session_id == session.id).order_by(InterviewTurn.turn_index)
