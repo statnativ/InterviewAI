@@ -1,11 +1,10 @@
 ---
 tags: [project, system-design, ai, openrouter]
 status: current — gateway + deterministic screening + question generation + LLM-as-judge
-  scoring live, off the request path (IA-003); retry/fallback built (IA-009); the voice
-  cascade is wired into the app (M4, Voice mode) — the pre-implementation architecture
-  review's findings (candidate auth, audio storage) were resolved via ADR-008 before the
-  build, not discovered after
-last-updated: 2026-08-10
+  scoring live, off the request path (IA-003); retry/fallback built (IA-009); the voice/video
+  cascade is wired into the app (M4/M4b); interview evaluation (M5) runs the same LLM-as-judge
+  shape off-request via Celery+Redis, not BackgroundTasks — see ADR-009
+last-updated: 2026-08-11
 ---
 
 # The Interview Agent — AI Architecture
@@ -13,8 +12,9 @@ last-updated: 2026-08-10
 How the AI works: the single gateway, which models are used for which task, each AI service
 in detail, and — just as important — **what is deliberately not AI**. Companion to
 [[Backend Overview]]; the decision records behind this are ADR-002 (OpenRouter as the AI
-gateway), ADR-004 (cascaded voice pipeline), and **ADR-007** (execution model for live
-interview turns, M4) in `docs/architecture/decisions/`.
+gateway), ADR-004 (cascaded voice pipeline), ADR-007 (execution model for live interview
+turns, M4), ADR-008 (candidate session auth + audio storage, M4), and **ADR-009** (Celery+Redis
+execution model for interview evaluation, M5) in `docs/architecture/decisions/`.
 
 ## The core principle: one gateway, per-task models
 
@@ -43,7 +43,7 @@ call. Consequences:
 |---|---|---|---|
 | LLM — interview brain | Nemotron 3 Ultra | `nvidia/nemotron-3-ultra-550b-a55b:free` | free tier |
 | LLM — interview brain fallback | DeepSeek V4 Pro | `deepseek/deepseek-v4-pro` | $0.435 / $0.87 per M tok — **wired and used automatically** on primary failure (IA-009), not just a documented manual option anymore |
-| LLM — resume/question structuring/candidate judging | GPT-4o mini | `openai/gpt-4o-mini` | cheap default — no fallback wired (not free-tier, hasn't shown the reliability issues Nemotron has). Three call sites now: `resume_parser.py` (dormant, off the ATS path), `question_generator.py` (M3), `candidate_judge.py` (M2, LLM-as-judge — new) |
+| LLM — resume/question structuring/candidate + interview judging | GPT-4o mini | `openai/gpt-4o-mini` | cheap default — no fallback wired (not free-tier, hasn't shown the reliability issues Nemotron has). Four call sites now: `resume_parser.py` (dormant, off the ATS path), `question_generator.py` (M3), `candidate_judge.py` (M2, LLM-as-judge), `interview_evaluator.py` (M5, LLM-as-judge over a transcript instead of a résumé profile — new) |
 | STT | Qwen3 ASR Flash | `qwen/qwen3-asr-flash-2026-02-10` | $0.000035/sec (~$0.13/hr audio) — one same-model retry, no fallback model |
 | TTS | Kokoro 82M | `hexgrad/kokoro-82m` | $0.62/M characters — **paid, not free-tier** (corrected 2026-08-10; an earlier note here mistakenly called it free-tier); one same-model retry, no fallback model |
 | LLM — manual-only contingency | GLM-5.2 | `z-ai/glm-5.2` | $0.406 / $1.276 per M tok — documented fallback-of-the-fallback, not wired into any automatic path |
@@ -140,6 +140,30 @@ cascade's original open-ended system prompt had no termination signal at all, wh
 fixed by having the interviewer ask the interview's own M3-curated questions in order, ending
 with a detectable sentinel. See [[Project Overview]]'s M4 section for the full build writeup.
 
+### `interview_evaluator.py` — scoring a completed interview (M5)
+
+The fifth `chat_completion` call site, and the second LLM-as-judge shape after
+`candidate_judge.py` (same prompt structure, same never-trust-the-response coercion — the
+shared clamp/scorecard logic lives in `llm_scoring.py` so it isn't duplicated). The only real
+difference from `candidate_judge.py`: the input is a completed interview's full transcript
+(built by walking `interview_turns` in order), not a candidate's structured résumé profile, and
+the rubric it's scored against is still `Job.rubric` — whole-interview evaluation, not a new
+per-question rubric concept.
+
+**Runs off the request path, but not via `BackgroundTasks`** — this is the codebase's first
+Celery+Redis call, triggered automatically the moment an `interview_sessions` row flips to
+`status="complete"`. ADR-007 (written during M4 planning) had already earmarked this exact
+workload as the "genuinely delay-tolerant batch work" that would finally justify a real task
+queue instead of reusing `BackgroundTasks` a third time. Full reasoning — including the real
+gotcha (Celery workers and this codebase's lazy async singletons, `app.db`'s engine and
+`llm_client.get_http_client()`'s shared client, don't mix safely without a persistent
+per-worker-process event loop) — in **ADR-009**.
+
+Live-verified end-to-end against the real API and a real worker: a genuine transcript ("led the
+redesign of our recommendation platform... Kafka and a feature store") scored 60/100 overall,
+0/100 on a Python criterion the candidate never mentioned, correctly distinct from a stronger
+Distributed-Systems score — reasoned output, not a placeholder.
+
 ### What is deliberately NOT AI
 
 - **Screening / scoring** (`services/screening.py`) — deterministic keyword matching against
@@ -179,6 +203,6 @@ with a detectable sentinel. See [[Project Overview]]'s M4 section for the full b
 | Rubric generation from JD              | ✅ live (deterministic, `generate_rubric`)                                                              |
 | Question generation                    | ✅ live (M3) — LLM-drafted from the JD, optional per-candidate personalization, edit/reorder/regenerate |
 | AI-call resilience (interview cascade) | ✅ live (IA-009) — retry + fallback on hard failures; ❌ no protection against slow-but-successful calls |
-| Voice cascade in the app               | ✅ live (M4, 2026-08-10) — Voice mode only; real session creation + turn endpoint, curated-question-driven with a detectable end-of-interview signal; live-verified against the real API, including a real TTS-timeout failure hitting the designed retry path; see ADR-007/ADR-008 |
-| Answer evaluation + report             | ❌ (M5)                                                                                                 |
-| Frontend voice/video sessions          | ✅ Voice mode real (M4) — `MediaRecorder` capture, real AI audio playback; ❌ Chat mode still simulated, avatar is still a static icon (see [[Frontend Overview]])                          |
+| Voice/video cascade in the app         | ✅ live (M4/M4b) — Voice and Video modes; real session creation + turn endpoint, curated-question-driven with a detectable end-of-interview signal; live-verified against the real API, including a real TTS-timeout failure hitting the designed retry path; see ADR-007/ADR-008 |
+| Answer evaluation + report             | ✅ live (M5, 2026-08-11) — a completed transcript is scored against the job's rubric off-request via Celery+Redis, with a real per-criterion scorecard, strengths/gaps, and verdict; recruiter-facing report page with real playback and a human-override decision; see ADR-009 |
+| Frontend voice/video sessions          | ✅ Voice and Video mode real (M4/M4b) — `MediaRecorder` capture, real AI audio playback; ❌ Chat mode still simulated, avatar is still a static icon (see [[Frontend Overview]])                          |
