@@ -9,18 +9,30 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 ### R-001
 - **Category**: Security / Authorization
 - **Description**: No authentication or authorization exists anywhere in the app. Every
-  endpoint is open; `jobs.posted_by` has no real "current user" to point to.
+  endpoint is open; `jobs.posted_by` has no real "current user" to point to. **M4 extended this
+  gap to a new surface, deliberately**: `app/routers/interview_sessions.py`'s candidate-facing
+  endpoints (`POST /interviews/{id}/sessions`, `POST /interview-sessions/{id}/turns`) have no
+  identity check at all beyond an unguessable UUID (`interview_sessions.id` itself, per
+  ADR-008) — there is no candidate login, and this is the first time this risk applies to a
+  non-recruiter, non-tenant-scoped surface.
 - **Evidence**: Confirmed in `app/routers/*.py` — no auth dependency on any route.
-  `app/models/user.py` exists but nothing creates or authenticates a `User`.
+  `app/models/user.py` exists but nothing creates or authenticates a `User`. Confirmed in
+  `app/routers/interview_sessions.py` and `app/deps.py::get_current_interview_session` — the
+  new dependency resolves a session by id only, with an explicit comment that this is deliberate
+  (no `get_current_tenant`/`require_roles` call).
 - **Likelihood**: High (certain, given current state)
-- **Impact**: High (blocks any multi-user or real-data usage; PRD §5.5/§6 requires RBAC)
+- **Impact**: High (blocks any multi-user or real-data usage; PRD §5.5/§6 requires RBAC; a
+  leaked `interview_sessions.id` now also exposes one candidate's interview transcript/audio)
 - **Severity**: High
 - **Owner**: Amit Tiwari
-- **Mitigation**: Sequenced as M6 (JWT auth, tenant isolation, RBAC) — not started.
+- **Mitigation**: Sequenced as M6 (JWT auth, tenant isolation, RBAC) — not started for the
+  recruiter side. The candidate side has no equivalent milestone at all yet; ADR-008 records the
+  session-ID-as-credential choice as an explicit, tracked acceptance of this risk for M4, not a
+  fix for it.
 - **Contingency**: None currently; app must not be exposed beyond localhost until M6.
 - **Trigger**: Any plan to deploy beyond local dev, or to onboard a second user.
 - **Status**: Open
-- **Related ADR or product decision**: none yet
+- **Related ADR or product decision**: ADR-008
 
 ---
 
@@ -141,19 +153,28 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
 - **Category**: Compliance / Privacy
 - **Description**: The PRD (§6) requires encryption at rest/in transit, PII protection, and
   GDPR/CCPA-ready data handling and deletion. None of this exists — resumes and candidate PII
-  are stored in plain local files and an unencrypted local Postgres instance.
-- **Evidence**: `app/storage/local.py` writes plaintext files to `data/resumes/`; no encryption
-  configuration anywhere in `docker-compose.yml` or `app/db.py`.
+  are stored in plain local files and an unencrypted local Postgres instance. **M4 widened this
+  risk's scope, deliberately, not accidentally**: interview audio (candidate and AI) is now a
+  second plaintext-local-disk PII category alongside résumés (`save_interview_audio`, same
+  pattern as `save_upload`) — voice is arguably more sensitive than a résumé file, and ADR-007
+  flagged this as a hard, non-deferrable dependency for M4's build. ADR-008 records the decision
+  to ship it plainly and accept the risk rather than solve encryption inside that milestone.
+- **Evidence**: `app/storage/local.py` writes plaintext files to `data/resumes/` and (new)
+  `data/interview_audio/`; no encryption configuration anywhere in `docker-compose.yml` or
+  `app/db.py`.
 - **Likelihood**: High (certain, given current state)
-- **Impact**: High (real PII, real compliance exposure the moment real candidate data is used)
+- **Impact**: High (real PII, real compliance exposure the moment real candidate data is used —
+  now covering voice recordings in addition to résumés)
 - **Severity**: High
 - **Owner**: Amit Tiwari
 - **Mitigation**: None yet. Not explicitly sequenced into a milestone — currently implicit in
-  M6 (auth/tenancy) but compliance/encryption isn't called out on its own.
-- **Contingency**: Do not use real candidate PII until this is addressed.
+  M6 (auth/tenancy) but compliance/encryption isn't called out on its own. IA-008 remains the
+  tracked action for closing this for real, covering résumés and interview audio together.
+- **Contingency**: Do not use real candidate PII (including real interview audio) until this is
+  addressed.
 - **Trigger**: Any use of real (non-test) candidate data.
 - **Status**: Open
-- **Related ADR or product decision**: none yet
+- **Related ADR or product decision**: ADR-008
 
 ---
 

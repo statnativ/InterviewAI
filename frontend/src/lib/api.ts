@@ -1,4 +1,4 @@
-import type { Candidate, Interview, Job } from "@/data/types";
+import type { Candidate, Interview, InterviewSessionInfo, Job, TurnResult } from "@/data/types";
 import { useAppStore } from "@/store/useAppStore";
 
 const BASE = import.meta.env.VITE_API_BASE ?? "/api";
@@ -16,6 +16,20 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     },
     ...init,
   });
+  if (!res.ok) {
+    const detail = await res.text();
+    throw new Error(detail || `Request failed: ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+}
+
+// M4: candidate-facing calls send NO tenant/user identity, deliberately — there is no
+// candidate identity anywhere in this app. The session/interview id in the URL is itself
+// the credential (ADR-008, app/deps.py::get_current_interview_session). Never merge this
+// with request() above: that would either leak the recruiter's headers onto candidate calls
+// or silently drop them from recruiter calls.
+async function sessionRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const res = await fetch(`${BASE}${path}`, init);
   if (!res.ok) {
     const detail = await res.text();
     throw new Error(detail || `Request failed: ${res.status}`);
@@ -73,4 +87,18 @@ export const api = {
     request<Interview>(`/interviews/${interviewId}/regenerate`, { method: "POST" }),
   regenerateQuestion: (interviewId: string, questionId: string) =>
     request<Interview>(`/interviews/${interviewId}/questions/${questionId}/regenerate`, { method: "POST" }),
+
+  // Interview sessions (M4 — candidate-facing, no recruiter identity sent, see sessionRequest above)
+  startInterviewSession: (interviewId: string) =>
+    sessionRequest<TurnResult>(`/interviews/${interviewId}/sessions`, { method: "POST" }),
+  postTurn: (sessionId: string, turnIndex: number, audioBlob: Blob, audioFormat: string) => {
+    const form = new FormData();
+    form.append("turn_index", String(turnIndex));
+    form.append("audio_format", audioFormat);
+    form.append("audio", audioBlob, `turn-${turnIndex}.${audioFormat}`);
+    return sessionRequest<TurnResult>(`/interview-sessions/${sessionId}/turns`, { method: "POST", body: form });
+  },
+  getSession: (sessionId: string) => sessionRequest<InterviewSessionInfo>(`/interview-sessions/${sessionId}`),
+  completeSession: (sessionId: string) =>
+    sessionRequest<InterviewSessionInfo>(`/interview-sessions/${sessionId}/complete`, { method: "POST" }),
 };

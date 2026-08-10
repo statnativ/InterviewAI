@@ -1,7 +1,10 @@
 ---
 tags: [project, system-design, ai, openrouter]
 status: current — gateway + deterministic screening + question generation + LLM-as-judge
-  scoring live; retry/fallback built (IA-009); the voice cascade's app wiring (M4) not started
+  scoring live, off the request path (IA-003); retry/fallback built (IA-009); the voice
+  cascade is wired into the app (M4, Voice mode) — the pre-implementation architecture
+  review's findings (candidate auth, audio storage) were resolved via ADR-008 before the
+  build, not discovered after
 last-updated: 2026-08-10
 ---
 
@@ -21,7 +24,6 @@ API key (`OPENROUTER_API_KEY` in `.env`), via **one shared, connection-pooled `h
 client, meaning a fresh TCP/TLS handshake per call; now the cascade's three legs reuse one
 connection). OpenRouter bills the account and routes to whichever model slug is specified per
 call. Consequences:
-
 - No per-vendor SDKs or keys; adding a model is a config change, not a code change.
 - Model choice is **config-driven per task** (the slug lives in `app/config.py` settings).
 - **Resilience exists now, but only for hard failures.** `interview_llm_model` (the one
@@ -35,7 +37,6 @@ call. Consequences:
   returned fine; the fallback correctly leaves that alone, since a performance guarantee would
   need racing against a shorter timeout, a different and bigger design not built here.
   (`llm_client.get_http_client`/`post_with_retry`; `app/config.py`'s `interview_llm_fallback_model`.)
-
 ## Model choices in use (cost-sensitive POC)
 
 | Task | Model | Slug | Cost |
@@ -101,6 +102,44 @@ dominant leg at 4.9–5.9s, not the LLM** (2.4–5.5s on the clean run, though o
 a single LLM call take 24.63s — real variance, not a one-time fluke). Worth knowing before any
 future optimization effort targets the wrong service.
 
+**Pre-implementation architecture review, 2026-08-10 (`/architect-review`, before any M4 code
+exists)** — ADR-007 is thorough on *transport* (which of `BackgroundTasks`/Celery/WebSocket/
+sync fits M4's live-turn shape) but was reviewed in isolation from one question it never asks:
+**who is actually calling the new endpoint.** Confirmed by direct inspection of `app/deps.py`
+and `app/services/authz.py`: only three roles exist (`admin`/`recruiter`/`hiring_manager`), all
+resolved via the recruiter-side `X-Tenant-Id`/`X-User-Email` dev headers. **No candidate identity
+or auth mechanism exists anywhere in the codebase.** The moment M4's turn endpoint goes live, it
+would be the first candidate-facing route persisting real conversational PII (more sensitive than
+a résumé, per R-006's own framing) with nothing in front of it — R-001's "no auth exists, don't
+expose beyond localhost" posture would be silently inherited by a brand-new persisted-transcript
+table, not just the existing recruiter-side routes it was written about.
+
+Two lower-severity findings from the same review: `docs/implementation-actions.md`'s **IA-006**
+(the tracked M4 action) lists `Dependencies: IA-002, IA-004` but omits **IA-008** (PII/
+encryption) — even though ADR-007's own "Unresolved questions" section calls audio storage "not
+deferrable past M4's build." A real contradiction between two of the project's own decision
+artifacts, cheap to fix, easy to miss once implementation is moving. And: no automated test file
+exists for `interview_pipeline.py` (only the manual `scripts/test_interview_pipeline.py`),
+unlike M2/M3 which both shipped a monkeypatched-`chat_completion` pytest suite alongside the
+router work, not after it.
+
+**Verdict: proceed with conditions** — ADR-007's core transport decision doesn't need
+revisiting, but the candidate-auth question (even a minimal answer — e.g., the unguessable
+`interview_sessions.id` itself as a bearer token, consistent with this project's POC-stage
+posture elsewhere) needs an explicit decision before the turn endpoint's contract is built, not
+after.
+
+**Resolved before the build, not discovered after (ADR-008, same day):** `interview_sessions.id`
+adopted as the bearer credential exactly as this review recommended; audio storage shipped as
+raw/unencrypted, deliberately risk-accepted rather than solved (widens R-006, doesn't close it);
+IA-006's dependency list issue and the missing test file were both fixed directly — 12 new tests
+now exist (`tests/test_interview_sessions.py`). A second design-validation pass, run the same
+day before any router code was written, caught one more structural gap this review missed: the
+cascade's original open-ended system prompt had no termination signal at all, while
+`VoiceInterviewSession.tsx` was already built entirely around a fixed `questions[step]` list —
+fixed by having the interviewer ask the interview's own M3-curated questions in order, ending
+with a detectable sentinel. See [[Project Overview]]'s M4 section for the full build writeup.
+
 ### What is deliberately NOT AI
 
 - **Screening / scoring** (`services/screening.py`) — deterministic keyword matching against
@@ -126,17 +165,20 @@ future optimization effort targets the wrong service.
   (generated at openrouter.ai/keys). `.env.example` is the committed blank template.
 - Resumes contain PII and are saved to disk **before** any downstream processing; a failed
   processing step can still orphan a file with no DB row and no cleanup — unresolved. Interview
-  audio (once M4 persists it) inherits the identical gap — flagged explicitly as a hard
-  dependency for M4's build in ADR-007, not deferrable past it.
+  audio (M4 now persists it — `data/interview_audio/{session_id}/`, unencrypted, same
+  `save_upload`-style pattern) inherits the identical gap. ADR-007 flagged this as a hard,
+  non-deferrable dependency for M4's build; ADR-008 records the decision to ship it plainly and
+  accept the risk (widening R-006's scope, deliberately, not silently) rather than solve
+  encryption inside that milestone.
 
 ## Where AI is still fake or missing (gaps)
 
 | Area                                   | Status                                                                                                 |
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------ |
-| Screening                              | ✅ deterministic & live (free default); ✅ LLM-as-judge also live (M2, 2026-08-10) — explicit, additive, reasons over full candidate profile not just keyword presence; ❌ execution still inline, not moved off the request path (IA-003) |
+| Screening                              | ✅ deterministic & live (free default); ✅ LLM-as-judge also live (M2, 2026-08-10) — explicit, additive, reasons over full candidate profile not just keyword presence; ✅ execution moved off the request path (IA-003, 2026-08-10) — `POST /candidates/{id}/judge` returns `202` via `BackgroundTasks`, frontend polls `GET /candidates/{id}`; this codebase's first `BackgroundTasks` usage |
 | Rubric generation from JD              | ✅ live (deterministic, `generate_rubric`)                                                              |
 | Question generation                    | ✅ live (M3) — LLM-drafted from the JD, optional per-candidate personalization, edit/reorder/regenerate |
 | AI-call resilience (interview cascade) | ✅ live (IA-009) — retry + fallback on hard failures; ❌ no protection against slow-but-successful calls |
-| Voice cascade in the app               | ❌ standalone script only, though real, live-verified, and timed (IA-002) — M4 wires it in; see ADR-007 |
+| Voice cascade in the app               | ✅ live (M4, 2026-08-10) — Voice mode only; real session creation + turn endpoint, curated-question-driven with a detectable end-of-interview signal; live-verified against the real API, including a real TTS-timeout failure hitting the designed retry path; see ADR-007/ADR-008 |
 | Answer evaluation + report             | ❌ (M5)                                                                                                 |
-| Frontend voice/video sessions          | ❌ recording is simulated; avatar is a static icon (see [[Frontend Overview]])                          |
+| Frontend voice/video sessions          | ✅ Voice mode real (M4) — `MediaRecorder` capture, real AI audio playback; ❌ Chat mode still simulated, avatar is still a static icon (see [[Frontend Overview]])                          |

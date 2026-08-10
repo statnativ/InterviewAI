@@ -20,8 +20,13 @@ class Settings(BaseSettings):
     stt_model: str = "qwen/qwen3-asr-flash-2026-02-10"
     tts_model: str = "hexgrad/kokoro-82m"
     tts_voice: str = "af_heart"
+    # IA-004: caps how many prior chat messages get sent back to the LLM each turn (the
+    # system prompt at index 0 is always kept on top of this). No real interview-length
+    # data exists yet, so this is a deliberately generous, tunable-without-a-deploy default.
+    interview_history_max_turns: int = 12
 
     resume_storage_dir: str = "./data/resumes"
+    interview_audio_storage_dir: str = "./data/interview_audio"
 
 
 settings = Settings()

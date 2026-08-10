@@ -58,6 +58,12 @@ JD_TEXT = (
     "We need a staff AI architect with deep LLM orchestration and distributed systems experience "
     "to lead our AI platform team and design our next-generation ML infrastructure."
 )
+# M4: the pipeline now asks the interview's own curated questions (M3) rather than deciding
+# freely — a small fixed list stands in here for the standalone script's fake candidate.
+QUESTIONS = [
+    "Tell me about a time you redesigned a system for real-time or low-latency requirements.",
+    "What was the hardest non-technical challenge in that project, and how did you handle it?",
+]
 
 # Fake candidate answers, spoken via TTS so we have real audio to transcribe.
 # The second answer deliberately references the first, so we can check the
@@ -78,7 +84,7 @@ async def main():
     print(f"--- Starting interview for: {JOB_TITLE} ---")
     _current_turn["n"] = 0  # opening turn: LLM + TTS only, no candidate audio yet
     opening_start = time.perf_counter()
-    turn = await start_interview(JOB_TITLE, JD_TEXT)
+    turn = await start_interview(JOB_TITLE, JD_TEXT, QUESTIONS)
     opening_total = time.perf_counter() - opening_start
     (OUT_DIR / "00_opening_question.mp3").write_bytes(turn.ai_audio)
     print(f"[AI opening question] {turn.ai_text}")

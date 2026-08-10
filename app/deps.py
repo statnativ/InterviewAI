@@ -12,6 +12,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db import get_db
+from app.models.interview_session import InterviewSession
 from app.models.session import Session
 from app.models.tenant import Tenant
 from app.models.user import User
@@ -96,3 +97,26 @@ async def require_platform_admin(
     if user is None or not user.is_platform_admin or user.status != "active":
         raise HTTPException(status_code=401, detail="Not authenticated")
     return user
+
+
+async def get_current_interview_session(
+    session_id: uuid.UUID,
+    db: AsyncSession = Depends(get_db),
+) -> InterviewSession:
+    """M4: the candidate-facing counterpart to get_current_tenant/require_roles above —
+    genuinely different, not an oversight. There is no candidate identity anywhere in this
+    codebase (no login, no header to trust from an anonymous candidate), so
+    `interview_sessions.id` itself is the bearer credential (see ADR-008). Deliberately does
+    NOT call get_current_tenant: tenant scoping for a session is derived transitively
+    (interview_id -> Interview.tenant_id) at session-creation time and stored directly on the
+    row, not asserted per-request via a header nobody sends here.
+
+    404s only on a genuinely unknown session id — this dependency does not judge whether the
+    session's current status (active/complete/abandoned) is valid for the calling route; each
+    route decides that for itself (e.g. POSTing a turn to a completed session is a 409, not a
+    404 — those are different failure meanings this codebase is otherwise careful to keep
+    separate, see interviews.py's 409 on ck_interviews_no_shared_personalized)."""
+    session = await db.get(InterviewSession, session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Interview session not found")
+    return session

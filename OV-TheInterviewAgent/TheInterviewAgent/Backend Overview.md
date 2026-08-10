@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4-prep (ADR-007, latency measurement, AI-client retry/fallback) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4 (voice cascade wired into the app, Voice mode) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
 last-updated: 2026-08-10
 ---
 
@@ -32,31 +32,37 @@ app/
 ├── db.py              # async engine + get_db() dependency
 ├── deps.py            # get_current_tenant / get_current_user / require_roles (M6 P1/P2)
 │                      # + require_platform_admin (master admin session cookie, additive)
+│                      # + get_current_interview_session (M4 — candidate-facing, session-id-as-
+│                      #   credential, deliberately not the tenant/role pattern above)
 ├── seed.py            # idempotent seed loader (python -m app.seed) — also seeds the one
 │                      # platform admin (statnativ)
 ├── models/            # SQLAlchemy models (all registered in models/__init__.py)
 │                      # + session.py, practice_test.py (master admin module)
+│                      # + interview_session.py, interview_turn.py (M4)
 ├── routers/           # health, jobs, candidates, interviews + auth.py, admin.py
+│                      # + interview_sessions.py (M4 — candidate-facing, no tenant/role auth)
 ├── schemas/           # Pydantic view schemas — match frontend TS types 1:1
 │                      # + auth.py, admin.py schemas
+│                      # + interview_session.py (M4)
 ├── services/          # business logic (kept out of the HTTP layer) + authz.py (RBAC matrix)
 │                      # + question_generator.py (M3 — LLM question generation)
-├── storage/           # local.py — uploaded file storage
+├── storage/           # local.py — uploaded file storage (+ save_interview_audio, M4)
 migrations/            # Alembic (env.py imports app.models wholesale)
 tests/                 # pytest: test_health, test_screening, test_tenant_isolation, test_rbac,
                         # test_admin_auth, test_question_generation, test_ai_client_resilience,
-                        # test_candidate_judge
+                        # test_candidate_judge, test_interview_sessions
 scripts/               # standalone tools (synthetic corpus, voice-cascade demo)
 ```
 
-## Data model — 13 tables
+## Data model — 15 tables
 
 Full ATS schema, with pgvector embeddings on `resumes`/`skills` and GIN full-text search on
 `resumes.raw_text`. Six of the original eleven tables carry `tenant_id` (M6 Phase 1) —
 `tenants` itself is the only fully global table; `skills`/`resume_skills`/`job_skills`/
 `ai_processing_logs` stay untenanted (shared taxonomy / join tables that inherit isolation
 through their parent FKs). Two more tables (`sessions`, `practice_tests`) were added by the
-master admin auth module — see the addendum in [[Identity & Access Overview]]:
+master admin auth module — see the addendum in [[Identity & Access Overview]]. Two more still
+(`interview_sessions`, `interview_turns`) were added by M4 — see below.
 
 | Table | Model file | Purpose |
 |---|---|---|
@@ -72,6 +78,8 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
 | `applications` | `application.py` | `tenant_id` + the screening record: `candidate_id`+`job_id`+`resume_id`, `status`, `stage`, `match_score`, `match_breakdown` (JSONB, still unused), plus screening outputs **`shortlisted`, `decision`, `pipeline_stage`, `scorecard` (JSONB), `strengths`/`gaps` (string arrays), `compare_verdict`, `ai_note`**, and **`score_method`** (`deterministic`/`llm_judge`, `CHECK ck_applications_score_method`, real column + constraint from day one, not inferred — see the LLM-as-judge section below). **`judge_status`/`judge_error`** (new — IA-003: `idle`/`pending`/`failed`, `CHECK ck_applications_judge_status`, `judge_error` nullable `Text`) — real, pollable state for the backgrounded judge call, since failure can no longer surface as a synchronous HTTP error. Fully wired. |
 | `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
+| `interview_sessions` | `interview_session.py` | **New (M4)**: `tenant_id`, `interview_id`, `candidate_id` (nullable — a `shared` interview link has no candidate to attribute the session to), `status` (`active`/`complete`/`abandoned`, `CHECK ck_interview_sessions_status`). `id` doubles as the bearer credential for every turn request (ADR-008) — no candidate login exists anywhere in this codebase. |
+| `interview_turns` | `interview_turn.py` | **New (M4)**: `session_id` + `turn_index` (client-supplied, `UNIQUE(session_id, turn_index)` — the idempotency key ADR-007's persist-before-calling pattern depends on), `status` (`pending`/`complete`/`failed`, `CHECK ck_interview_turns_status`), `candidate_audio_path`/`candidate_audio_format`, `transcript`, `ai_text`, `ai_audio_path`, `error`. Audio paths point at unencrypted local disk (`data/interview_audio/`) — a deliberate, risk-accepted extension of R-006, recorded in ADR-008. |
 
 ### Schema evolution (the migration story)
 
@@ -109,6 +117,11 @@ master admin auth module — see the addendum in [[Identity & Access Overview]]:
   ck_applications_judge_status` (`idle`/`pending`/`failed`) and `applications.judge_error`
   (`Text`, nullable). Same discipline again — a third real, inspectable state-discriminator
   column this session, not an inferred flag.
+- `c9d0e1f2a3b4_interview_sessions_and_turns.py` — M4: two new tables, `interview_sessions`
+  and `interview_turns` (see Data model above), each with the same `String(20)` + `CHECK`
+  status-column discipline, plus `interview_turns`' `UNIQUE(session_id, turn_index)` idempotency
+  constraint. Migration docstring cites ADR-007 and ADR-008 for why audio storage is unencrypted
+  by deliberate choice, not oversight.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -129,6 +142,7 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 | `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
+| `interview_sessions.py` | **New (M4)**: `POST /interviews/{interview_id}/sessions` (open access, keyed on the interview's own unguessable id — creates a session, seeds the opening AI question from the interview's curated questions), `POST /interview-sessions/{session_id}/turns` (the core exchange — persist-before-calling, idempotent on `turn_index`), `GET /interview-sessions/{session_id}` (reload/resume), `POST /interview-sessions/{session_id}/complete`. **No `get_current_tenant`/`require_roles` on any of these** — see the dedicated callout below. |
 
 Design rules: view schemas are flat and match `frontend/src/data/types.ts` field-for-field
 (`app/services/views.py` maps ORM → view); business logic never lives in routers — it's in
@@ -151,7 +165,9 @@ recognized user with the wrong role gets `403`. These headers are explicitly a s
 Phase 3's real session-based auth, not real security — nothing stops a client from claiming any
 tenant/email today. **`auth`/`admin` routes are a separate, real-auth surface** (session cookie
 via `require_platform_admin`, not the dev headers) — see [[Identity & Access Overview]]
-addendum for why this doesn't count as Phase 3 being done.
+addendum for why this doesn't count as Phase 3 being done. **`interview_sessions.py` routes are
+a third, separate surface again** — no headers at all, session-id-as-credential instead (M4,
+ADR-008) — see the dedicated callout below.
 
 **`POST /candidates/{app_id}/judge` is this codebase's first-ever use of FastAPI
 `BackgroundTasks` (IA-003, 2026-08-10 — confirmed via grep before writing it: zero prior usage).**
@@ -177,6 +193,49 @@ need" call on M4: M4's cascade is a live, turn-by-turn conversation where queuei
 UX worse; LLM-as-judge is a one-shot, explicit, non-interactive action, and a live measurement
 (~8s for one `judge_candidate` call) is exactly the "measured need" ADR-007 said to wait for.
 
+**`interview_sessions.py` is this codebase's first candidate-facing, non-recruiter auth pattern
+(M4, ADR-008).** Every other router resolves identity via `get_current_tenant`/`require_roles`
+(the `X-Tenant-Id`/`X-User-Email` dev headers) — that pattern assumes a recruiter is calling.
+There is no candidate identity anywhere in this app (no login, no header a candidate's browser
+would send), so this router uses a genuinely different dependency instead:
+`get_current_interview_session` (`app/deps.py`) resolves `session_id` from the URL path, loads
+the `InterviewSession` row, and 404s only if it doesn't exist — deliberately **not** calling
+`get_current_tenant` (there's no header to trust), with `tenant_id` instead derived transitively
+(`interview_id` → `Interview.tenant_id`) once, at session-creation time, and stored directly on
+the row. The dependency also deliberately does *not* judge whether the session's current status
+is valid for the calling route — that's left to each route (`POST .../turns` on a
+`complete`/`abandoned` session is a `409` from the route itself, not folded into the dependency's
+404), matching this codebase's existing discipline of keeping "doesn't exist" and "exists but
+wrong state" as distinct failure meanings (see `ck_interviews_no_shared_personalized`'s `409`
+above).
+
+`interview_sessions.id` (an unguessable UUID, minted at creation) *is* the bearer credential —
+no separate token or login system. Session creation itself is keyed on the interview's own id
+(already an unguessable UUID, already the frontend's URL param since M3), so there's no
+unauthenticated bootstrap step to design around. ADR-008 records this as a deliberate,
+risk-accepted choice — consistent with R-001's existing posture for the recruiter side pre-M6 —
+not an oversight; R-001 has been extended to note the new surface it now covers.
+
+**The turn endpoint's persist-before-calling idempotency, made concrete** (ADR-007 specified the
+pattern; here's exactly how it's implemented): `POST /interview-sessions/{id}/turns` takes a
+**client-supplied** `turn_index` — not server-derived from a count, which would defeat the whole
+mechanism, since a client retry needs to land on the *same* index to be recognized as a retry,
+not a new turn. On each call: an existing `complete` row for that `(session_id, turn_index)`
+returns the cached result immediately, without re-running the cascade (avoids double-billing the
+LLM/TTS calls); an existing `pending` row means a request for this exact turn is genuinely still
+in flight, so it's a `409`; an existing `failed` row is retried (flipped back to `pending`); no
+row means one is inserted `pending`, then the DB session is closed *before* the slow cascade call
+— two short, separate `async_session()` scopes bracketing the call, matching
+`_run_judge_in_background`'s shape above, never one session held open across it (ADR-007's
+connection-pool-exhaustion concern: SQLAlchemy's default pool is 5+10 overflow, and the cascade's
+worst case is 60s × 3 calls).
+
+**Live-verified against the real API, not just the mocked test suite**: a genuine TTS timeout on
+`hexgrad/kokoro-82m` (the same failure mode IA-002/IA-009 already documented) hit exactly the
+failed→retry path above — the turn row flipped to `failed` with the real error text captured,
+the session stayed `active`, and resubmitting the identical `turn_index` succeeded normally on
+retry.
+
 ## Services — where the logic lives
 
 | Service | Responsibility |
@@ -191,10 +250,11 @@ UX worse; LLM-as-judge is a one-shot, explicit, non-interactive action, and a li
 | `llm_client.py` | OpenRouter `/chat/completions` via a shared, connection-pooled client (`get_http_client()`, IA-014). Supports `exclude_reasoning=True` to strip a reasoning model's "thinking" from visible output. Response shape validated + a hard-failure retry/fallback (`post_with_retry`, opt-in `fallback_model`) added 2026-08-10 (IA-009) after IA-002 reproduced both failure modes live — depth in [[AI Architecture]]. |
 | `stt_client.py` | OpenRouter `/audio/transcriptions`. Model: `qwen/qwen3-asr-flash-2026-02-10`. One same-model retry (IA-009). |
 | `tts_client.py` | OpenRouter `/audio/speech`. Model: `hexgrad/kokoro-82m` — **paid**, not free-tier (a prior version of this note miscalled it free-tier). One same-model retry (IA-009) — this is the leg that hit a real 60s timeout during IA-002. |
-| `interview_pipeline.py` | Chains STT→LLM→TTS. `start_interview()` + `run_turn()`; conversation history (a list of chat messages) **is** the session state, passed in and returned, not owned by the module. Interviewer brain: `nvidia/nemotron-3-ultra-550b-a55b:free`, with automatic fallback to `deepseek/deepseek-v4-pro` on hard failure (IA-009). Real, live-verified, timed (IA-002: 8.24s/12.51s full-turn totals) — but still a standalone demo, not wired into the app; see ADR-007 for M4's chosen execution model. |
+| `interview_pipeline.py` | Chains STT→LLM→TTS. `start_interview()` + `run_turn()`; conversation history (a list of chat messages) **is** the session state, passed in and returned, not owned by the module. Interviewer brain: `nvidia/nemotron-3-ultra-550b-a55b:free`, with automatic fallback to `deepseek/deepseek-v4-pro` on hard failure (IA-009). **Wired into the app now (M4)** — `app/routers/interview_sessions.py` calls it for real, not just the standalone script. `start_interview()` now takes the interview's own curated `questions` (M3) and builds a system prompt instructing the interviewer to ask them in order with limited follow-ups, ending with a detectable `[INTERVIEW_COMPLETE]` sentinel (`strip_completion_sentinel`) instead of an open-ended, no-termination conversation. New `bound_history()` (IA-004) caps what's sent to the LLM each turn — a pure function, called by the router before `run_turn`, not inside the module itself (`run_turn`'s own signature is unchanged, per ADR-007). |
 
 `app/storage/local.py` saves uploaded files under `data/resumes/{candidate_id}/` with a
-random prefix.
+random prefix — plus `save_interview_audio` (M4), same pattern, under
+`data/interview_audio/{session_id}/`.
 
 ## Request traces
 
@@ -213,7 +273,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 70 tests, all DB-backed
+pytest                          # from repo root (venv active) — 82 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -265,6 +325,22 @@ pytest                          # from repo root (venv active) — 70 tests, all
   with no rubric → `400` synchronously, still pre-background; cross-tenant application id → 404;
   judging then deterministic re-screening the same application flips `scoreMethod` back to
   `"deterministic"` — a documented, tested contract, now polled for completion first.
+- `tests/test_interview_sessions.py` — **new (M4)**, 12 tests: STT/LLM/TTS all monkeypatched at
+  `interview_pipeline`'s import site (fake `chat_completion`/`transcribe`/`synthesize`), same
+  convention as the other AI-mocked suites — these test the router's persistence/idempotency
+  logic, not HTTP-layer resilience (`test_ai_client_resilience.py`'s job). Covers: session
+  creation happy path + `400` on non-Voice mode + `400` on zero questions + `404` on an unknown
+  interview; a turn call with **no tenant/user headers at all** succeeds (the point of the
+  design); a retried `turn_index` returns the cached result without re-running the cascade
+  (asserted via a captured-calls counter); a manually-inserted `pending` row for the same
+  `(session_id, turn_index)` → `409`; an `LLMError` mid-cascade → row `failed` + `error`
+  captured, session stays `active`, and a resubmitted identical `turn_index` succeeds and
+  completes; unknown `session_id` → `404`; a turn on an already-`complete` session → `409`;
+  history bounding (seeds turns past `interview_history_max_turns`, asserts the captured
+  message list sent to the fake LLM stays capped); the `[INTERVIEW_COMPLETE]` sentinel in a
+  fake LLM response flips the session to `complete` and is stripped from the returned `aiText`.
+  **Also live-verified against the real OpenRouter API** (not just this mocked suite) — see the
+  `interview_sessions.py` callout above for the real TTS-timeout-then-retry finding.
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
   sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
   module-level async engine in `app/db.py` binds to whichever event loop is running on first

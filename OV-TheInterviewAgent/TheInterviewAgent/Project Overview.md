@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi]
-status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) complete
+status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) + M4 (voice cascade wired in, Voice mode) complete
 last-updated: 2026-08-10
 ---
 
@@ -41,7 +41,7 @@ ATS vertical slice are built so far):
 | — | **Full ATS vertical slice** — deterministic JD-rubric screening (server-side), jobs/candidates/interviews CRUD, React frontend fully wired to the API (no localStorage) | sync vs async, schema alignment, client↔API contract design | ✅ done (2026-08-09) |
 | M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | ✅ done (2026-08-10) — deterministic scoring **and** LLM-as-judge scoring both live, additive, explicit `POST /candidates/{id}/judge` action; execution moved off the request path (IA-003: `BackgroundTasks` + polling `GET /candidates/{id}`) |
 | M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
-| M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ⬜ not started |
+| M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ✅ done (2026-08-10) — Voice mode only; live-verified against the real API, including a real TTS timeout hitting the designed failure path |
 | M4b | Async → video capture | media-type-as-data, object storage | ⬜ not started |
 | M5 | Answer evaluation + aggregated report, human override | pipeline orchestration, explainability | ⬜ not started |
 | M6 | Identity & Access — tenant isolation, RBAC, OIDC SSO, MFA, SCIM (enterprise reqs) | authn vs authz, multi-tenant isolation, protocols (OIDC/SAML), provisioning | 🔶 Phase 1 (tenants) + Phase 2 (RBAC) shipped & tested (2026-08-09); master admin auth module (email/password, separate from tenant SSO) shipped & tested (2026-08-09); Phase 3 (tenant OIDC SSO) not started |
@@ -412,10 +412,64 @@ Shipped in two passes the same day:
    Full detail: [[Backend Overview]] (migration, endpoint, background-task pattern),
    [[Frontend Overview]] (polling `useEffect`, store's `pollCandidate` action).
 
+## M4 — the voice cascade wired into the app (2026-08-10)
+
+`app/services/interview_pipeline.py` (STT→LLM→TTS) went from a standalone script to a real,
+candidate-reachable feature the same day ADR-007 settled its execution model. A fresh
+`/architect-review` against that plan — run before any M4 code existed — found ADR-007 was
+thorough on *transport* but never asked who's calling the new endpoint: no candidate identity
+exists anywhere in this codebase. That review, plus a frontend exploration confirming the gap
+concretely (`OnboardingConsent.tsx` collects no name/email; every candidate-facing API call sent
+the *recruiter's* headers), drove four decisions before implementation started — full reasoning
+in **ADR-008**:
+
+1. **Candidate auth**: `interview_sessions.id` itself (an unguessable UUID) is the bearer
+   credential for every turn — no login, no token system. Consistent with R-001's existing
+   accepted posture for the recruiter side pre-M6.
+2. **Audio storage**: raw, unencrypted local disk — same pattern as résumé uploads. A
+   deliberate, risk-accepted widening of R-006, not a fix for it.
+3. **IA-004** (bounding conversation history) built *first*, inside this same milestone, not
+   deferred.
+4. **Question source**: the cascade asks the interview's own M3-curated questions, in order,
+   with limited follow-ups, then signals completion via a detectable token
+   (`[INTERVIEW_COMPLETE]`) — not a fully open-ended, LLM-paced conversation. This was the
+   sharpest finding from a second design-validation pass: `VoiceInterviewSession.tsx` was
+   already built entirely around a fixed `questions[step]` list, and the original open-ended
+   prompt had no termination signal at all.
+
+**What shipped**: new `interview_sessions`/`interview_turns` tables (migration `c9d0e1f2a3b4`)
+and `app/routers/interview_sessions.py` — `POST /interviews/{id}/sessions` (creates a session,
+seeds the opening question), `POST /interview-sessions/{id}/turns` (the core exchange, with a
+persist-before-calling idempotency pattern keyed on `(session_id, turn_index)` exactly as
+ADR-007 specified), `GET`/`.../complete` for reload and early exit. `bound_history()` (IA-004)
+caps what's sent to the LLM each turn. Scope deliberately narrow: **Voice mode only** — Chat mode
+(text-only) and Avatar mode are untouched, separate future work.
+
+**Live-verified against the real OpenRouter API**, not just mocked tests: the full session
+creation → real STT transcription → curated-question follow-up → real TTS playback loop worked
+end-to-end in the browser. One real-world find along the way — a genuine TTS timeout on
+`hexgrad/kokoro-82m` (the same failure mode IA-002/IA-009 had already documented) hit the new
+failed→retry path exactly as designed: the turn row flipped to `failed` with the real error
+captured, the session stayed `active`, and resubmitting the identical turn succeeded and
+completed normally. Also observed, worth noting plainly: the LLM didn't always perfectly respect
+the "at most one follow-up per question" instruction in the system prompt — a real prompt-
+adherence limitation, not a bug in the persistence/idempotency logic, which behaved correctly
+regardless of how many turns the LLM took.
+
+12 new tests (`tests/test_interview_sessions.py`, fake STT/LLM/TTS doubles) covering idempotent
+retry, concurrent-pending `409`, failure-then-retry, unknown-session `404`, history bounding, and
+sentinel-triggered termination — full suite 82/82 passing. `npm run build` clean.
+
+Full detail: [[Backend Overview]] (schema, router, the first candidate-facing auth pattern in
+this codebase), [[AI Architecture]] (cascade/prompt changes), [[Frontend Overview]] (session
+flow wiring, the header-free `sessionRequest` helper).
+
 ## Next up
 
-- **M4** — wire the voice cascade into the app with DB persistence; next natural milestone now
-  that M2 and M3 are both done.
+- **M4b** — async → video capture; the next natural extension now that M4's audio-only cascade
+  is live.
+- **Extend IA-003's `BackgroundTasks` pattern and IA-004's bounding discipline** where relevant
+  as later milestones add AI calls — M4 proved both patterns work, not just in theory.
 - **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested
   ([[Identity & Access Overview]]); a master admin auth module (real email/password login +
   session cookie, one cross-tenant operator account — creates tenants, creates/approves users,

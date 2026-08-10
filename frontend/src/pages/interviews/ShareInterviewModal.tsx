@@ -40,7 +40,10 @@ export function ShareInterviewModal({
     );
   }
 
-  const link = `https://app.statnativ.com/i/${interview.id}`;
+  // Was `https://app.statnativ.com/i/${interview.id}` — matched no route in App.tsx and
+  // went nowhere (found during M4's frontend exploration). Points at the real candidate
+  // entry route now.
+  const link = `${window.location.origin}/session/${interview.id}/consent`;
 
   return (
     <Modal

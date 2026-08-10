@@ -102,12 +102,30 @@ export interface Interview {
   shared: boolean;
 }
 
-export interface SessionInfo {
+// M4: response shape for POST /interviews/:id/sessions and POST /interview-sessions/:id/turns.
+// Replaces the old, never-populated SessionInfo type.
+export interface TurnResult {
+  sessionId: string;
+  turnIndex: number;
+  transcript: string | null;
+  aiText: string;
+  aiAudio: string; // base64-encoded audio bytes — no file-serving endpoint exists (see ADR-008)
+  aiAudioFormat: string;
+  status: "active" | "complete" | "abandoned";
+}
+
+export interface TurnSummary {
+  turnIndex: number;
+  status: "pending" | "complete" | "failed";
+  transcript: string | null;
+  aiText: string | null;
+}
+
+export interface InterviewSessionInfo {
   id: string;
-  candidateName: string;
-  jobTitle: string;
-  interviewTitle: string;
-  mode: InterviewMode;
+  interviewId: string;
+  status: "active" | "complete" | "abandoned";
+  turns: TurnSummary[];
 }
 
 export interface ChatMessage {

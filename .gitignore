@@ -4,6 +4,7 @@ __pycache__/
 .env
 data/resumes/
 data/pipeline_test/
+data/interview_audio/
 .pytest_cache/
 *.egg-info/
 node_modules/
