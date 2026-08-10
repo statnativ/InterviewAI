@@ -85,7 +85,7 @@ export interface InterviewQuestion {
   difficulty: "Easy" | "Medium" | "Hard";
 }
 
-export type InterviewMode = "Chat" | "Voice" | "Avatar";
+export type InterviewMode = "Chat" | "Voice" | "Avatar" | "Video";
 
 export interface Interview {
   id: string;
@@ -117,6 +117,7 @@ export interface TurnResult {
 export interface TurnSummary {
   turnIndex: number;
   status: "pending" | "complete" | "failed";
+  mediaType: "audio" | "video"; // M4b
   transcript: string | null;
   aiText: string | null;
 }

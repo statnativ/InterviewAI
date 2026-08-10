@@ -4,12 +4,13 @@ import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { useAppStore } from "@/store/useAppStore";
-import { Plus, MessageSquare, Mic, Video, Share2 } from "lucide-react";
+import { Plus, MessageSquare, Mic, Video, Camera, Share2 } from "lucide-react";
 import type { InterviewMode } from "@/data/types";
 
 const modeIcon: Record<InterviewMode, typeof MessageSquare> = {
   Chat: MessageSquare,
   Voice: Mic,
+  Video: Camera,
   Avatar: Video,
 };
 

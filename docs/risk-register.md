@@ -159,22 +159,29 @@ currently a solo project, so most risks are owned by Amit Tiwari by default.
   pattern as `save_upload`) — voice is arguably more sensitive than a résumé file, and ADR-007
   flagged this as a hard, non-deferrable dependency for M4's build. ADR-008 records the decision
   to ship it plainly and accept the risk rather than solve encryption inside that milestone.
-- **Evidence**: `app/storage/local.py` writes plaintext files to `data/resumes/` and (new)
-  `data/interview_audio/`; no encryption configuration anywhere in `docker-compose.yml` or
-  `app/db.py`.
+  **M4b widened it again, in the same direction**: a Video-mode candidate's uploaded `video/webm`
+  file (both their likeness on camera and their voice) is stored on the same unencrypted local
+  disk via the same `save_interview_audio` function, reused as-is rather than given a
+  video-specific sibling. Video is a richer, more re-identifying PII category than either a
+  résumé or an audio-only recording — this is a second, deliberate extension of the same
+  risk-accepted posture, not a new risk or an oversight.
+- **Evidence**: `app/storage/local.py` writes plaintext files to `data/resumes/` and
+  `data/interview_audio/` (now holding both audio- and video-mode candidate uploads,
+  distinguished only by `interview_turns.media_type`, migration `d0e1f2a3b4c5`); no encryption
+  configuration anywhere in `docker-compose.yml` or `app/db.py`.
 - **Likelihood**: High (certain, given current state)
 - **Impact**: High (real PII, real compliance exposure the moment real candidate data is used —
-  now covering voice recordings in addition to résumés)
+  now covering voice **and video** recordings in addition to résumés)
 - **Severity**: High
 - **Owner**: Amit Tiwari
 - **Mitigation**: None yet. Not explicitly sequenced into a milestone — currently implicit in
   M6 (auth/tenancy) but compliance/encryption isn't called out on its own. IA-008 remains the
-  tracked action for closing this for real, covering résumés and interview audio together.
-- **Contingency**: Do not use real candidate PII (including real interview audio) until this is
-  addressed.
+  tracked action for closing this for real, covering résumés and interview audio/video together.
+- **Contingency**: Do not use real candidate PII (including real interview audio/video) until
+  this is addressed.
 - **Trigger**: Any use of real (non-test) candidate data.
 - **Status**: Open
-- **Related ADR or product decision**: ADR-008
+- **Related ADR or product decision**: ADR-008, PD-001
 
 ---
 

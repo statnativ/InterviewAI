@@ -1,4 +1,4 @@
-"""M4: candidate-facing endpoints for taking a Voice-mode interview.
+"""M4/M4b: candidate-facing endpoints for taking a Voice- or Video-mode interview.
 
 Deliberately NOT scoped like every other router in this codebase — no
 `get_current_tenant`/`require_roles` here. There is no candidate identity
@@ -6,6 +6,12 @@ anywhere in this app; `interview_sessions.id` itself is the bearer
 credential (see `get_current_interview_session` in app/deps.py and
 ADR-008). Session creation is keyed on the interview's own id, which is
 already an unguessable UUID and already the frontend's URL param.
+
+M4b (video capture) touches only the mode gate and `InterviewTurn.media_type`
+below — `interview_pipeline.py`'s cascade itself needed zero changes, the
+concrete proof of PD-001's "swap the capture type, not the architecture"
+claim. The interviewer's own response is always synthesized audio (TTS)
+regardless of `media_type`; only the candidate's uploaded answer differs.
 """
 import base64
 import uuid
@@ -33,7 +39,10 @@ router = APIRouter(tags=["interview-sessions"])
 
 def _turn_summaries(turns: list[InterviewTurn]) -> list[TurnSummaryView]:
     return [
-        TurnSummaryView(turnIndex=t.turn_index, status=t.status, transcript=t.transcript, aiText=t.ai_text)
+        TurnSummaryView(
+            turnIndex=t.turn_index, status=t.status, transcript=t.transcript, aiText=t.ai_text,
+            mediaType=t.media_type,
+        )
         for t in turns
     ]
 
@@ -79,8 +88,9 @@ async def create_interview_session(
     interview = await db.get(Interview, interview_id)
     if interview is None:
         raise HTTPException(status_code=404, detail="Interview not found")
-    if interview.mode != "Voice":
-        raise HTTPException(status_code=400, detail="This interview isn't a Voice-mode interview.")
+    if interview.mode not in ("Voice", "Video"):
+        raise HTTPException(status_code=400, detail="This interview isn't a Voice or Video-mode interview.")
+    media_type = "video" if interview.mode == "Video" else "audio"
     questions = [q["prompt"] for q in (interview.questions or [])]
     if not questions:
         raise HTTPException(status_code=400, detail="This interview has no questions to ask yet.")
@@ -111,6 +121,7 @@ async def create_interview_session(
             session_id=session.id,
             turn_index=0,
             status="complete",
+            media_type=media_type,  # turn 0 has no candidate media either way — recorded for consistency
             ai_text=result.ai_text,
             ai_audio_path=str(ai_audio_path),
             completed_at=now,
@@ -155,8 +166,13 @@ async def submit_turn(
         if existing is not None and existing.status == "pending":
             raise HTTPException(status_code=409, detail="This turn is already being processed.")
 
+        interview = await db.get(Interview, session.interview_id)
+        media_type = "video" if interview.mode == "Video" else "audio"
+
         if existing is None:
-            turn_row = InterviewTurn(session_id=session.id, turn_index=turn_index, status="pending")
+            turn_row = InterviewTurn(
+                session_id=session.id, turn_index=turn_index, status="pending", media_type=media_type
+            )
             db.add(turn_row)
         else:  # existing.status == "failed" — retry allowed
             turn_row = existing
@@ -177,7 +193,6 @@ async def submit_turn(
             )
         ).scalars().all()
 
-        interview = await db.get(Interview, session.interview_id)
         job = await db.get(Job, interview.job_id) if interview.job_id else None
         history = _reconstruct_history(interview, job, prior_turns)
         history = bound_history(history, settings.interview_history_max_turns)

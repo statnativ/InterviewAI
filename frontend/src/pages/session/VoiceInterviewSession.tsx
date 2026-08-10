@@ -7,7 +7,7 @@ import { useAppStore } from "@/store/useAppStore";
 import { api } from "@/lib/api";
 import type { TurnResult } from "@/data/types";
 import { AntiCheatingModal } from "./AntiCheatingModal";
-import { Mic, Square, Clock, Loader2 } from "lucide-react";
+import { Mic, Camera, Square, Clock, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // M4: how a session id survives from OnboardingDeviceCheck (which creates it) into this
@@ -26,11 +26,17 @@ function decodeBase64Audio(base64: string, format: string): string {
   return URL.createObjectURL(blob);
 }
 
+// M4b: this component now serves both Voice (audio-only) and Video mode — "swap the
+// browser capture type, not the architecture" (PD-001). Everything below the capture layer
+// (turn submission, idempotency, reconciliation, AI-audio playback) is identical for both;
+// only getUserMedia's constraints, the MediaRecorder mimeType probe, and an optional
+// self-view <video> element differ, gated on `isVideo`.
 export function VoiceInterviewSession() {
   const { interviewId } = useParams();
   const navigate = useNavigate();
   const interview = useAppStore((s) => s.interviews.find((i) => i.id === interviewId));
   const ready = useAppStore((s) => s.ready);
+  const isVideo = interview?.mode === "Video";
 
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -50,6 +56,7 @@ export function VoiceInterviewSession() {
   const streamRef = useRef<MediaStream | null>(null);
   const lastFailedRef = useRef<{ blob: Blob; format: string } | null>(null);
   const audioElRef = useRef<HTMLAudioElement>(null);
+  const selfViewRef = useRef<HTMLVideoElement>(null);
 
   const playAiAudio = (base64: string, format: string) => {
     const url = decodeBase64Audio(base64, format);
@@ -162,9 +169,11 @@ export function VoiceInterviewSession() {
 
   const startRecording = async () => {
     setSubmitError(null);
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: isVideo });
     streamRef.current = stream;
-    const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "";
+    if (isVideo && selfViewRef.current) selfViewRef.current.srcObject = stream;
+    const preferredMimeType = isVideo ? "video/webm" : "audio/webm";
+    const mimeType = MediaRecorder.isTypeSupported(preferredMimeType) ? preferredMimeType : "";
     const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
     chunksRef.current = [];
     recorder.ondataavailable = (e) => {
@@ -181,7 +190,9 @@ export function VoiceInterviewSession() {
     if (!recorder) return;
     recorder.onstop = () => {
       streamRef.current?.getTracks().forEach((t) => t.stop());
-      const mimeType = recorder.mimeType || "audio/webm";
+      if (selfViewRef.current) selfViewRef.current.srcObject = null;
+      const fallbackMimeType = isVideo ? "video/webm" : "audio/webm";
+      const mimeType = recorder.mimeType || fallbackMimeType;
       const blob = new Blob(chunksRef.current, { type: mimeType });
       const format = mimeType.split("/")[1]?.split(";")[0] || "webm";
       void submitTurn(blob, format);
@@ -251,6 +262,16 @@ export function VoiceInterviewSession() {
 
             <audio ref={audioElRef} className="mt-4 w-full max-w-xs" controls />
 
+            {isVideo && (
+              <video
+                ref={selfViewRef}
+                autoPlay
+                muted
+                playsInline
+                className="mt-4 h-32 w-44 rounded-md bg-neutral-900 object-cover"
+              />
+            )}
+
             <div className="my-8 flex h-16 items-center gap-1">
               {Array.from({ length: 24 }).map((_, i) => (
                 <span
@@ -282,6 +303,8 @@ export function VoiceInterviewSession() {
                 <Loader2 className="h-6 w-6 animate-spin" />
               ) : recording ? (
                 <Square className="h-6 w-6" />
+              ) : isVideo ? (
+                <Camera className="h-6 w-6" />
               ) : (
                 <Mic className="h-6 w-6" />
               )}

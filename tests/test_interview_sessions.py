@@ -146,7 +146,7 @@ async def test_create_session_happy_path(client, tenant, cascade):
     assert uuid.UUID(body["sessionId"])
 
 
-async def test_create_session_requires_voice_mode(client, tenant, cascade):
+async def test_create_session_requires_voice_or_video_mode(client, tenant, cascade):
     interview_id = await _make_interview(client, tenant, mode="Chat")
     res = await client.post(f"/interviews/{interview_id}/sessions")
     assert res.status_code == 400
@@ -296,3 +296,43 @@ async def test_completion_sentinel_ends_session_and_is_stripped(client, tenant, 
 
     fetched = await client.get(f"/interview-sessions/{session_id}")
     assert fetched.json()["status"] == "complete"
+
+
+async def test_create_session_video_mode(client, tenant, cascade):
+    """M4b: Video mode uses the exact same session-creation path as Voice — no cascade
+    changes needed, only the mode gate."""
+    interview_id = await _make_interview(client, tenant, mode="Video")
+    res = await client.post(f"/interviews/{interview_id}/sessions")
+    assert res.status_code == 201
+
+    session_id = res.json()["sessionId"]
+    fetched = await client.get(f"/interview-sessions/{session_id}")
+    assert fetched.json()["turns"][0]["mediaType"] == "video"
+
+
+async def test_video_mode_turn_persists_media_type(client, tenant, cascade):
+    interview_id = await _make_interview(client, tenant, mode="Video")
+    session_id = (await client.post(f"/interviews/{interview_id}/sessions")).json()["sessionId"]
+
+    data = {"turn_index": "1", "audio_format": "webm"}
+    files = {"audio": ("answer.webm", b"fake-candidate-video-bytes", "video/webm")}
+    res = await client.post(f"/interview-sessions/{session_id}/turns", data=data, files=files)
+    assert res.status_code == 200
+
+    fetched = await client.get(f"/interview-sessions/{session_id}")
+    turn_1 = next(t for t in fetched.json()["turns"] if t["turnIndex"] == 1)
+    assert turn_1["mediaType"] == "video"
+
+
+async def test_voice_mode_turn_media_type_stays_audio(client, tenant, cascade):
+    """Regression: adding Video mode must not change Voice mode's existing behavior."""
+    interview_id = await _make_interview(client, tenant, mode="Voice")
+    session_id = (await client.post(f"/interviews/{interview_id}/sessions")).json()["sessionId"]
+
+    data, files = _audio_payload(1)
+    res = await client.post(f"/interview-sessions/{session_id}/turns", data=data, files=files)
+    assert res.status_code == 200
+
+    fetched = await client.get(f"/interview-sessions/{session_id}")
+    for turn in fetched.json()["turns"]:
+        assert turn["mediaType"] == "audio"

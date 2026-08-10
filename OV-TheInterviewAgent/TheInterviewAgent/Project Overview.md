@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi]
-status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) + M4 (voice cascade wired in, Voice mode) complete
+status: in-progress — ATS vertical slice + M2 (LLM-as-judge, off request path) + M3 (AI question generation) + M4/M4b (voice + video cascade wired in) complete
 last-updated: 2026-08-10
 ---
 
@@ -42,7 +42,7 @@ ATS vertical slice are built so far):
 | M2 | Resume scoring against a JD, moved off the request path | sync vs async, polling, LLM-as-judge | ✅ done (2026-08-10) — deterministic scoring **and** LLM-as-judge scoring both live, additive, explicit `POST /candidates/{id}/judge` action; execution moved off the request path (IA-003: `BackgroundTasks` + polling `GET /candidates/{id}`) |
 | M3 | AI question generation, edit/reorder/regenerate | prompt context injection, idempotency | ✅ done (2026-08-10) |
 | M4 | Wire the voice cascade into the app + DB persistence | background workers, why BackgroundTasks stops being enough → Celery+Redis | ✅ done (2026-08-10) — Voice mode only; live-verified against the real API, including a real TTS timeout hitting the designed failure path |
-| M4b | Async → video capture | media-type-as-data, object storage | ⬜ not started |
+| M4b | Async → video capture | media-type-as-data, object storage | ✅ done (2026-08-10) — new "Video" mode, sibling to Voice; `interview_pipeline.py` needed zero changes, validating PD-001's "same architecture" claim |
 | M5 | Answer evaluation + aggregated report, human override | pipeline orchestration, explainability | ⬜ not started |
 | M6 | Identity & Access — tenant isolation, RBAC, OIDC SSO, MFA, SCIM (enterprise reqs) | authn vs authz, multi-tenant isolation, protocols (OIDC/SAML), provisioning | 🔶 Phase 1 (tenants) + Phase 2 (RBAC) shipped & tested (2026-08-09); master admin auth module (email/password, separate from tenant SSO) shipped & tested (2026-08-09); Phase 3 (tenant OIDC SSO) not started |
 | M6b | Deploy to cloud (Cloud Run + Neon + GCS) | dev/prod config parity, pay-per-use cost tradeoffs | ⬜ not started |
@@ -464,10 +464,63 @@ Full detail: [[Backend Overview]] (schema, router, the first candidate-facing au
 this codebase), [[AI Architecture]] (cascade/prompt changes), [[Frontend Overview]] (session
 flow wiring, the header-free `sessionRequest` helper).
 
+## M4b — video capture (2026-08-10)
+
+Same-day follow-on to M4, and the concrete test of PD-001's own framing: **"swap the browser
+capture type, not the architecture."** Two scope decisions made before implementation: a new
+`"Video"` mode, sibling to `"Voice"` (recruiters choose audio-only vs. video explicitly, not an
+upgrade path); and a direct `save_interview_video`-style reuse of the existing storage function,
+not a new abstraction — a real object-storage layer is M6b's job (actual GCS deployment), not
+something to build speculatively now.
+
+A code exploration before writing the plan found the delta really was small: `interviews.mode`
+has no DB `CheckConstraint` (adding `"Video"` needed zero migration for the value itself), and
+`interview_pipeline.py` doesn't know or care what media a candidate's answer arrived as — it
+only ever sees transcript text. The one genuinely open question was empirical, not architectural:
+whether OpenRouter's STT model would transcribe a webm container holding both video and audio
+tracks, or need the audio extracted first.
+
+**What shipped**: one additive column, `interview_turns.media_type` (`'audio'`/`'video'`, `CHECK
+ck_interview_turns_media_type`, migration `d0e1f2a3b4c5`) — `candidate_audio_path`/
+`candidate_audio_format` were deliberately **not** renamed despite now potentially holding a
+video file, matching this project's additive-migration discipline (same reasoning as `score_method`,
+`judge_status` before it: a real inspectable state column, not an inferred one, and no churn to
+every existing M4 call site for a cosmetic rename). The router's mode gate widened from
+`!= "Voice"` to `not in ("Voice", "Video")`; `media_type` is derived from `interview.mode` and
+stamped on each turn row. `VoiceInterviewSession.tsx` was generalized in place (branching on
+`interview.mode === "Video"` for `getUserMedia` constraints, the `MediaRecorder` mimeType, and an
+optional self-view `<video>` element) rather than forked into a new component — matching PD-001's
+own "same architecture" framing directly, not just in prose.
+
+**The empirical question was answered live, the same discipline M4 used for webm-audio**: a real
+`ffmpeg`-synthesized webm file (vp8 video + opus audio tracks) was submitted through the actual
+`POST /interview-sessions/{id}/turns` endpoint against the live OpenRouter API. OpenRouter's
+`qwen/qwen3-asr-flash-2026-02-10` transcribed the embedded audio track correctly with no
+client-side or server-side extraction — the STT leg needed zero code changes either. Verified
+end-to-end in the browser too: mode picker → Video-mode interview creation → consent → device
+check → the new `/session/:id/video` route, rendering the self-view video element and a
+Camera-icon record button distinct from Voice mode's Mic icon.
+
+**`interview_pipeline.py` needed genuinely zero code changes** — not just claimed, empirically
+confirmed by the same Video-mode turns flowing through the unmodified `start_interview`/`run_turn`
+functions in the live end-to-end run. This is the concrete proof behind PD-001's "same
+architecture" claim, not an assertion.
+
+**Scope boundary, deliberately narrow**: capture, transcribe, store, and cascade through — that's
+it. Recruiter-facing playback/review of a candidate's video is explicitly deferred to M5
+("Answer evaluation + aggregated report" is the natural home for a review UI), which also means
+no new file-serving endpoint was needed this milestone — M4's "no file-serving precedent,
+base64-inline is fine" reasoning holds unchanged.
+
+3 new tests (`tests/test_interview_sessions.py`) — Video-mode session creation, `media_type`
+persistence for a webm turn, a Voice-mode regression check confirming `media_type` still defaults
+to `"audio"` — full suite 85/85 passing. `npm run build` clean.
+
+Full detail: [[Backend Overview]] (schema, router gate, the STT-video empirical finding),
+[[Frontend Overview]] (generalized session component, new route, mode picker).
+
 ## Next up
 
-- **M4b** — async → video capture; the next natural extension now that M4's audio-only cascade
-  is live.
 - **Extend IA-003's `BackgroundTasks` pattern and IA-004's bounding discipline** where relevant
   as later milestones add AI calls — M4 proved both patterns work, not just in theory.
 - **M6** — Phase 1 (tenant isolation) and Phase 2 (RBAC enforcement) are shipped and tested

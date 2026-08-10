@@ -81,6 +81,9 @@ export default function App() {
         <Route path="/session/:interviewId/device" element={<OnboardingDeviceCheck />} />
         <Route path="/session/:interviewId/chat" element={<ChatInterviewSession />} />
         <Route path="/session/:interviewId/voice" element={<VoiceInterviewSession />} />
+        {/* M4b: Video mode shares the same (generalized) component as Voice — same backend
+            session/turn mechanics, only the capture type differs. See VoiceInterviewSession.tsx. */}
+        <Route path="/session/:interviewId/video" element={<VoiceInterviewSession />} />
         <Route path="/session/:interviewId/completed" element={<SessionCompleted />} />
 
         {/* Avatar Interviewer (candidate-facing) */}

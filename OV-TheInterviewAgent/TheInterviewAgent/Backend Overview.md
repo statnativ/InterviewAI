@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, python, fastapi, backend]
-status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4 (voice cascade wired into the app, Voice mode) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
+status: current — ATS vertical slice + M6 Phase 1/2 (tenants, RBAC) wired + master admin auth module + M3 (AI question generation) + M4/M4b (voice + video cascade wired into the app) + M2 (LLM-as-judge scoring, moved off the request path via IA-003)
 last-updated: 2026-08-10
 ---
 
@@ -79,7 +79,7 @@ master admin auth module — see the addendum in [[Identity & Access Overview]].
 | `interviews` | `interview.py` | `tenant_id` + `title`, `job_title` (plain string, kept as a display fallback), `job_id` (**new, M3** — nullable FK to `jobs`, resolves the [[UX Review]] finding #10 IA gap), `candidate_id` (**new, M3** — nullable FK to `candidates`; set means this interview is personalized for one person, not a shared template), `mode` (Chat/Voice/Avatar), `status` (Draft/Active/Archived), `questions` (JSONB), `duration`, `shared`. **`CHECK ck_interviews_no_shared_personalized`** (new, R-011/IA-012): `shared` and `candidate_id IS NOT NULL` can't both be true — prevents a personalized interview from being broadcast to every applicant. No `scheduled_at` column despite an earlier version of this note claiming otherwise. |
 | `ai_processing_logs` | `ai_processing_log.py` | Audit trail for AI calls (model, tokens, cost, success/failure). Table exists, not yet written to. Not tenant-scoped yet — would need it before this becomes a real audit trail (M6 Phase 6). |
 | `interview_sessions` | `interview_session.py` | **New (M4)**: `tenant_id`, `interview_id`, `candidate_id` (nullable — a `shared` interview link has no candidate to attribute the session to), `status` (`active`/`complete`/`abandoned`, `CHECK ck_interview_sessions_status`). `id` doubles as the bearer credential for every turn request (ADR-008) — no candidate login exists anywhere in this codebase. |
-| `interview_turns` | `interview_turn.py` | **New (M4)**: `session_id` + `turn_index` (client-supplied, `UNIQUE(session_id, turn_index)` — the idempotency key ADR-007's persist-before-calling pattern depends on), `status` (`pending`/`complete`/`failed`, `CHECK ck_interview_turns_status`), `candidate_audio_path`/`candidate_audio_format`, `transcript`, `ai_text`, `ai_audio_path`, `error`. Audio paths point at unencrypted local disk (`data/interview_audio/`) — a deliberate, risk-accepted extension of R-006, recorded in ADR-008. |
+| `interview_turns` | `interview_turn.py` | **New (M4)**: `session_id` + `turn_index` (client-supplied, `UNIQUE(session_id, turn_index)` — the idempotency key ADR-007's persist-before-calling pattern depends on), `status` (`pending`/`complete`/`failed`, `CHECK ck_interview_turns_status`), `candidate_audio_path`/`candidate_audio_format`, `transcript`, `ai_text`, `ai_audio_path`, `error`. Audio paths point at unencrypted local disk (`data/interview_audio/`) — a deliberate, risk-accepted extension of R-006, recorded in ADR-008. **`media_type`** (new, M4b — `String(20)`, `'audio'`/`'video'`, `CHECK ck_interview_turns_media_type`): the *columns* weren't renamed when video capture shipped — `candidate_audio_path`/`candidate_audio_format` hold whichever media the candidate uploaded, `media_type` is what records which one, a deliberately additive-not-renamed migration. |
 
 ### Schema evolution (the migration story)
 
@@ -122,6 +122,11 @@ master admin auth module — see the addendum in [[Identity & Access Overview]].
   status-column discipline, plus `interview_turns`' `UNIQUE(session_id, turn_index)` idempotency
   constraint. Migration docstring cites ADR-007 and ADR-008 for why audio storage is unencrypted
   by deliberate choice, not oversight.
+- `d0e1f2a3b4c5_interview_turns_media_type.py` — M4b: adds `interview_turns.media_type`
+  (`'audio'`/`'video'`, `CHECK ck_interview_turns_media_type`). Purely additive — the
+  `candidate_audio_path`/`candidate_audio_format` columns were deliberately **not** renamed
+  despite now potentially holding a video file; a rename would have touched every M4 call site
+  for a cosmetic reason, against this project's additive-migration discipline.
 - `migrations/env.py` does `import app.models` so Alembic and the app can never see
   different slices of the schema (see the bug below that caused this).
 
@@ -142,7 +147,7 @@ Full reference lives in Swagger at `http://localhost:8000/docs` (auto-generated 
 | `interviews.py` | `GET/POST /interviews`, `GET/PATCH /interviews/{iv_id}` (**409**, not a raw 500, if a `PATCH` would violate `ck_interviews_no_shared_personalized` — R-011/IA-012), `POST /interviews/{iv_id}/regenerate` (**new, M3** — replaces the whole question set), `POST /interviews/{iv_id}/questions/{q_id}/regenerate` (**new, M3** — replaces one question in place) |
 | `auth.py` | **New (admin auth module)**: `POST /auth/login` (username/password → session cookie), `POST /auth/logout`, `GET /auth/me`. Platform-admin only — see [[Identity & Access Overview]] addendum. |
 | `admin.py` | **New (admin auth module)**: `GET/POST /admin/tenants`, `GET/POST /admin/users` + `/admin/users/{id}/approve` + `/admin/users/{id}/disable`, `GET/POST /admin/practice-tests`. Every route behind `require_platform_admin` at the router level (`dependencies=[Depends(require_platform_admin)]`). |
-| `interview_sessions.py` | **New (M4)**: `POST /interviews/{interview_id}/sessions` (open access, keyed on the interview's own unguessable id — creates a session, seeds the opening AI question from the interview's curated questions), `POST /interview-sessions/{session_id}/turns` (the core exchange — persist-before-calling, idempotent on `turn_index`), `GET /interview-sessions/{session_id}` (reload/resume), `POST /interview-sessions/{session_id}/complete`. **No `get_current_tenant`/`require_roles` on any of these** — see the dedicated callout below. |
+| `interview_sessions.py` | **New (M4), extended (M4b)**: `POST /interviews/{interview_id}/sessions` (open access, keyed on the interview's own unguessable id — creates a session, seeds the opening AI question from the interview's curated questions; accepts `mode IN ("Voice", "Video")` as of M4b, `400` for anything else), `POST /interview-sessions/{session_id}/turns` (the core exchange — persist-before-calling, idempotent on `turn_index`; the uploaded blob's `media_type` is derived from `interview.mode` and stamped on the turn row), `GET /interview-sessions/{session_id}` (reload/resume), `POST /interview-sessions/{session_id}/complete`. **No `get_current_tenant`/`require_roles` on any of these** — see the dedicated callout below. |
 
 Design rules: view schemas are flat and match `frontend/src/data/types.ts` field-for-field
 (`app/services/views.py` maps ORM → view); business logic never lives in routers — it's in
@@ -236,6 +241,34 @@ failed→retry path above — the turn row flipped to `failed` with the real err
 the session stayed `active`, and resubmitting the identical `turn_index` succeeded normally on
 retry.
 
+**M4b widened `interview_sessions.py` to a second capture type — and the interesting part is
+everything it *didn't* have to change.** The router's mode gate went from `interview.mode !=
+"Voice"` to `interview.mode not in ("Voice", "Video")`; `submit_turn` derives `media_type` from
+`interview.mode` (fetched once, same call already used for history reconstruction) and stamps it
+on the turn row. That's the entire router diff. `interview_pipeline.py` — `start_interview`,
+`run_turn`, `build_system_prompt` — needed **zero** code changes, confirmed by the same
+Video-mode turns flowing through those unmodified functions in a real end-to-end run: the cascade
+only ever sees transcript-derived text, never the media type it came from. This is the concrete,
+empirically-proven version of PD-001's "swap the capture type, not the architecture" claim, not
+just a restatement of it.
+
+The one genuinely open question going in was whether OpenRouter's STT model would accept a webm
+container holding **both** video and audio tracks, or need the video stream stripped first —
+`stt_client.py`'s `transcribe(audio_bytes, audio_format)` has always passed `audio_format` through
+unvalidated, so nothing in the code enforced audio-only input, but nothing had ever tested the
+video case either. Answered empirically the same way M4 validated webm-audio compatibility: a
+real `ffmpeg`-synthesized test file (`color=c=blue:s=320x240:d=6` + a sample MP3 track, encoded
+`libvpx`/`libopus` into a genuine webm container) was submitted through the actual `POST
+/interview-sessions/{id}/turns` endpoint against the live API. `qwen/qwen3-asr-flash-2026-02-10`
+transcribed the embedded audio track correctly, no client-side or server-side extraction needed —
+the STT leg needed exactly as much code change as the rest of the cascade: none.
+
+**Storage got no video-specific sibling function, on purpose.** `save_interview_audio` was
+already `(bytes, filename, session_id) → Path` with zero content-type awareness — reusing it for
+video bytes required no new code, just an updated doc comment noting it now handles either media
+type. `InterviewTurn.media_type` is what distinguishes audio from video for anything that reads
+the data back later (a future M5 review UI), not the storage layer itself.
+
 ## Services — where the logic lives
 
 | Service | Responsibility |
@@ -273,7 +306,7 @@ against the job → `Resume` + updated application persisted. Deterministic — 
 ## Tests
 
 ```bash
-pytest                          # from repo root (venv active) — 82 tests, all DB-backed
+pytest                          # from repo root (venv active) — 85 tests, all DB-backed
                                  # ones run against the real dev Postgres (no test-DB isolation
                                  # layer exists yet; each test cleans up what it creates)
 ```
@@ -325,7 +358,7 @@ pytest                          # from repo root (venv active) — 82 tests, all
   with no rubric → `400` synchronously, still pre-background; cross-tenant application id → 404;
   judging then deterministic re-screening the same application flips `scoreMethod` back to
   `"deterministic"` — a documented, tested contract, now polled for completion first.
-- `tests/test_interview_sessions.py` — **new (M4)**, 12 tests: STT/LLM/TTS all monkeypatched at
+- `tests/test_interview_sessions.py` — **new (M4), extended (M4b)**, 15 tests: STT/LLM/TTS all monkeypatched at
   `interview_pipeline`'s import site (fake `chat_completion`/`transcribe`/`synthesize`), same
   convention as the other AI-mocked suites — these test the router's persistence/idempotency
   logic, not HTTP-layer resilience (`test_ai_client_resilience.py`'s job). Covers: session
@@ -339,8 +372,13 @@ pytest                          # from repo root (venv active) — 82 tests, all
   history bounding (seeds turns past `interview_history_max_turns`, asserts the captured
   message list sent to the fake LLM stays capped); the `[INTERVIEW_COMPLETE]` sentinel in a
   fake LLM response flips the session to `complete` and is stripped from the returned `aiText`.
+  **New (M4b)**: session creation succeeds for `mode="Video"` (previously only `"Voice"` was
+  tested — confirms the widened gate); a turn submitted with `audio_format="webm"` on a
+  Video-mode session persists `media_type="video"`; a Voice-mode session's turns still persist
+  `media_type="audio"` (regression, confirms the default/explicit-set behavior for both paths).
   **Also live-verified against the real OpenRouter API** (not just this mocked suite) — see the
-  `interview_sessions.py` callout above for the real TTS-timeout-then-retry finding.
+  `interview_sessions.py` callout above for the real TTS-timeout-then-retry finding, and the
+  M4b callout below for the real STT-video finding.
 - `pytest.ini` — `asyncio_default_fixture_loop_scope = session`, and **every** async test file
   sets `pytest.mark.asyncio(loop_scope="session")` at module level. Needed because the
   module-level async engine in `app/db.py` binds to whichever event loop is running on first

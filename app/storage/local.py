@@ -16,7 +16,11 @@ def save_upload(file_bytes: bytes, filename: str, candidate_id: uuid.UUID) -> Pa
 
 def save_interview_audio(file_bytes: bytes, filename: str, session_id: uuid.UUID) -> Path:
     """M4: same unencrypted-local-disk pattern as save_upload above — a deliberate,
-    risk-accepted extension of R-006 to interview audio, not a new pattern. See ADR-008."""
+    risk-accepted extension of R-006 to interview audio, not a new pattern. See ADR-008.
+
+    M4b: also used for Video-mode candidate uploads — despite the name, this function has
+    never been content-type-aware (bytes in, path out), so no video-specific sibling was
+    added; InterviewTurn.media_type is what distinguishes audio vs. video, not this function."""
     safe_name = Path(filename).name
     session_dir = Path(settings.interview_audio_storage_dir) / str(session_id)
     session_dir.mkdir(parents=True, exist_ok=True)

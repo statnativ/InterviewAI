@@ -22,6 +22,7 @@ class TurnSummaryView(BaseModel):
 
     turnIndex: int
     status: str
+    mediaType: str = "audio"  # audio, video — M4b
     transcript: str | None = None
     aiText: str | None = None
 

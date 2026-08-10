@@ -1,6 +1,6 @@
 ---
 tags: [project, system-design, frontend, react, typescript]
-status: prototype — fully wired to the FastAPI backend; sends M6 Phase 1/2 tenant + role headers; new /admin/* module has the app's first real session-based route guard; M3 question generation/edit/reorder/regenerate shipped; M4 Voice mode real recording/playback shipped, sends NO identity headers (candidate-facing, see ADR-008)
+status: prototype — fully wired to the FastAPI backend; sends M6 Phase 1/2 tenant + role headers; new /admin/* module has the app's first real session-based route guard; M3 question generation/edit/reorder/regenerate shipped; M4/M4b Voice + Video mode real recording/playback shipped, sends NO identity headers (candidate-facing, see ADR-008)
 last-updated: 2026-08-10
 ---
 
@@ -106,7 +106,7 @@ route guards, no lazy loading). 27 paths, ~23 real pages + 4 placeholders + 2 re
 | Candidates (cross-job) | `/candidates` | `CandidatesList` — every candidate across every job, with filters/sort/bulk actions/CSV export |
 | Candidates (per job) | `/jobs/:jobId/candidates`, `/candidates/:candidateId`, `/pipeline`, `/compare` | `RankedShortlist`, `CandidateDetail`, `PipelineBoard`, `ComparativeReport` |
 | Interviews | `/interviews`, `/interviews/new`, `/interviews/:interviewId/edit`, `/persona-builder` | `InterviewsList`, `NewInterview`, `InterviewEditor`, `PersonaBuilder` |
-| Session (candidate-facing) | `/session/:interviewId/consent`, `/device`, `/chat`, `/voice`, `/completed` | `OnboardingConsent`, `OnboardingDeviceCheck`, `ChatInterviewSession`, `VoiceInterviewSession`, `SessionCompleted` |
+| Session (candidate-facing) | `/session/:interviewId/consent`, `/device`, `/chat`, `/voice`, `/video`, `/completed` | `OnboardingConsent`, `OnboardingDeviceCheck`, `ChatInterviewSession`, `VoiceInterviewSession` (also serves `/video`, **new M4b**), `SessionCompleted` |
 | Avatar (candidate-facing) | `/avatar/:interviewId/disclosure`, `/interview` | `AIDisclosure`, `AvatarVideoInterview` |
 | Placeholders | `/practices`, `/sessions`, `/questions`, `/answer-bank` | `PlaceholderPage` (reused 4× with different props) |
 | Master admin | `/admin/login`; `/admin` (nested: `/tenants`, `/users`, `/practice-tests`) | `AdminLogin`; `AdminShell` (route guard, wraps the nested routes via `<Outlet/>`) + `AdminTenants`, `AdminUsers`, `AdminPracticeTests` |
@@ -142,7 +142,10 @@ Patterns to learn from `App.tsx`:
   in this app (ADR-008). Kept as its own function rather than a flag on `request()`, so it's
   structurally impossible to accidentally leak the recruiter's headers onto a candidate-facing
   call, or vice versa. `postTurn` builds a `FormData` body (multipart: `turn_index`,
-  `audio_format`, the recorded `Blob`) — the one non-JSON request shape in this file.
+  `audio_format`, the recorded `Blob`) — the one non-JSON request shape in this file. **M4b**:
+  no change to `postTurn`'s signature — a Video-mode turn just sends a `video/webm` blob with
+  `audio_format: "webm"` through the same call; the backend derives `media_type` from the
+  interview's own `mode`, not from anything the client sends explicitly.
 
 ### Master admin module — a separate, real-auth surface
 
@@ -257,7 +260,7 @@ in `lib/candidates.ts`, bulk API calls live in the store.
 | `PipelineBoard` | A real kanban — native HTML5 drag & drop moves candidates between the 5 stages via `movePipelineStage` (bulk-patched to the API) | — |
 | `ComparativeReport` | Renders candidate cards with strengths/concerns/evidence | "Panel summary" prose and the verdicts come straight from seed data; "Print/PDF" and "Regenerate" buttons are decorative |
 | `InterviewsList` | Grid of interviews with mode icon, status, question count, shared flag — **loaded from the API** | — |
-| `NewInterview` | **Real AI generation (M3)**: mode picker, job select (now keyed by `job.id`, not title), an optional candidate picker sourced from that job's applicants (`api.listJobCandidates`) that personalizes the generated questions, `createInterview` triggers a real backend LLM call | — |
+| `NewInterview` | **Real AI generation (M3)**: mode picker (4 tiles as of **M4b** — Chat/Voice/Video/Avatar, `Camera` icon for Video, distinct from Avatar's `Video` icon), job select (now keyed by `job.id`, not title), an optional candidate picker sourced from that job's applicants (`api.listJobCandidates`) that personalizes the generated questions, `createInterview` triggers a real backend LLM call | — |
 | `InterviewEditor` | **Real edit/reorder/regenerate (M3)**: add/remove/edit questions (text + type + difficulty) wired to `patchInterview`, drag-to-reorder via the `GripVertical` handles (native HTML5 DnD, same pattern as `PipelineBoard`), per-question and regenerate-all buttons that call the backend, a "Personalized for {name}" badge when the interview has a `candidateId`, share modal via `?share=1` | Regenerate buttons are disabled (with a tooltip) when the interview has no linked job — an interview created before M3, or via the old flow |
 | `ShareInterviewModal` | Toggle `shared` flag + clipboard copy; **link fixed (M4)** — now `/session/{interview.id}/consent`, a route that actually exists | Access control is just the unguessable interview/session id (ADR-008), not a real permission check |
 | `PersonaBuilder` | Full form for name/appearance/voice/tone/intro + live preview | **Nothing is saved** — "Save persona" just shows a 1.5s "Saved" state |
@@ -266,9 +269,9 @@ in `lib/candidates.ts`, bulk API calls live in the store.
 | Page | Real functionality | Simulated/fake parts |
 |---|---|---|
 | `OnboardingConsent` | 4 consent checkboxes; button disabled until all checked; routes to device check | Consents recorded nowhere |
-| `OnboardingDeviceCheck` | **Real** `navigator.mediaDevices.getUserMedia` — shows live camera feed, reports camera+mic as Working/denied, stops tracks on unmount. **New (M4)**: for a Voice-mode interview, "Continue" now calls `api.startInterviewSession` for real before navigating — a real backend session/opening question exists by the time `VoiceInterviewSession` renders, cached in `sessionStorage` (not the global recruiter-identity store) | For Chat mode, still just navigates — no session is created (Chat is untouched, out of M4's scope) |
+| `OnboardingDeviceCheck` | **Real** `navigator.mediaDevices.getUserMedia` — shows live camera feed, reports camera+mic as Working/denied, stops tracks on unmount. **New (M4), widened (M4b)**: for a Voice- **or Video-mode** interview, "Continue" now calls `api.startInterviewSession` for real before navigating (to `/voice` or `/video` respectively) — a real backend session/opening question exists by the time `VoiceInterviewSession` renders, cached in `sessionStorage` (not the global recruiter-identity store) | For Chat mode, still just navigates — no session is created (Chat is untouched, out of M4/M4b's scope) |
 | `ChatInterviewSession` | Working linear chat: AI asks each question in order, candidate types answers, timer runs, auto-advances; **real** anti-cheating via `visibilitychange` | Answers aren't sent anywhere; AI "responses" are just the next question from the interview's array. **Deliberately untouched by M4** — text-only, no STT/TTS needed, a smaller separate future task |
-| `VoiceInterviewSession` | **Fully rewired (M4)**: real `MediaRecorder` capture (`audio/webm`, replacing the old `setTimeout` fake), a real `<audio>` element decodes and plays the AI's base64 response after each turn, a local `turnIndex` counter resent identically on a client-side failure (matching the backend's idempotency contract), reconciles against `GET /interview-sessions/:id` on mount in case of a reload mid-conversation. The AI asks the interview's own curated questions (server-driven, not `questions[step]` anymore) and the page navigates to `/completed` once the backend signals the interviewer's `[INTERVIEW_COMPLETE]` sentinel fired | Re-record limits (PRD §5.3) not implemented — a candidate can always retry a failed submission, but there's no cap on redo attempts |
+| `VoiceInterviewSession` | **Fully rewired (M4), generalized for Video (M4b)**: real `MediaRecorder` capture (`audio/webm` for Voice, `video/webm` for Video — branches on `interview.mode === "Video"`, replacing the old `setTimeout` fake), a real `<audio>` element decodes and plays the AI's base64 response after each turn, an optional self-view `<video>` element shown only in Video mode (`getUserMedia({audio:true, video:isVideo})` → `srcObject`), a local `turnIndex` counter resent identically on a client-side failure (matching the backend's idempotency contract), reconciles against `GET /interview-sessions/:id` on mount in case of a reload mid-conversation. The AI asks the interview's own curated questions (server-driven, not `questions[step]` anymore) and the page navigates to `/completed` once the backend signals the interviewer's `[INTERVIEW_COMPLETE]` sentinel fired. Serves both `/voice` and `/video` routes — one component, not a fork, per PD-001's "same architecture" framing | Re-record limits (PRD §5.3) not implemented — a candidate can always retry a failed submission, but there's no cap on redo attempts |
 | `AvatarVideoInterview` | **Real** `getUserMedia` for the candidate's self-view pip; speaking pulse animation; mute/next/hang-up controls | The "AI avatar" is a static `Bot` icon — no video, no WebRTC, no AI. **Untouched by M4** — a separate, unbuilt feature |
 | `SessionCompleted` | Summary card (mode, submitted-at). **New (M4)**: for a Voice session, calls `api.completeSession` on mount (no-ops if the interviewer's sentinel already ended it) and shows the real answered-turn count from the backend instead of guessing from `interview.questions.length` | — |
 
@@ -333,6 +336,17 @@ The classic end-to-end path, now crossing both halves:
 AI responses persisted per turn, and real audio files on disk (`data/interview_audio/`) — M4's
 whole point. Evaluation/scoring of the transcript is still M5's job, not built here.
 
+## Trace: candidate takes a Video interview (M4b, real)
+
+Identical to the Voice trace above through step 2, with two differences: `OnboardingDeviceCheck`
+navigates to `/video` instead of `/voice`, and `VoiceInterviewSession` (the same component,
+serving both routes) reads `interview.mode === "Video"` to request `{audio: true, video: true}`
+from `getUserMedia`, record with a `video/webm` `MediaRecorder`, and render a self-view `<video>`
+element wired to the live stream. The submitted turn's blob is `video/webm`; the backend
+transcribes the embedded audio track via the same STT call, unaware anything about the input
+changed. Recruiter-facing playback of the recorded video is **not built** — deferred to M5,
+alongside answer evaluation.
+
 ## Feature truth table (what's real vs. smoke-and-mirrors)
 
 | Feature | Real? | Where |
@@ -345,6 +359,7 @@ whole point. Evaluation/scoring of the transcript is still M5's job, not built h
 | Resume upload/parsing | ✅ real PDF upload + browser text extraction | `AddCandidateModal` + `lib/pdf.ts` |
 | AI question generation, edit/reorder/regenerate | ✅ **real** (M3) — server-side LLM call, optional per-candidate personalization, drag reorder, per-question and regenerate-all | `NewInterview` / `InterviewEditor` → `app/services/question_generator.py` |
 | Voice recording | ✅ **real (M4)** — `MediaRecorder`, real backend cascade, real AI audio playback | `VoiceInterviewSession` → `app/routers/interview_sessions.py` |
+| Video recording | ✅ **real (M4b)** — same `MediaRecorder`/cascade path, `video/webm` capture + self-view element | `VoiceInterviewSession` (generalized) → `app/routers/interview_sessions.py` |
 | AI avatar video interviewer | ❌ static icon (self-view is real) | `AvatarVideoInterview` |
 | Anti-cheating detection | ✅ detection works, ❌ nothing logged | session pages |
 | Auth | ❌ forms just `navigate()` | `LoginOrg`/`LoginCandidate` |
@@ -368,14 +383,17 @@ view schemas match `src/data/types.ts` field-for-field. **Remaining divergence:*
 doesn't exist anywhere (D3) — consistent with single-tenant, but the frontend already
 renders an org-agnostic app with hardcoded "Northwind Health".
 
-### 3. ~~Fake AI in the session/voice/avatar areas mirrors unbuilt milestones~~ — Voice resolved (M4, 2026-08-10)
-Screening, rubric generation, question generation (M3), and now Voice-mode session recording
-(M4) are all real; only the avatar area remains a static icon. Unlike M3, M4's UI change wasn't
-just a store-swap — `VoiceInterviewSession.tsx` needed a real rewrite (`MediaRecorder`, an
-`<audio>` element that didn't exist before, a `sessionStorage`-based session-id carry mechanism
-instead of the global store), since the component's whole state model shifted from a local
-`step`/`questions.length` walk to server-driven `aiText`/`status`. Chat mode and Avatar mode are
-both deliberately untouched — separate, smaller future work, not part of M4's scope.
+### 3. ~~Fake AI in the session/voice/avatar areas mirrors unbuilt milestones~~ — Voice + Video resolved (M4/M4b, 2026-08-10)
+Screening, rubric generation, question generation (M3), and now Voice- and Video-mode session
+recording (M4/M4b) are all real; only the avatar area remains a static icon. Unlike M3, M4's UI
+change wasn't just a store-swap — `VoiceInterviewSession.tsx` needed a real rewrite
+(`MediaRecorder`, an `<audio>` element that didn't exist before, a `sessionStorage`-based
+session-id carry mechanism instead of the global store), since the component's whole state model
+shifted from a local `step`/`questions.length` walk to server-driven `aiText`/`status`. M4b then
+**generalized** that same component in place — branching on `interview.mode === "Video"` for
+capture constraints, mimeType, and an optional self-view element — rather than forking it,
+directly mirroring PD-001's "same architecture" framing. Chat mode and Avatar mode are both
+deliberately untouched — separate, smaller future work, not part of M4/M4b's scope.
 
 ### 4. No auth for tenant users (consistent with backend M6) — partially addressed by Phase 1/2; a real (but separate) login now exists for the platform admin
 `LoginOrg`/`LoginCandidate` still navigate straight to `/dashboard`/`/candidate` — no token, no
@@ -448,15 +466,18 @@ Navigate the app:
 
 ## Next up
 
-The API layer is in, M4's Voice mode is real. Natural next steps, roughly in order of value:
+The API layer is in, M4/M4b's Voice and Video modes are both real. Natural next steps, roughly
+in order of value:
 
 1. **Frontend tests** — Vitest for `lib/api.ts` (mock fetch) and the store actions (mock API
-   module) to lock in the client–server contract. `sessionRequest`/the M4 session functions are
-   now a second, unauth'd surface worth covering explicitly, not just the recruiter-side one.
+   module) to lock in the client–server contract. `sessionRequest`/the M4/M4b session functions
+   are now a second, unauth'd surface worth covering explicitly, not just the recruiter-side one.
 2. **Guard rails** — a loading/error state at the route level (the pages currently assume
    `init()` finished), plus a 409-conflict UX for duplicate emails beyond the add-candidate
    modal.
-3. **Chat mode's own real wiring** — smaller than M4 was (no STT/TTS, no audio storage — just
+3. **Chat mode's own real wiring** — smaller than M4/M4b was (no STT/TTS, no audio storage — just
    real LLM turns over the existing `interview_sessions`/`interview_turns` schema), a natural
    next extension now that the persistence layer exists.
-4. M4b — video capture, the next milestone in the roadmap.
+4. **M5** — recruiter-facing playback/review of a candidate's Video-mode recording is the first
+   natural home for it, alongside answer evaluation and the aggregated report — deliberately
+   deferred out of M4b's scope, not dropped.

@@ -6,13 +6,14 @@ import { Button } from "@/components/ui/Button";
 import { Input, Label } from "@/components/ui/Input";
 import { useAppStore } from "@/store/useAppStore";
 import { api } from "@/lib/api";
-import { MessageSquare, Mic, Video, Sparkles } from "lucide-react";
+import { MessageSquare, Mic, Video, Camera, Sparkles } from "lucide-react";
 import type { Candidate, InterviewMode } from "@/data/types";
 import { cn } from "@/lib/utils";
 
 const modes: { mode: InterviewMode; icon: typeof MessageSquare; desc: string }[] = [
   { mode: "Chat", icon: MessageSquare, desc: "Text-based, async-friendly" },
   { mode: "Voice", icon: Mic, desc: "Live spoken conversation" },
+  { mode: "Video", icon: Camera, desc: "Recorded video answers" },
   { mode: "Avatar", icon: Video, desc: "AI video interviewer" },
 ];
 
@@ -137,7 +138,7 @@ export function NewInterview() {
 
             <div>
               <Label>Interview mode</Label>
-              <div className="grid grid-cols-3 gap-3">
+              <div className="grid grid-cols-4 gap-3">
                 {modes.map(({ mode: m, icon: Icon, desc }) => (
                   <button
                     key={m}
